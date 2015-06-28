@@ -36,8 +36,6 @@ class Plugin:
                 logging.debug('Download web-page from "{}", {}, {}'.format(url, util.format_file_size(page_size),
                                                                            util.format_time_ms(time.time() - start)))
 
-                logging.debug('Web-page:\n {}'.format(the_page.decode("utf-8")))
-
                 return the_page
         except urllib.error.HTTPError as err:
             logging.debug('Failed to download web-page from "{}", error: {}, {}'.format(url, err.code, err.reason))
