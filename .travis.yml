@@ -1,0 +1,9 @@
+language: python
+python:
+  - "3.3"
+  - "3.4"
+  - "nightly"
+# command to install dependencies
+install: "pip install beautifulsoup4"
+# command to run tests
+script: nosetests3 -v
