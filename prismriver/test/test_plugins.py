@@ -55,6 +55,16 @@ class TestPlugins(unittest.TestCase):
                           ['9776ed55e1c7ca636a2fb69721127dc5',
                            '91f572732889601128280fb06eac2a95'])
 
+    def test_metrolyrics_01(self):
+        self.check_plugin('metrolyrics',
+                          'Ace of Base', "Never Gonna Say I'm Sorry",
+                          ['69bc545282aabd9f4e0135c82eb9a803'])
+
+    def test_metrolyrics_02(self):
+        self.check_plugin('metrolyrics',
+                          'Joe Dassin', "Et Si Tu N'existais Pas",
+                          ['fd488f806589f80ee18db6a78c051035'])
+
     def test_touhouwiki_01(self):
         self.check_plugin('touhouwiki',
                           'FELT', 'World Around Us',
