@@ -1,6 +1,9 @@
 import logging
+import random
+from time import sleep
 import unittest
 import hashlib
+import os
 
 from prismriver.main import search
 
@@ -20,6 +23,12 @@ class TestPlugins(unittest.TestCase):
                              'Different text in #{} lyrics'.format(index))
             index += 1
 
+    def setUp(self):
+        max_delay = int(os.getenv('PRISMRIVER_TEST_MAX_DELAY', '0'))
+        delay = random.randint(0, max_delay)
+        logging.debug('Wait {}sec. before executing test...'.format(delay))
+        sleep(delay)
+
     def get_md5(self, value):
         return hashlib.md5(value.encode('utf-8')).hexdigest()
 
@@ -37,7 +46,6 @@ class TestPlugins(unittest.TestCase):
         self.check_plugin('elyrics',
                           'Dschinghis Khan', 'Pistolero',
                           ['4be7cef73596ded5201904c31b4ced91'])
-
 
     def test_leoslyrics_01(self):
         self.check_plugin('leoslyrics',
