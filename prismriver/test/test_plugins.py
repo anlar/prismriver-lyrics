@@ -53,6 +53,16 @@ class TestPlugins(unittest.TestCase):
                           'Sound Holic', 'Grip & Break Down !!',
                           ['ea12362512264723fee26192a3ea53b5'])
 
+    def test_lyrster_01(self):
+        self.check_plugin('lyrster',
+                          'Groove Coverage', 'Damn!',
+                          ['b7efbc6c5899c123e0459324c66732ac'])
+
+    def test_lyrster_02(self):
+        self.check_plugin('lyrster',
+                          'Pink Floyd', 'The Wall (complete)',
+                          ['5011d7e7a1a26480601237820e65ef4d'])
+
     def test_megalyrics_01(self):
         self.check_plugin('megalyrics',
                           'Joe Dassin', 'Salut',

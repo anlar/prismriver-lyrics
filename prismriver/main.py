@@ -6,6 +6,7 @@ from prismriver.plugin.chartlyrics import ChartlyricsPlugin
 from prismriver.plugin.leoslyrics import LeosLyricsPlugin
 from prismriver.plugin.lyricsmania import LyricsManiaPlugin
 from prismriver.plugin.lyricwiki import LyricWikiPlugin
+from prismriver.plugin.lyrster import LyrsterPlugin
 from prismriver.plugin.megalyrics import MegalyricsPlugin
 from prismriver.plugin.metrolyrics import MetroLyricsPlugin
 from prismriver.plugin.touhouwiki import TouhouWikiPlugin
@@ -30,7 +31,8 @@ def search(artist, title, limit=None, enabled_plugins=None):
         LyricsManiaPlugin(),
         ChartlyricsPlugin(),
         MetroLyricsPlugin(),
-        LeosLyricsPlugin()
+        LeosLyricsPlugin(),
+        LyrsterPlugin()
     ]
 
     result = []
