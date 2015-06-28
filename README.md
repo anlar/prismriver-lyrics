@@ -27,6 +27,11 @@ Prismriver is a search engine for song information (generally for it's lyrics).
 * http://www.lyrics.com/
 * http://www.lyrics.net/
 * http://www.nitrolyrics.com/
+* http://j-lyric.net/
+* http://www.lololyrics.com/ (api available)
+* http://www.urbanlyrics.com/
+* http://www.plyrics.com/
+* http://www.metal-archives.com/
 
 See also:
 
@@ -50,6 +55,10 @@ Wikia, MetroLyrics
 * https://github.com/timrogers/genius;
 Ruby;
 Genius
+
+* https://github.com/geecko86/QuickLyric;
+Java;
+multiple sites
 
 ## Copyright
 
