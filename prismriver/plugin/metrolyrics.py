@@ -6,7 +6,7 @@ from prismriver.struct import Song
 
 class MetroLyricsPlugin(Plugin):
     def __init__(self):
-        super().__init__('metrolyrics', 'MetroLyricsPlugin')
+        super().__init__('metrolyrics', 'MetroLyrics')
 
     def search(self, artist, title):
         link = "http://www.metrolyrics.com/{}-lyrics-{}.html".format(self.simplify_url_parameter(title),
