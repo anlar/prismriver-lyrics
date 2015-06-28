@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup, NavigableString, Tag
+from bs4 import BeautifulSoup
 
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
@@ -30,9 +30,9 @@ class MegalyricsPlugin(Plugin):
                         html_text = lyric_pane.find("div", {"class": "text_inner"})
 
                         if html_text:
-                            lyric = self.parse_text_pane(html_text)
+                            lyric = self.parse_verse_block(html_text)
                         else:
-                            lyric = self.parse_text_pane(lyric_pane)
+                            lyric = self.parse_verse_block(lyric_pane)
 
                         lyrics.append(lyric)
 
@@ -60,14 +60,3 @@ class MegalyricsPlugin(Plugin):
             lyric_translate += '\n'
 
         return [lyric_original, lyric_translate]
-
-    def parse_text_pane(self, html_text):
-        lyric = ''
-
-        for elem in html_text.recursiveChildGenerator():
-            if isinstance(elem, NavigableString):
-                lyric += elem.strip()
-            elif isinstance(elem, Tag):
-                lyric += '\n'
-
-        return lyric

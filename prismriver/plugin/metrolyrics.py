@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup, NavigableString, Tag
+from bs4 import BeautifulSoup
 
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
@@ -21,13 +21,8 @@ class MetroLyricsPlugin(Plugin):
 
             lyric = ''
             for verse_pane in lyric_pane.findAll("p", {"class": "verse"}):
-                for elem in verse_pane.recursiveChildGenerator():
-                    if isinstance(elem, NavigableString):
-                        lyric += elem.strip()
-                    elif isinstance(elem, Tag):
-                        lyric += '\n'
-
-                lyric += '\n\n'
+                verse = self.parse_verse_block(verse_pane)
+                lyric += (verse + '\n\n')
 
             return Song(artist, title, self.sanitize_lyrics([lyric]))
 

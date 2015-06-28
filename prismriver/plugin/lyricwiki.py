@@ -28,8 +28,14 @@ class LyricWikiPlugin(Plugin):
         soup = BeautifulSoup(web_page)
         main_table = soup.find("div", {"class": "lyricbox"})
 
+        lyric = self.parse_verse_block(main_table)
+
+        return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
+
+    def parse_verse_block(self, verse_block):
         lyric = ''
-        for elem in main_table.recursiveChildGenerator():
+
+        for elem in verse_block.recursiveChildGenerator():
             if isinstance(elem, Comment):
                 pass
             elif isinstance(elem, NavigableString):
@@ -38,4 +44,4 @@ class LyricWikiPlugin(Plugin):
             elif isinstance(elem, Tag):
                 lyric += '\n'
 
-        return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
+        return lyric

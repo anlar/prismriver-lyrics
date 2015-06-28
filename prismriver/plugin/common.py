@@ -7,6 +7,8 @@ import sys
 import time
 import xml.etree.ElementTree
 
+from bs4 import NavigableString, Tag
+
 from prismriver import util
 
 
@@ -62,3 +64,14 @@ class Plugin:
             return sanitized
         else:
             return None
+
+    def parse_verse_block(self, verse_block):
+        lyric = ''
+
+        for elem in verse_block.recursiveChildGenerator():
+            if isinstance(elem, NavigableString):
+                lyric += elem.strip()
+            elif isinstance(elem, Tag):
+                lyric += '\n'
+
+        return lyric.strip()

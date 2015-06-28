@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup, NavigableString, Tag
+from bs4 import BeautifulSoup
 
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
@@ -27,15 +27,6 @@ class LeosLyricsPlugin(Plugin):
             lyric = self.parse_verse_block(lyric_pane)
 
             return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
-
-    def parse_verse_block(self, verse_block):
-        lyric = ''
-        for elem in verse_block.recursiveChildGenerator():
-            if isinstance(elem, NavigableString):
-                lyric += elem.strip()
-            elif isinstance(elem, Tag):
-                lyric += '\n'
-        return lyric.strip()
 
     def prepare_url_parameter(self, value):
         simplified = value.translate({ord(":"): None,

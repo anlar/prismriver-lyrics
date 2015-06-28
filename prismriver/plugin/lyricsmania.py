@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup, NavigableString, Tag
+from bs4 import BeautifulSoup
 
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
@@ -18,12 +18,7 @@ class LyricsManiaPlugin(Plugin):
             main_pane = soup.find("div", {"class": "lyrics-body"})
             lyric_pane = main_pane.find("div", {"class": "p402_premium"})
 
-            lyric = ''
-            for elem in lyric_pane.recursiveChildGenerator():
-                if isinstance(elem, NavigableString):
-                    lyric += elem.strip()
-                elif isinstance(elem, Tag):
-                    lyric += '\n'
+            lyric = self.parse_verse_block(lyric_pane)
 
             return Song(artist, title, self.sanitize_lyrics([lyric]))
 
