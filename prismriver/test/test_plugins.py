@@ -11,7 +11,7 @@ class TestPlugins(unittest.TestCase):
 
         result = search(artist, title, limit=None, enabled_plugins=[plugin_id])
 
-        self.assertEqual(len(result), 1, 'Wrong songs count')
+        self.assertEqual(1, len(result), 'Wrong songs count')
         self.assertEqual(len(lyric_hashes), len(result[0].lyrics), 'Wrong lyrics count')
 
         index = 0
