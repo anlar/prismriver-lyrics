@@ -1,4 +1,4 @@
-## About
+# Prismriver Project [![Build Status](https://travis-ci.org/anlar/prismriver.svg?branch=master)](https://travis-ci.org/anlar/prismriver)
 
 Prismriver is a search engine for song information (generally for it's lyrics).
 
