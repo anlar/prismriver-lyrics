@@ -1,0 +1,5 @@
+# Pycharm project files
+.idea/
+
+# dev launcher
+run-dev-prismriver.sh
