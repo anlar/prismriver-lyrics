@@ -9,7 +9,8 @@ class MegalyricsPlugin(Plugin):
         super().__init__('megalyrics', 'Megalyrics')
 
     def search(self, artist, title):
-        link = "http://megalyrics.ru/lyric/{}/{}.htm".format(self.quote_uri(artist), self.quote_uri(title))
+        link = "http://megalyrics.ru/lyric/{}/{}.htm".format(self.simplify_url_parameter(artist),
+                                                             self.simplify_url_parameter(title))
         page = self.download_webpage(link)
 
         if page:
@@ -42,6 +43,10 @@ class MegalyricsPlugin(Plugin):
                 song_title = title_values[1]
 
                 return Song(song_artist, song_title, self.sanitize_lyrics(lyrics))
+
+    def simplify_url_parameter(self, value):
+        simplified = value.translate({ord(" "): "-"})
+        return self.quote_uri(simplified)
 
     def parse_dual_text_pane(self, lyric_pane):
         lyric_original = ''
