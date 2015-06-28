@@ -22,10 +22,8 @@ Prismriver is a search engine for song information (generally for it's lyrics).
 * https://bandcamp.com/
 * http://www.animelyrics.com/
 * http://mp3lyrics.com/
-* http://www.lyricshuddle.com/
 * http://www.lyricsmode.com/
 * http://www.lyricsfreak.com/
-* http://www.elyrics.net/
 * http://www.lyrics.com/
 * http://www.lyrics.net/
 * http://www.nitrolyrics.com/

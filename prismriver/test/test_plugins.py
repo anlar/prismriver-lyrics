@@ -28,6 +28,17 @@ class TestPlugins(unittest.TestCase):
                           'James Brown', 'Prisoner of Love',
                           ['a4cc13ee79455148090068388b74b8cf'])
 
+    def test_elyrics_01(self):
+        self.check_plugin('elyrics',
+                          'C.C. Catch', "V.i.p. (they're Calling Me Tonight)",
+                          ['f841980a7040ff3733e41cf75f075b04'])
+
+    def test_elyrics_02(self):
+        self.check_plugin('elyrics',
+                          'Dschinghis Khan', 'Pistolero',
+                          ['4be7cef73596ded5201904c31b4ced91'])
+
+
     def test_leoslyrics_01(self):
         self.check_plugin('leoslyrics',
                           'Groove Coverage', 'Moonlight Shadow [Extended Version]',

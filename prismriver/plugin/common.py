@@ -26,7 +26,7 @@ class Plugin:
     def quote_uri(self, value):
         return urllib.parse.quote(value)
 
-    def prepare_url_parameter(self, value, to_delete=None, to_replace=None, delimiter='-'):
+    def prepare_url_parameter(self, value, to_delete=None, to_replace=None, delimiter='-', quote_uri=True):
         if not to_delete:
             to_delete = []
         if not to_replace:
@@ -40,7 +40,10 @@ class Plugin:
         for elem in to_replace:
             new_value = new_value.replace(elem, delimiter)
 
-        return self.quote_uri(new_value)
+        if quote_uri:
+            return self.quote_uri(new_value)
+        else:
+            return new_value
 
     def download_webpage(self, url):
         start = time.time()
@@ -80,6 +83,10 @@ class Plugin:
             return sanitized
         else:
             return None
+
+    def remove_tags_from_block(self, pane, tags):
+        for tag in tags:
+            [x.extract() for x in pane.findAll(tag)]
 
     def parse_verse_block(self, verse_block):
         lyric = ''

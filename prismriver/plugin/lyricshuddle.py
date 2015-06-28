@@ -28,8 +28,7 @@ class LyricsHuddlePlugin(Plugin):
             song_title = head_pane_parts[3].text
 
             main_pane = soup.find("div", {"class": "lyricstext"})
-            [x.extract() for x in main_pane.findAll('div')]
-            [x.extract() for x in main_pane.findAll('style')]
+            self.remove_tags_from_block(main_pane, ['div', 'style'])
             lyric = self.parse_verse_block(main_pane)
 
             return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
