@@ -4,6 +4,7 @@ import time
 from prismriver import util
 from prismriver.plugin.chartlyrics import ChartlyricsPlugin
 from prismriver.plugin.leoslyrics import LeosLyricsPlugin
+from prismriver.plugin.lyricshuddle import LyricsHuddlePlugin
 from prismriver.plugin.lyricsmania import LyricsManiaPlugin
 from prismriver.plugin.lyricwiki import LyricWikiPlugin
 from prismriver.plugin.lyrster import LyrsterPlugin
@@ -32,7 +33,8 @@ def search(artist, title, limit=None, enabled_plugins=None):
         ChartlyricsPlugin(),
         MetroLyricsPlugin(),
         LeosLyricsPlugin(),
-        LyrsterPlugin()
+        LyrsterPlugin(),
+        LyricsHuddlePlugin()
     ]
 
     result = []

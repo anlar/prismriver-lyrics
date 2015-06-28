@@ -26,6 +26,22 @@ class Plugin:
     def quote_uri(self, value):
         return urllib.parse.quote(value)
 
+    def prepare_url_parameter(self, value, to_delete=None, to_replace=None, delimiter='-'):
+        if not to_delete:
+            to_delete = []
+        if not to_replace:
+            to_replace = []
+
+        new_value = value
+
+        for elem in to_delete:
+            new_value = new_value.replace(elem, '')
+
+        for elem in to_replace:
+            new_value = new_value.replace(elem, delimiter)
+
+        return self.quote_uri(new_value)
+
     def download_webpage(self, url):
         start = time.time()
 
