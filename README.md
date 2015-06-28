@@ -17,13 +17,19 @@ Prismriver is a search engine for song information (generally for it's lyrics).
 * http://genius.com/
 * http://letras.mus.br/
 * http://www.vagalume.com.br/
-* http://www.metrolyrics.com/
 * http://www.darklyrics.com/
 * http://www.leoslyrics.com/
 * http://www.lyrster.com/
-* http://www.lyricfind.com/
+* http://www.lyricfind.com/ (available only via their mobile app)
 * https://bandcamp.com/
 * http://www.animelyrics.com/
+* http://mp3lyrics.com/
+* http://www.lyricshuddle.com/
+* http://www.lyricsmode.com/
+* http://www.lyricsfreak.com/
+* http://www.elyrics.net/
+* http://www.lyrics.com/
+* http://www.lyrics.net/
 
 See also:
 
