@@ -28,6 +28,16 @@ class TestPlugins(unittest.TestCase):
                           'James Brown', 'Prisoner of Love',
                           ['a4cc13ee79455148090068388b74b8cf'])
 
+    def test_leoslyrics_01(self):
+        self.check_plugin('leoslyrics',
+                          'Groove Coverage', 'Moonlight Shadow [Extended Version]',
+                          ['4d865496dfa31f0e5994d7c646af17d1'])
+
+    def test_leoslyrics_02(self):
+        self.check_plugin('leoslyrics',
+                          'Ace of Base', "Never Gonna Say I'm Sorry [Long]",
+                          ['f3e7fbdfd3c1bc85a21dad24188b75b4'])
+
     def test_lyricsmania_01(self):
         self.check_plugin('lyricsmania',
                           'Ayumi Hamasaki', '(Miss)understood',
@@ -65,21 +75,21 @@ class TestPlugins(unittest.TestCase):
                           'Joe Dassin', "Et Si Tu N'existais Pas",
                           ['fd488f806589f80ee18db6a78c051035'])
 
-    # def test_touhouwiki_01(self):
-    #     self.check_plugin('touhouwiki',
-    #                       'FELT', 'World Around Us',
-    #                       ['49c8b1f1d35cc7627b9f163d2301ef58'])
-    #
-    # def test_touhouwiki_02(self):
-    #     self.check_plugin('touhouwiki',
-    #                       'ShibayanRecords', 'Fall In The Dark',
-    #                       ['29f3f203077b522be3d5da484732d0f0',
-    #                        '0d6849e8150afc2c529fa790b5531968',
-    #                        'c0d7a18839b1da9c2236a63559c6d8a5'])
-    #
-    # def test_touhouwiki_03(self):
-    #     self.check_plugin('touhouwiki',
-    #                       'Shinra-bansho', '受け入れられない真実',
-    #                       ['1d6b57d693eee13ffb5eed10a31d6605',
-    #                        '895cdd1950bdf462b2ed4d2f53d910a2',
-    #                        '53ba62a6cb0b8d1a2311796b81aff106'])
+        # def test_touhouwiki_01(self):
+        #     self.check_plugin('touhouwiki',
+        #                       'FELT', 'World Around Us',
+        #                       ['49c8b1f1d35cc7627b9f163d2301ef58'])
+        #
+        # def test_touhouwiki_02(self):
+        #     self.check_plugin('touhouwiki',
+        #                       'ShibayanRecords', 'Fall In The Dark',
+        #                       ['29f3f203077b522be3d5da484732d0f0',
+        #                        '0d6849e8150afc2c529fa790b5531968',
+        #                        'c0d7a18839b1da9c2236a63559c6d8a5'])
+        #
+        # def test_touhouwiki_03(self):
+        #     self.check_plugin('touhouwiki',
+        #                       'Shinra-bansho', '受け入れられない真実',
+        #                       ['1d6b57d693eee13ffb5eed10a31d6605',
+        #                        '895cdd1950bdf462b2ed4d2f53d910a2',
+        #                        '53ba62a6cb0b8d1a2311796b81aff106'])
