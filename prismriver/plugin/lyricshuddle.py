@@ -20,6 +20,8 @@ class LyricsHuddlePlugin(Plugin):
         page = self.download_webpage(link)
         if page:
             soup = BeautifulSoup(page)
+            if soup.text == 'Impossible to find lyrics.':
+                return None
 
             head_pane = soup.find("div", {"class": "location"})
             head_pane_parts = head_pane.findAll("a")
