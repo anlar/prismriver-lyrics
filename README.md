@@ -4,7 +4,7 @@ Prismriver is a search engine for song information (generally for it's lyrics).
 
 ## Requirements
 
-* Python 3.3+
+* Python 3.2+
 * Beautiful Soup 4
 
 ## Usage
