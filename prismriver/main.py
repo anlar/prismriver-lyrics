@@ -11,6 +11,7 @@ from prismriver.plugin.lyricwiki import LyricWikiPlugin
 from prismriver.plugin.lyrster import LyrsterPlugin
 from prismriver.plugin.megalyrics import MegalyricsPlugin
 from prismriver.plugin.metrolyrics import MetroLyricsPlugin
+from prismriver.plugin.nitrolyrics import NitroLyricsPlugin
 from prismriver.plugin.touhouwiki import TouhouWikiPlugin
 
 
@@ -36,7 +37,8 @@ def search(artist, title, limit=None, enabled_plugins=None):
         LeosLyricsPlugin(),
         LyrsterPlugin(),
         LyricsHuddlePlugin(),
-        ELyricsPlugin()
+        ELyricsPlugin(),
+        NitroLyricsPlugin()
     ]
 
     result = []

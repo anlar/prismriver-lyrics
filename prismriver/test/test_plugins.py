@@ -114,6 +114,16 @@ class TestPlugins(unittest.TestCase):
                           'Joe Dassin', "Et Si Tu N'existais Pas",
                           ['fd488f806589f80ee18db6a78c051035'])
 
+    def test_nitrolyrics_01(self):
+        self.check_plugin('nitrolyrics',
+                          'C. C. Catch', "Can't Catch Me",
+                          ['231af8f3447878ac33625e9e36c36047'])
+
+    def test_nitrolyrics_02(self):
+        self.check_plugin('nitrolyrics',
+                          'Bad Boys Blue', 'A World Without You (michelle)',
+                          ['ad1240f4f772fc36e5286c4a4f29f187'])
+
         # def test_touhouwiki_01(self):
         #     self.check_plugin('touhouwiki',
         #                       'FELT', 'World Around Us',
