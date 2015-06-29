@@ -1,9 +1,13 @@
 language: python
+
 python:
   - "3.2"
   - "3.3"
   - "3.4"
-# command to install dependencies
+
+notifications:
+  email: false
+
 install: "pip install beautifulsoup4"
-# command to run tests
+
 script: nosetests -v
