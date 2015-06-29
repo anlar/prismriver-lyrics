@@ -14,8 +14,8 @@ class LyricWikiPlugin(Plugin):
         url = 'http://lyrics.wikia.com/api.php?action=lyrics&artist={}&song={}&fmt=realjson&func=getSong'.format(
             self.quote_uri(artist), self.quote_uri(title))
 
-        webpage = self.download_webpage(url)
-        resp = json.loads(webpage.decode("utf-8"))
+        webpage = self.download_webpage_text(url)
+        resp = json.loads(webpage)
         if resp['lyrics'] == 'Not found':
             return None
 

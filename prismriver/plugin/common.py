@@ -65,11 +65,15 @@ class Plugin:
             logging.debug('Failed to download web-page from "{}", error: {}, {}'.format(url, err.errno, err.strerror))
             return None
 
-    def download_xml(self, url):
+    def download_webpage_text(self, url):
         page = self.download_webpage(url)
         if page:
-            xml_string = page.decode("utf-8")
-            xml_string = re.sub(' xmlns="[^"]+"', '', xml_string, count=1)
+            return page.decode("utf-8")
+
+    def download_xml(self, url):
+        page = self.download_webpage_text(url)
+        if page:
+            xml_string = re.sub(' xmlns="[^"]+"', '', page, count=1)
             root = xml.etree.ElementTree.fromstring(xml_string)
             return root
 
