@@ -34,4 +34,4 @@ class LyrsterPlugin(Plugin):
                                       ord("]"): None,
                                       ord(" "): "-"}
                                      )
-        return self.quote_uri(simplified.casefold())
+        return self.quote_uri(simplified.lower())

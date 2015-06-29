@@ -26,7 +26,7 @@ class TouhouWikiPlugin(Plugin):
             title_bar = soup.find("th", {"class": "incell_top"})
             song_artist = title_bar.find('a').get_text()
 
-            # if artist.casefold() != song_artist.casefold():
+            # if artist.lower() != song_artist.lower():
             #     return None
 
             # title
