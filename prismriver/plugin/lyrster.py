@@ -23,7 +23,8 @@ class LyrsterPlugin(Plugin):
             lyric_pane = soup.find("div", {"id": "lyrics"})
             lyric = self.parse_verse_block(lyric_pane)
 
-            return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
+            if lyric != "We do not have the complete song's lyrics just yet.":
+                return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
 
     def prepare_url_parameter(self, value):
         simplified = value.translate({ord("'"): None,

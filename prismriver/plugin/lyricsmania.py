@@ -16,6 +16,10 @@ class LyricsManiaPlugin(Plugin):
         if page:
             soup = BeautifulSoup(page)
             main_pane = soup.find("div", {"class": "lyrics-body"})
+            if main_pane is None:
+                # song wasn't found on site and we're redirected on main page where we can't find lyric pane
+                return None
+
             lyric_pane = main_pane.find("div", {"class": "p402_premium"})
 
             lyric = self.parse_verse_block(lyric_pane)

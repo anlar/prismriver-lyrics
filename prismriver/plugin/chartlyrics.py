@@ -17,4 +17,5 @@ class ChartlyricsPlugin(Plugin):
             song_title = xml_root.find("LyricSong").text
             song_lyric = xml_root.find("Lyric").text
 
-            return Song(song_artist, song_title, self.sanitize_lyrics([song_lyric]))
+            if song_lyric:
+                return Song(song_artist, song_title, self.sanitize_lyrics([song_lyric]))
