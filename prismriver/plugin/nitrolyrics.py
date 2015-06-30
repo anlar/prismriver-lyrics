@@ -21,6 +21,10 @@ class NitroLyricsPlugin(Plugin):
             soup = BeautifulSoup(page)
 
             head_pane = soup.find('div', {'class', 'lyric'})
+            if head_pane is None:
+                # empty page - song not found
+                return None
+
             song_artist = head_pane.find('a').text
             song_title = head_pane.find('h1').text.replace(' Lyrics', '')
 
