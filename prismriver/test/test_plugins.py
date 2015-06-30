@@ -42,6 +42,16 @@ class TestPlugins(unittest.TestCase):
                           'C.C. Catch', "V.i.p. (they're Calling Me Tonight)",
                           ['f841980a7040ff3733e41cf75f075b04'])
 
+    def test_jlyric_01(self):
+        self.check_plugin('jlyric',
+                          '宇多田ヒカル', 'Beautiful World',
+                          ['0f8a63e0369675653f2c734a534555fe'])
+
+    def test_jlyric_02(self):
+        self.check_plugin('jlyric',
+                          '浜崎あゆみ', 'Bold & Delicious',
+                          ['87cdd3d59e867ece975a49c2129d3aa6'])
+
     def test_elyrics_02(self):
         self.check_plugin('elyrics',
                           'Dschinghis Khan', 'Pistolero',
