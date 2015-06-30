@@ -17,6 +17,10 @@ class LyrsterPlugin(Plugin):
             soup = BeautifulSoup(page)
 
             head_pane = soup.find("div", {"id": "lyrics-info"})
+            if head_pane is None:
+                # song wasn't found and we're redirected to main page
+                return None
+
             song_title = head_pane.find("h1").text.replace(" Lyrics", "")
             song_artist = head_pane.find("a").text
 
