@@ -53,7 +53,11 @@ def run():
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", "--artist", help="song artist")
     parser.add_argument("-t", "--title", help="song title")
+
     parser.add_argument("-l", "--limit", type=int, help="lyrics limit")
+    parser.add_argument('-p', '--plugins', help='comma separated listed of enabled plugins '
+                                                '(empty list means that everything is enabled - by default)')
+
     parser.add_argument("-f", "--format", type=str, default='txt',
                         help="lyrics output format (txt (default), json, json_ascii)")
     parser.add_argument("-q", "--quiet", help="disable logging info (show only errors)", action="store_true")
@@ -65,7 +69,8 @@ def run():
 
     logging.debug('Search lyrics with following parameters: {}'.format(params.__dict__))
 
-    result = search(params.artist, params.title, params.limit)
+    enabled_plugins = params.plugins.split(',') if params.plugins else None
+    result = search(params.artist, params.title, params.limit, enabled_plugins)
 
     if result:
         print(format_output(result, params.format))
