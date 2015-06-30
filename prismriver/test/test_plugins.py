@@ -32,10 +32,10 @@ class TestPlugins(unittest.TestCase):
     def get_md5(self, value):
         return hashlib.md5(value.encode('utf-8')).hexdigest()
 
-    def test_chartlyrics_01(self):
-        self.check_plugin('chartlyrics',
-                          'James Brown', 'Prisoner of Love',
-                          ['a4cc13ee79455148090068388b74b8cf'])
+    # def test_chartlyrics_01(self):
+    #     self.check_plugin('chartlyrics',
+    #                       'James Brown', 'Prisoner of Love',
+    #                       ['a4cc13ee79455148090068388b74b8cf'])
 
     def test_elyrics_01(self):
         self.check_plugin('elyrics',
