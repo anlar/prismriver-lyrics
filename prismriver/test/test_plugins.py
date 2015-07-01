@@ -19,6 +19,7 @@ class TestPlugins(unittest.TestCase):
 
         index = 0
         for lyric_hash in lyric_hashes:
+            logging.debug('Lyric #{}:\n'.format(index) + result[0].lyrics[index])
             self.assertEqual(lyric_hash, self.get_md5(result[0].lyrics[index]),
                              'Different text in #{} lyrics'.format(index))
             index += 1
