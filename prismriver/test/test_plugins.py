@@ -80,12 +80,12 @@ class TestPlugins(unittest.TestCase):
     def test_lyricsmania_01(self):
         self.check_plugin('lyricsmania',
                           'Ayumi Hamasaki', '(Miss)understood',
-                          ['f3fac3f5e50ca009457e5167e06fa728'])
+                          ['42029923f3f4a69d2c6b0b3525e387c1'])
 
     def test_lyricsmania_02(self):
         self.check_plugin('lyricsmania',
                           'Joe Esposito', 'You\'re The Best',
-                          ['754cfd853d3f924bc243404b9306a222'])
+                          ['ee9de08277a90ad90f0caae8bcb2ae23'])
 
     def test_lyricwiki_01(self):
         self.check_plugin('lyricwiki',

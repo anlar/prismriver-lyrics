@@ -7,7 +7,7 @@ import sys
 import time
 import xml.etree.ElementTree
 
-from bs4 import NavigableString, Tag
+from bs4 import NavigableString, Tag, Comment
 
 from prismriver import util
 
@@ -96,13 +96,24 @@ class Plugin:
         for tag in tags:
             [x.extract() for x in pane.findAll(tag)]
 
-    def parse_verse_block(self, verse_block):
+    def parse_verse_block(self, verse_block, recursive=True):
         lyric = ''
 
-        for elem in verse_block.recursiveChildGenerator():
-            if isinstance(elem, NavigableString):
-                lyric += elem.strip()
-            elif isinstance(elem, Tag):
-                lyric += '\n'
+        if recursive:
+            for elem in verse_block.recursiveChildGenerator():
+                if isinstance(elem, Comment):
+                    pass
+                elif isinstance(elem, NavigableString):
+                    lyric += elem.strip()
+                elif isinstance(elem, Tag):
+                    lyric += '\n'
+        else:
+            for elem in verse_block.childGenerator():
+                if isinstance(elem, Comment):
+                    pass
+                elif isinstance(elem, NavigableString):
+                    lyric += elem.strip()
+                elif isinstance(elem, Tag):
+                    lyric += '\n'
 
         return lyric.strip()
