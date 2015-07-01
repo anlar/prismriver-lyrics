@@ -149,6 +149,6 @@ class TestPlugins(unittest.TestCase):
         # def test_touhouwiki_03(self):
         #     self.check_plugin('touhouwiki',
         #                       'Shinra-bansho', '受け入れられない真実',
-        #                       ['1d6b57d693eee13ffb5eed10a31d6605',
+        #                       ['bf8cc305e81594b38d5b282b58e53d68',
         #                        '895cdd1950bdf462b2ed4d2f53d910a2',
         #                        '53ba62a6cb0b8d1a2311796b81aff106'])
