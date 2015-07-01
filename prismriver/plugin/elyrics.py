@@ -9,11 +9,8 @@ class ELyricsPlugin(Plugin):
         super().__init__('elyrics', 'eLyrics')
 
     def search(self, artist, title):
-        to_replace = [' ']
         link = 'http://www.elyrics.net/read/{}/{}-lyrics/{}-lyrics.html' \
-            .format(artist[0],
-                    self.prepare_url_parameter(artist, None, to_replace, quote_uri=False),
-                    self.prepare_url_parameter(title, None, to_replace, quote_uri=False))
+            .format(artist[0], self.prepare_parameter(artist), self.prepare_parameter(title))
 
         page = self.download_webpage(link)
         if page:
@@ -30,5 +27,5 @@ class ELyricsPlugin(Plugin):
 
             return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
 
-    def prepare_url_parameter(self, value, to_delete=None, to_replace=None, delimiter='-', quote_uri=True):
-        return super().prepare_url_parameter(value.replace("'", '_'), to_delete, to_replace, delimiter, quote_uri)
+    def prepare_parameter(self, value):
+        return self.prepare_url_parameter(value.replace("'", '_'), None, [' '], quote_uri=True, safe_chars='/()')

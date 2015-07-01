@@ -23,10 +23,14 @@ class Plugin:
     def is_valid_request(self, artist, title):
         return artist and title
 
-    def quote_uri(self, value):
-        return urllib.parse.quote(value)
+    def quote_uri(self, value, safe_chars=None):
+        if safe_chars:
+            return urllib.parse.quote(value, safe=safe_chars)
+        else:
+            return urllib.parse.quote(value)
 
-    def prepare_url_parameter(self, value, to_delete=None, to_replace=None, delimiter='-', quote_uri=True):
+    def prepare_url_parameter(self, value, to_delete=None, to_replace=None, delimiter='-',
+                              quote_uri=True, safe_chars=None):
         if not to_delete:
             to_delete = []
         if not to_replace:
@@ -41,7 +45,7 @@ class Plugin:
             new_value = new_value.replace(elem, delimiter)
 
         if quote_uri:
-            return self.quote_uri(new_value)
+            return self.quote_uri(new_value, safe_chars)
         else:
             return new_value
 
