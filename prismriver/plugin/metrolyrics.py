@@ -18,6 +18,8 @@ class MetroLyricsPlugin(Plugin):
             soup = BeautifulSoup(page)
 
             lyric_pane = soup.find("div", {"id": "lyrics-body-text"})
+            if lyric_pane is None:  # song not found
+                return None
 
             lyric = ''
             for verse_pane in lyric_pane.findAll("p", {"class": "verse"}):
