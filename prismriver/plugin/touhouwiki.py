@@ -8,7 +8,6 @@ from prismriver.struct import Song
 # 2) http://en.touhouwiki.net/wiki/Template:Lyrics
 
 # todo:
-# - check artist name
 # - songs with different lyrics but same name
 
 class TouhouWikiPlugin(Plugin):
@@ -26,8 +25,8 @@ class TouhouWikiPlugin(Plugin):
             title_bar = soup.find("th", {"class": "incell_top"})
             song_artist = title_bar.find('a').get_text()
 
-            # if artist.lower() != song_artist.lower():
-            #     return None
+            if artist.lower() != song_artist.lower():
+                return None
 
             # title
             title_bar = soup.find("h1", {"id": "firstHeading"})
