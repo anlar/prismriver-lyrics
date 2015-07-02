@@ -36,6 +36,9 @@ class MegalyricsPlugin(Plugin):
 
                         lyrics.append(lyric)
 
+                    if len(lyrics) == 0:  # song wasn't found - empty page
+                        return None
+
                 title_pane = soup.find("div", {"class": "title_w"})
                 title_values = title_pane.get_text().split(" - ")
 
