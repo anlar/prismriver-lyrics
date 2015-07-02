@@ -55,6 +55,9 @@ def search(artist, title, limit=None, enabled_plugins=None):
                     total_time = time.time() - start_time
 
                     if song:
+                        song.plugin_id = plugin.plugin_id
+                        song.plugin_name = plugin.plugin_name
+
                         logging.info('Found song info on "{}" [{}], {}'.format(plugin.plugin_name, plugin.plugin_id,
                                                                                util.format_time_ms(total_time)))
                         result.append(song)
@@ -71,7 +74,4 @@ def search(artist, title, limit=None, enabled_plugins=None):
                 logging.info(
                     'Skip search on "{}" [{}] - request not valid'.format(plugin.plugin_name, plugin.plugin_id))
 
-    if limit:
-        return result[:limit]
-    else:
-        return result
+    return result
