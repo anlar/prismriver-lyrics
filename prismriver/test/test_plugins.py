@@ -33,6 +33,16 @@ class TestPlugins(unittest.TestCase):
     def get_md5(self, value):
         return hashlib.md5(value.encode('utf-8')).hexdigest()
 
+    def test_azlyrics_01(self):
+        self.check_plugin('azlyrics',
+                          'Modern Talking', "You're My Heart, You're My Soul",
+                          ['c02cee74bc3d8bc20ed95e8ff5b39c13'])
+
+    def test_azlyrics_02(self):
+        self.check_plugin('azlyrics',
+                          'Modern Talking', "Atlantis Is Calling (S.O.S. For Love)",
+                          ['4b826df521c5a9ca057796daa760b5b7'])
+
     # def test_chartlyrics_01(self):
     #     self.check_plugin('chartlyrics',
     #                       'James Brown', 'Prisoner of Love',

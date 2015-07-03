@@ -2,6 +2,7 @@ import logging
 import time
 
 from prismriver import util
+from prismriver.plugin.azlyrics import AZLyricsPlugin
 from prismriver.plugin.chartlyrics import ChartlyricsPlugin
 from prismriver.plugin.elyrics import ELyricsPlugin
 from prismriver.plugin.jlyric import JLyricPlugin
@@ -29,6 +30,7 @@ def is_enabled(plugin, enabled_plugins):
 
 def search(artist, title, limit=None, enabled_plugins=None):
     plugins = [
+        AZLyricsPlugin(),
         TouhouWikiPlugin(),
         LyricWikiPlugin(),
         MegalyricsPlugin(),
