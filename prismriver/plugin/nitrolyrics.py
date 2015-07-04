@@ -27,6 +27,6 @@ class NitroLyricsPlugin(Plugin):
             song_title = head_pane.find('h1').text.replace(' Lyrics', '')
 
             lyric_pane = soup.find('div', {'class': 'lyricContent'})
-            lyric = self.parse_verse_block(lyric_pane)
+            lyric = self.parse_verse_block(lyric_pane.find('p'))
 
             return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))

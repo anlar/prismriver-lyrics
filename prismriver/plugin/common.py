@@ -99,24 +99,15 @@ class Plugin:
         for tag in tags:
             [x.extract() for x in pane.findAll(tag)]
 
-    def parse_verse_block(self, verse_block, recursive=True):
+    def parse_verse_block(self, verse_block):
         lyric = ''
 
-        if recursive:
-            for elem in verse_block.recursiveChildGenerator():
-                if isinstance(elem, Comment):
-                    pass
-                elif isinstance(elem, NavigableString):
-                    lyric += elem.strip()
-                elif isinstance(elem, Tag):
-                    lyric += '\n'
-        else:
-            for elem in verse_block.childGenerator():
-                if isinstance(elem, Comment):
-                    pass
-                elif isinstance(elem, NavigableString):
-                    lyric += elem.strip()
-                elif isinstance(elem, Tag):
-                    lyric += '\n'
+        for elem in verse_block.childGenerator():
+            if isinstance(elem, Comment):
+                pass
+            elif isinstance(elem, NavigableString):
+                lyric += elem.strip()
+            elif isinstance(elem, Tag):
+                lyric += '\n'
 
         return lyric.strip()

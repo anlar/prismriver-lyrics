@@ -19,7 +19,7 @@ class LyricsManiaPlugin(Plugin):
                 return None
 
             # first part of lyrics to the left of video block
-            lyric1 = self.parse_verse_block(main_pane, recursive=False)
+            lyric1 = self.parse_verse_block(main_pane)
 
             lyric_pane = main_pane.find("div", {"class": "p402_premium"})
 
