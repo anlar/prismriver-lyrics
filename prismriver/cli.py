@@ -76,14 +76,14 @@ def run():
     parser.add_argument("-f", "--format", type=str, default='txt',
                         help="lyrics output format (txt (default), json, json_ascii)")
 
-    parser.add_argument("-o", "--output", type=str, default='%TITLE% - %ARTIST%\nSource: %PLUGIN_NAME%\n\n%LYRICS%',
+    parser.add_argument("-o", "--output", type=str, default='%ARTIST% - %TITLE%\nSource: %PLUGIN_NAME%\n\n%LYRICS%',
                         help="output template for txt format. Available parameters: "
                              "%%TITLE%% - song title, "
                              "%%ARTIST%% - song artist, "
                              "%%LYRICS%% - song lyrics, "
                              "%%PLUGIN_ID%% - plugin id, "
                              "%%PLUGIN_NAME%% - plugin name "
-                             "(default value: %%TITLE%% - %%ARTIST%%nSource: %%PLUGIN_NAME%%nn%%LYRICS%%)"
+                             "(default value: %%ARTIST%% - %%TITLE%%\\nSource: %%PLUGIN_NAME%%\\n\\n%%LYRICS%%)"
                         )
 
     parser.add_argument("-q", "--quiet", help="disable logging info (show only errors)", action="store_true")
