@@ -1,5 +1,3 @@
-from bs4 import BeautifulSoup
-
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
 
@@ -15,7 +13,7 @@ class MetroLyricsPlugin(Plugin):
         page = self.download_webpage(link)
 
         if page:
-            soup = BeautifulSoup(page)
+            soup = self.prepare_soup(page)
 
             lyric_pane = soup.find("div", {"id": "lyrics-body-text"})
             if lyric_pane is None:  # song not found

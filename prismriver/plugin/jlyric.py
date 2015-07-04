@@ -1,5 +1,3 @@
-from bs4 import BeautifulSoup
-
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
 
@@ -15,7 +13,7 @@ class JLyricPlugin(Plugin):
 
         page = self.download_webpage(link)
         if page:
-            soup = BeautifulSoup(page)
+            soup = self.prepare_soup(page)
 
             lyric_list_pane = soup.find('div', {'id': 'lyricList'})
             if lyric_list_pane is None:
@@ -29,7 +27,7 @@ class JLyricPlugin(Plugin):
             song_link = title_pane['href']
 
             lyric_page = self.download_webpage(song_link)
-            soup = BeautifulSoup(lyric_page)
+            soup = self.prepare_soup(lyric_page)
 
             lyric_pane = soup.find('p', {'id': 'lyricBody'})
             lyric = self.parse_verse_block(lyric_pane)

@@ -1,5 +1,3 @@
-from bs4 import BeautifulSoup
-
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
 
@@ -18,7 +16,7 @@ class NitroLyricsPlugin(Plugin):
         page = self.download_webpage(link)
 
         if page:
-            soup = BeautifulSoup(page)
+            soup = self.prepare_soup(page)
 
             head_pane = soup.find('div', {'class', 'lyric'})
             if head_pane is None:

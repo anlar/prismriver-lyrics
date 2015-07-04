@@ -1,6 +1,6 @@
 import json
 
-from bs4 import BeautifulSoup, Tag, NavigableString, Comment
+from bs4 import Tag, NavigableString, Comment
 
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
@@ -25,7 +25,7 @@ class LyricWikiPlugin(Plugin):
         second_url = resp['url']
         web_page = self.download_webpage(second_url)
 
-        soup = BeautifulSoup(web_page)
+        soup = self.prepare_soup(web_page)
         main_table = soup.find("div", {"class": "lyricbox"})
 
         lyric = self.parse_verse_block(main_table)

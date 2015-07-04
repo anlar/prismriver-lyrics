@@ -1,5 +1,3 @@
-from bs4 import BeautifulSoup
-
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
 
@@ -19,7 +17,7 @@ class TouhouWikiPlugin(Plugin):
         page = self.download_webpage(link)
 
         if page:
-            soup = BeautifulSoup(page)
+            soup = self.prepare_soup(page)
 
             # artist
             title_bar = soup.find("th", {"class": "incell_top"})

@@ -7,7 +7,7 @@ import sys
 import time
 import xml.etree.ElementTree
 
-from bs4 import NavigableString, Tag, Comment
+from bs4 import NavigableString, Tag, Comment, BeautifulSoup
 
 from prismriver import util
 
@@ -91,6 +91,9 @@ class Plugin:
             return sanitized
         else:
             return None
+
+    def prepare_soup(self, page):
+        return BeautifulSoup(page, 'lxml')
 
     def remove_tags_from_block(self, pane, tags):
         for tag in tags:

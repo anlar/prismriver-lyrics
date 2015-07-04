@@ -1,5 +1,3 @@
-from bs4 import BeautifulSoup
-
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
 
@@ -14,7 +12,7 @@ class LyricsManiaPlugin(Plugin):
         page = self.download_webpage(link)
 
         if page:
-            soup = BeautifulSoup(page)
+            soup = self.prepare_soup(page)
             main_pane = soup.find("div", {"class": "lyrics-body"})
             if main_pane is None:
                 # song wasn't found on site and we're redirected on main page where we can't find lyric pane

@@ -8,6 +8,6 @@ python:
 notifications:
   email: false
 
-install: "pip install beautifulsoup4"
+install: "pip install beautifulsoup4 lxml"
 
 script: nosetests -v

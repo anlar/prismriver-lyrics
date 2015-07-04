@@ -1,5 +1,3 @@
-from bs4 import BeautifulSoup
-
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
 
@@ -14,7 +12,7 @@ class MegalyricsPlugin(Plugin):
         page = self.download_webpage(link)
 
         if page:
-            soup = BeautifulSoup(page)
+            soup = self.prepare_soup(page)
             main_pane = soup.find("div", {"id": "txt"})
 
             if main_pane:

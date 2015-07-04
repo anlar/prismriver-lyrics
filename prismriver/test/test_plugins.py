@@ -145,21 +145,21 @@ class TestPlugins(unittest.TestCase):
                           'Bad Boys Blue', 'A World Without You (michelle)',
                           ['ad1240f4f772fc36e5286c4a4f29f187'])
 
-        # def test_touhouwiki_01(self):
-        #     self.check_plugin('touhouwiki',
-        #                       'FELT', 'World Around Us',
-        #                       ['49c8b1f1d35cc7627b9f163d2301ef58'])
-        #
-        # def test_touhouwiki_02(self):
-        #     self.check_plugin('touhouwiki',
-        #                       'ShibayanRecords', 'Fall In The Dark',
-        #                       ['29f3f203077b522be3d5da484732d0f0',
-        #                        '0d6849e8150afc2c529fa790b5531968',
-        #                        'c0d7a18839b1da9c2236a63559c6d8a5'])
-        #
-        # def test_touhouwiki_03(self):
-        #     self.check_plugin('touhouwiki',
-        #                       'Shinra-bansho', '受け入れられない真実',
-        #                       ['bf8cc305e81594b38d5b282b58e53d68',
-        #                        '895cdd1950bdf462b2ed4d2f53d910a2',
-        #                        '53ba62a6cb0b8d1a2311796b81aff106'])
+    def test_touhouwiki_01(self):
+        self.check_plugin('touhouwiki',
+                          'FELT', 'World Around Us',
+                          ['49c8b1f1d35cc7627b9f163d2301ef58'])
+
+    def test_touhouwiki_02(self):
+        self.check_plugin('touhouwiki',
+                          'ShibayanRecords', 'Fall In The Dark',
+                          ['29f3f203077b522be3d5da484732d0f0',
+                           '0d6849e8150afc2c529fa790b5531968',
+                           'c0d7a18839b1da9c2236a63559c6d8a5'])
+
+    def test_touhouwiki_03(self):
+        self.check_plugin('touhouwiki',
+                          'Shinra-bansho', '受け入れられない真実',
+                          ['bf8cc305e81594b38d5b282b58e53d68',
+                           'a7de7b5e4460d573c87feded75709bce',
+                           '3b5ae103d34b8a1e5d782f8439b400ad'])
