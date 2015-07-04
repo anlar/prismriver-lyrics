@@ -6,6 +6,7 @@ from prismriver.plugin.azlyrics import AZLyricsPlugin
 from prismriver.plugin.chartlyrics import ChartlyricsPlugin
 from prismriver.plugin.elyrics import ELyricsPlugin
 from prismriver.plugin.jlyric import JLyricPlugin
+from prismriver.plugin.kget import KGetPlugin
 from prismriver.plugin.leoslyrics import LeosLyricsPlugin
 from prismriver.plugin.lyricshuddle import LyricsHuddlePlugin
 from prismriver.plugin.lyricsmania import LyricsManiaPlugin
@@ -42,7 +43,8 @@ def search(artist, title, limit=None, enabled_plugins=None):
         LyricsHuddlePlugin(),
         ELyricsPlugin(),
         NitroLyricsPlugin(),
-        JLyricPlugin()
+        JLyricPlugin(),
+        KGetPlugin()
     ]
 
     result = []

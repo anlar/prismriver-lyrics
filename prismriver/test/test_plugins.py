@@ -68,6 +68,21 @@ class TestPlugins(unittest.TestCase):
                           '浜崎あゆみ', 'Bold & Delicious',
                           ['87cdd3d59e867ece975a49c2129d3aa6'])
 
+    def test_kget_01(self):
+        self.check_plugin('kget',
+                          'YUI', 'CHE.R.RY ～Bossa Live Version～',
+                          ['7f96f730bf8b3181d203d2ca50bf2112'])
+
+    def test_kget_02(self):
+        self.check_plugin('kget',
+                          'Groove Coverage', '7 years & 50 days (Cascada vs. Plazmatek Remix)',
+                          ['7efbe88d207031795a16f85f5c2f2460'])
+
+    def test_kget_03(self):
+        self.check_plugin('kget',
+                          '浜崎あゆみ', 'A Song for ××',
+                          ['e06cfe45fa4e261ff92c30fd444ce39e'])
+
     def test_leoslyrics_01(self):
         self.check_plugin('leoslyrics',
                           'Groove Coverage', 'Moonlight Shadow [Extended Version]',
