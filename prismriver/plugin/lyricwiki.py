@@ -8,34 +8,38 @@ from prismriver.struct import Song
 
 class LyricWikiPlugin(Plugin):
     def __init__(self):
-        super().__init__('lyricwiki', 'LyricWiki')
+        super(LyricWikiPlugin, self).__init__('lyricwiki', 'LyricWiki')
 
     def search(self, artist, title):
         url = 'http://lyrics.wikia.com/api.php?action=lyrics&artist={}&song={}&fmt=realjson&func=getSong'.format(
-            self.quote_uri(artist), self.quote_uri(title))
+            self.prepare_url_parameter(artist), self.prepare_url_parameter(title))
 
-        webpage = self.download_webpage_text(url)
-        resp = json.loads(webpage)
-        if resp['lyrics'] == 'Not found':
-            return None
+        page = self.download_webpage_text(url)
 
-        song_artist = resp['artist']
-        song_title = resp['song']
+        if page:
+            resp = json.loads(page)
+            if resp['lyrics'] == 'Not found':
+                return None
 
-        second_url = resp['url']
-        web_page = self.download_webpage(second_url)
+            song_artist = resp['artist']
+            song_title = resp['song']
 
-        soup = self.prepare_soup(web_page)
-        main_table = soup.find("div", {"class": "lyricbox"})
+            lyric_url = resp['url']
+            lyric_page = self.download_webpage(lyric_url)
 
-        lyric = self.parse_verse_block(main_table)
+            soup = self.prepare_soup(lyric_page)
 
-        return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
+            lyrics = []
+            for lyric_pane in soup.findAll("div", {"class": "lyricbox"}):
+                lyric = self.parse_verse_block(lyric_pane)
+                lyrics.append(lyric)
+
+            return Song(song_artist, song_title, self.sanitize_lyrics(lyrics))
 
     def parse_verse_block(self, verse_block):
         lyric = ''
 
-        for elem in verse_block.recursiveChildGenerator():
+        for elem in verse_block.childGenerator():
             if isinstance(elem, Comment):
                 pass
             elif isinstance(elem, NavigableString):

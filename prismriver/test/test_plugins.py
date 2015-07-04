@@ -103,6 +103,12 @@ class TestPlugins(unittest.TestCase):
                           'Sound Holic', 'Grip & Break Down !!',
                           ['ea12362512264723fee26192a3ea53b5'])
 
+    def test_lyricwiki_02(self):
+        self.check_plugin('lyricwiki',
+                          'Kalafina', 'Red Moon',
+                          ['a2cf1a1d1b54145d262418d22cac9381',
+                           '3a8a2b0b4ec438a9cef665b861ef0f43'])
+
     def test_lyrster_01(self):
         self.check_plugin('lyrster',
                           'Groove Coverage', 'Damn!',
