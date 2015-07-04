@@ -7,8 +7,12 @@ class LeosLyricsPlugin(Plugin):
         super().__init__('leoslyrics', "Leo's Lyrics")
 
     def search(self, artist, title):
-        link = "http://www.leoslyrics.com/{}/{}-lyrics/".format(self.prepare_url_parameter(artist),
-                                                                self.prepare_url_parameter(title))
+        to_delete = [',', '"', '?', '!', '(', ')', '[', ']']
+        to_replace = [' ', '.', "'", ' & ']
+
+        link = "http://www.leoslyrics.com/{}/{}-lyrics/".format(
+            self.prepare_url_parameter(artist, to_delete=to_delete, to_replace=to_replace),
+            self.prepare_url_parameter(title, to_delete=to_delete, to_replace=to_replace))
 
         page = self.download_webpage(link)
         if page:
@@ -25,16 +29,3 @@ class LeosLyricsPlugin(Plugin):
             lyric = self.parse_verse_block(lyric_pane)
 
             return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
-
-    def prepare_url_parameter(self, value):
-        simplified = value.translate({ord(":"): None,
-                                      ord("'"): None,
-                                      ord(","): None,
-                                      ord("&"): None,
-                                      ord("["): None,
-                                      ord("]"): None,
-                                      ord("'"): "-",
-                                      ord("."): "-",
-                                      ord(" "): "-"}
-                                     )
-        return self.quote_uri(simplified)

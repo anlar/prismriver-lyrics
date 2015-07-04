@@ -8,8 +8,8 @@ class ChartlyricsPlugin(Plugin):
 
     def search(self, artist, title):
         link = "http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist={}&song={}".format(
-            self.quote_uri(artist),
-            self.quote_uri(title))
+            self.prepare_url_parameter(artist),
+            self.prepare_url_parameter(title))
 
         xml_root = self.download_xml(link)
         if xml_root:

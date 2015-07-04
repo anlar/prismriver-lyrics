@@ -7,8 +7,11 @@ class LyrsterPlugin(Plugin):
         super().__init__('lyrster', "Lyrster")
 
     def search(self, artist, title):
-        link = "http://www.lyrster.com/lyrics/{}-lyrics-{}.html".format(self.prepare_url_parameter(title),
-                                                                        self.prepare_url_parameter(artist))
+        to_delete = ["'", '!', '(', ')', '[', ']']
+
+        link = "http://www.lyrster.com/lyrics/{}-lyrics-{}.html".format(
+            self.prepare_url_parameter(title, to_delete=to_delete),
+            self.prepare_url_parameter(artist, to_delete=to_delete))
 
         page = self.download_webpage(link)
         if page:
@@ -27,14 +30,3 @@ class LyrsterPlugin(Plugin):
 
             if lyric != "We do not have the complete song's lyrics just yet.":
                 return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
-
-    def prepare_url_parameter(self, value):
-        simplified = value.translate({ord("'"): None,
-                                      ord("!"): None,
-                                      ord("("): None,
-                                      ord(")"): None,
-                                      ord("["): None,
-                                      ord("]"): None,
-                                      ord(" "): "-"}
-                                     )
-        return self.quote_uri(simplified.lower())

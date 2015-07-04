@@ -9,11 +9,11 @@ class LyricsHuddlePlugin(Plugin):
     def search(self, artist, title):
         to_delete = ['!', '?', '(', ')', "'", '"', ',']
         to_replace = [' ', ' & ', ' / ', '/', ':']
-        link = "http://www.lyricshuddle.com/{}/{}/{}.html".format(artist[0],
-                                                                  self.prepare_url_parameter(artist, to_delete,
-                                                                                             to_replace),
-                                                                  self.prepare_url_parameter(title, to_delete,
-                                                                                             to_replace))
+
+        link = "http://www.lyricshuddle.com/{}/{}/{}.html".format(
+            artist[0],
+            self.prepare_url_parameter(artist, to_delete, to_replace),
+            self.prepare_url_parameter(title, to_delete, to_replace))
 
         page = self.download_webpage(link)
         if page:

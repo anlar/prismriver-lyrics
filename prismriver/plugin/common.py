@@ -25,7 +25,7 @@ class Plugin:
 
     def quote_uri(self, value, safe_chars=None):
         if safe_chars:
-            return urllib.parse.quote(value, safe=safe_chars)
+            return urllib.parse.quote(value, safe=(safe_chars + '/'))
         else:
             return urllib.parse.quote(value)
 

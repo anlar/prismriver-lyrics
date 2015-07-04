@@ -7,8 +7,12 @@ class MetroLyricsPlugin(Plugin):
         super().__init__('metrolyrics', 'MetroLyrics')
 
     def search(self, artist, title):
-        link = "http://www.metrolyrics.com/{}-lyrics-{}.html".format(self.simplify_url_parameter(title),
-                                                                     self.simplify_url_parameter(artist))
+        to_delete = ["'", '(', ')']
+        to_replace = [' ']
+
+        link = "http://www.metrolyrics.com/{}-lyrics-{}.html".format(
+            self.prepare_url_parameter(title, to_delete=to_delete, to_replace=to_replace),
+            self.prepare_url_parameter(artist, to_delete=to_delete, to_replace=to_replace))
 
         page = self.download_webpage(link)
 
@@ -25,7 +29,3 @@ class MetroLyricsPlugin(Plugin):
                 lyric += (verse + '\n\n')
 
             return Song(artist, title, self.sanitize_lyrics([lyric]))
-
-    def simplify_url_parameter(self, value):
-        simplified = value.translate({ord("("): None, ord(")"): None, ord("'"): None, ord(" "): "-"})
-        return self.quote_uri(simplified)

@@ -7,8 +7,13 @@ class LyricsManiaPlugin(Plugin):
         super().__init__('lyricsmania', "LyricsMania")
 
     def search(self, artist, title):
-        link = "http://www.lyricsmania.com/{}_lyrics_{}.html".format(self.simplify_url_parameter(title),
-                                                                     self.simplify_url_parameter(artist))
+        to_delete = ['.', "'", '?', '(', ')']
+        to_replace = [' ', ' & ']
+
+        link = "http://www.lyricsmania.com/{}_lyrics_{}.html".format(
+            self.prepare_url_parameter(title, to_delete=to_delete, to_replace=to_replace, delimiter='_'),
+            self.prepare_url_parameter(artist, to_delete=to_delete, to_replace=to_replace, delimiter='_'))
+
         page = self.download_webpage(link)
 
         if page:
@@ -27,7 +32,3 @@ class LyricsManiaPlugin(Plugin):
             lyric2 = self.parse_verse_block(lyric_pane)
 
             return Song(artist, title, self.sanitize_lyrics([lyric1 + '\n' + lyric2]))
-
-    def simplify_url_parameter(self, value):
-        simplified = value.translate({ord("("): None, ord(")"): None, ord("'"): None, ord(" "): "_"})
-        return self.quote_uri(simplified)

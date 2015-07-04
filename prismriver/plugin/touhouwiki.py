@@ -13,7 +13,7 @@ class TouhouWikiPlugin(Plugin):
         super().__init__('touhouwiki', 'TouhouWiki')
 
     def search(self, artist, title):
-        link = "http://en.touhouwiki.net/wiki/Lyrics:_" + self.quote_uri(title)
+        link = "http://en.touhouwiki.net/wiki/Lyrics:_" + self.prepare_url_parameter(title)
         page = self.download_webpage(link)
 
         if page:

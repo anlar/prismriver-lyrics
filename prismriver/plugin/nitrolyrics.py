@@ -9,6 +9,7 @@ class NitroLyricsPlugin(Plugin):
     def search(self, artist, title):
         to_delete = ['.', '(', ')', "'", ',', '.', '?', '-']
         to_replace = [' ', ' & ']
+
         link = 'http://www.nitrolyrics.com/{}_{}-lyrics.html'.format(
             self.prepare_url_parameter(artist, to_delete, to_replace),
             self.prepare_url_parameter(title, to_delete, to_replace))
