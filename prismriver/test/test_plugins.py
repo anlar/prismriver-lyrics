@@ -93,6 +93,16 @@ class TestPlugins(unittest.TestCase):
                           'Ace of Base', "Never Gonna Say I'm Sorry [Long]",
                           ['f3e7fbdfd3c1bc85a21dad24188b75b4'])
 
+    def test_lololyrics_01(self):
+        self.check_plugin('lololyrics',
+                          'Daft Punk', 'Harder, Better, Faster, Stronger',
+                          ['b97a0f09485238d5fb09780c44d54c51'])
+
+    def test_lololyrics_02(self):
+        self.check_plugin('lololyrics',
+                          'Groove Coverage', 'Holy Virgin (Radio Edit)',
+                          ['5348e8a8cb887b00ae918dffe518ed51'])
+
     def test_lyricshuddle_01(self):
         self.check_plugin('lyricshuddle',
                           'Daft Punk', "One More Time (romanthony's Unplugged Version)",
