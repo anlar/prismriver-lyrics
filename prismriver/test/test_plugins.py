@@ -33,6 +33,20 @@ class TestPlugins(unittest.TestCase):
     def get_md5(self, value):
         return hashlib.md5(value.encode('utf-8')).hexdigest()
 
+    def test_amalgama_01(self):
+        self.check_plugin('amalgama',
+                          'Modern Talking', "You're My Heart, You're My Soul",
+                          ['7236c048b8f71ba1e7485136efba5abf',
+                           '1aa073ad09ad5b3d10cc67e4d4060ab7',
+                           '7b2a083cfbf7d20ad7e1b3749b229564'])
+
+    def test_amalgama_02(self):
+        self.check_plugin('amalgama',
+                          'Modern Talking', 'China in Her Eyes (Rap Version)',
+                          ['23b184a36effe86c42ec29e65fcbc512',
+                           '9bc36b6bd9160f86f7378964d6267928',
+                           'bbeccf0b9e0670bdcb4049aa38ae5f29'])
+
     # def test_azlyrics_01(self):
     #     self.check_plugin('azlyrics',
     #                       'Modern Talking', "You're My Heart, You're My Soul",

@@ -2,6 +2,7 @@ import logging
 import time
 
 from prismriver import util
+from prismriver.plugin.amalgama import AmalgamaPlugin
 from prismriver.plugin.azlyrics import AZLyricsPlugin
 from prismriver.plugin.chartlyrics import ChartlyricsPlugin
 from prismriver.plugin.elyrics import ELyricsPlugin
@@ -46,7 +47,8 @@ def search(artist, title, limit=None, enabled_plugins=None):
         NitroLyricsPlugin(),
         JLyricPlugin(),
         KGetPlugin(),
-        LololyricsPlugin()
+        LololyricsPlugin(),
+        AmalgamaPlugin()
     ]
 
     result = []
