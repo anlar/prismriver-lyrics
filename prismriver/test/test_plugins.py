@@ -33,15 +33,15 @@ class TestPlugins(unittest.TestCase):
     def get_md5(self, value):
         return hashlib.md5(value.encode('utf-8')).hexdigest()
 
-    def test_azlyrics_01(self):
-        self.check_plugin('azlyrics',
-                          'Modern Talking', "You're My Heart, You're My Soul",
-                          ['c02cee74bc3d8bc20ed95e8ff5b39c13'])
+    # def test_azlyrics_01(self):
+    #     self.check_plugin('azlyrics',
+    #                       'Modern Talking', "You're My Heart, You're My Soul",
+    #                       ['c02cee74bc3d8bc20ed95e8ff5b39c13'])
 
-    def test_azlyrics_02(self):
-        self.check_plugin('azlyrics',
-                          'Modern Talking', "Atlantis Is Calling (S.O.S. For Love)",
-                          ['4b826df521c5a9ca057796daa760b5b7'])
+    # def test_azlyrics_02(self):
+    #     self.check_plugin('azlyrics',
+    #                       'Modern Talking', "Atlantis Is Calling (S.O.S. For Love)",
+    #                       ['4b826df521c5a9ca057796daa760b5b7'])
 
     # def test_chartlyrics_01(self):
     #     self.check_plugin('chartlyrics',
@@ -103,15 +103,15 @@ class TestPlugins(unittest.TestCase):
                           'Groove Coverage', 'Holy Virgin (Radio Edit)',
                           ['5348e8a8cb887b00ae918dffe518ed51'])
 
-    def test_lyricshuddle_01(self):
-        self.check_plugin('lyricshuddle',
-                          'Daft Punk', "One More Time (romanthony's Unplugged Version)",
-                          ['9931445a1c03a8cc78745ffcba611691'])
+    # def test_lyricshuddle_01(self):
+    #     self.check_plugin('lyricshuddle',
+    #                       'Daft Punk', "One More Time (romanthony's Unplugged Version)",
+    #                       ['9931445a1c03a8cc78745ffcba611691'])
 
-    def test_lyricshuddle_02(self):
-        self.check_plugin('lyricshuddle',
-                          'Daft Punk', "Harder, Better, Faster, Stronger (neptunes Remix)",
-                          ['995db98bba775ccf4e8cbc97efd37e98'])
+    # def test_lyricshuddle_02(self):
+    #     self.check_plugin('lyricshuddle',
+    #                       'Daft Punk', "Harder, Better, Faster, Stronger (neptunes Remix)",
+    #                       ['995db98bba775ccf4e8cbc97efd37e98'])
 
     def test_lyricsmania_01(self):
         self.check_plugin('lyricsmania',
