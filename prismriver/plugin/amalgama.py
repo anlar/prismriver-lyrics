@@ -17,7 +17,7 @@ class AmalgamaPlugin(Plugin):
         to_replace = [' ', "'", '-']
 
         link = 'http://www.amalgama-lab.com/songs/{}/{}/{}.html'.format(
-            artist[0],
+            self.prepare_url_parameter(artist[0]),
             self.prepare_url_parameter(artist, to_delete, to_replace, delimiter='_'),
             self.prepare_url_parameter(title, to_delete, to_replace, delimiter='_')).lower()
 

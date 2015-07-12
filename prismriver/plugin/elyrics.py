@@ -11,7 +11,7 @@ class ELyricsPlugin(Plugin):
         safe_chars = '()'
 
         link = 'http://www.elyrics.net/read/{}/{}-lyrics/{}-lyrics.html'.format(
-            artist[0],
+            self.prepare_url_parameter(artist[0]),
             self.prepare_url_parameter(self.prepare_parameter(artist), to_replace=to_replace, safe_chars=safe_chars),
             self.prepare_url_parameter(self.prepare_parameter(title), to_replace=to_replace, safe_chars=safe_chars))
 

@@ -11,7 +11,7 @@ class LyricsHuddlePlugin(Plugin):
         to_replace = [' ', ' & ', ' / ', '/', ':']
 
         link = "http://www.lyricshuddle.com/{}/{}/{}.html".format(
-            artist[0],
+            self.prepare_url_parameter(artist[0]),
             self.prepare_url_parameter(artist, to_delete, to_replace),
             self.prepare_url_parameter(title, to_delete, to_replace))
 
