@@ -66,4 +66,4 @@ multiple sites
 
 ## Copyright
 
-Released under Expat license (aka MIT License), see [LICENSE.md](LICENSE.md) for details.
+Released under Expat license (aka MIT License), see [LICENSE](LICENSE) for details.
