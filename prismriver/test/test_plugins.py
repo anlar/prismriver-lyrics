@@ -5,14 +5,14 @@ import unittest
 import hashlib
 import os
 
-from prismriver.main import search
+from prismriver.main import search_sync
 
 
 class TestPlugins(unittest.TestCase):
     def check_plugin(self, plugin_id, artist, title, lyric_hashes):
         logging.basicConfig(format='%(asctime)s %(levelname)s [%(module)s] %(message)s', level=logging.DEBUG)
 
-        result = search(artist, title, limit=None, enabled_plugins=[plugin_id])
+        result = search_sync(artist, title, limit=None, enabled_plugins=[plugin_id])
 
         self.assertEqual(1, len(result), 'Wrong songs count')
         self.assertEqual(len(lyric_hashes), len(result[0].lyrics), 'Wrong lyrics count')

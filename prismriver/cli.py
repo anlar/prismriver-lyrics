@@ -3,7 +3,7 @@ from json import JSONEncoder
 import json
 import logging
 
-from prismriver.main import search
+from prismriver.main import search_sync, search_async
 
 
 class SongJsonEncoder(JSONEncoder):
@@ -76,6 +76,9 @@ def run():
     parser.add_argument("-f", "--format", type=str, default='txt',
                         help="lyrics output format (txt (default), json, json_ascii)")
 
+    parser.add_argument('--async', action='store_true',
+                        help='search info from all plugins simultaneously')
+
     parser.add_argument("-o", "--output", type=str, default='%ARTIST% - %TITLE%\nSource: %PLUGIN_NAME%\n\n%LYRICS%',
                         help="output template for txt format. Available parameters: "
                              "%%TITLE%% - song title, "
@@ -96,7 +99,11 @@ def run():
     logging.debug('Search lyrics with following parameters: {}'.format(params.__dict__))
 
     enabled_plugins = params.plugins.split(',') if params.plugins else None
-    result = search(params.artist, params.title, params.limit, enabled_plugins)
+
+    if params.async:
+        result = search_async(params.artist, params.title, params.limit, enabled_plugins)
+    else:
+        result = search_sync(params.artist, params.title, params.limit, enabled_plugins)
 
     if result:
         print(format_output(result, params.format, params.output))
