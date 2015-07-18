@@ -13,6 +13,7 @@ from prismriver.plugin.jlyric import JLyricPlugin
 from prismriver.plugin.kget import KGetPlugin
 from prismriver.plugin.leoslyrics import LeosLyricsPlugin
 from prismriver.plugin.lololyrics import LololyricsPlugin
+from prismriver.plugin.lyricalnonsense import LyricalNonsensePlugin
 from prismriver.plugin.lyricshuddle import LyricsHuddlePlugin
 from prismriver.plugin.lyricsmania import LyricsManiaPlugin
 from prismriver.plugin.lyricwiki import LyricWikiPlugin
@@ -43,7 +44,8 @@ def get_plugins(enabled_plugins=None):
         KGetPlugin(),
         LololyricsPlugin(),
         AmalgamaPlugin(),
-        AnimeLyricsPlugin()
+        AnimeLyricsPlugin(),
+        LyricalNonsensePlugin()
     ]
 
     plugins = []

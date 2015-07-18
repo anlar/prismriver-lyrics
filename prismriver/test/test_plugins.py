@@ -143,6 +143,14 @@ class TestPlugins(unittest.TestCase):
                           'Groove Coverage', 'Holy Virgin (Radio Edit)',
                           ['5348e8a8cb887b00ae918dffe518ed51'])
 
+    def test_lyricalnonsense_01(self):
+        self.check_plugin('lyricalnonsense',
+                          'supercell', 'ワールドイズマイン',
+                          ['e8ec2964d298caa61aeddb2e353ec574',
+                           '57e83798afde4fc3aa0fdd65adf0012f',
+                           '85cb77dbc3635102f118205672311ea8',
+                           '7baa703eab3a32e76cc2c86f0a8e1c04'])
+
     # def test_lyricshuddle_01(self):
     #     self.check_plugin('lyricshuddle',
     #                       'Daft Punk', "One More Time (romanthony's Unplugged Version)",
