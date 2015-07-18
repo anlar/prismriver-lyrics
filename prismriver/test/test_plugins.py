@@ -47,6 +47,32 @@ class TestPlugins(unittest.TestCase):
                            '9bc36b6bd9160f86f7378964d6267928',
                            'bbeccf0b9e0670bdcb4049aa38ae5f29'])
 
+    def test_animelyrics_01(self):
+        self.check_plugin('animelyrics',
+                          'Yui Horie', 'ALL MY LOVE',
+                          ['38f0889fce3c422d894d1e766e14f492',
+                           'f474cf8ef4017fd9a2adda76c88bde2c',
+                           '5636bb331d8d91da75c4477a78e0ae56'])
+
+    def test_animelyrics_02(self):
+        self.check_plugin('animelyrics',
+                          'supercell', 'Kokuhaku',
+                          ['12933b6f2b339d01b9b1bbb7228525c4',
+                           'fa2bdfc06457002b0640ac4f6d782ced'])
+
+    def test_animelyrics_03(self):
+        self.check_plugin('animelyrics',
+                          'Konomi Suzuki', 'Yume no Tsuzuki',
+                          ['ddc2639d5ce46acfba260d38cc21a74a',
+                           'c05345db62f58cff9ca2c9facf038d1e'])
+
+    def test_animelyrics_04(self):
+        self.check_plugin('animelyrics',
+                          ' Luca Yumi', 'Truth',
+                          ['b67b5b76497a3bf3dfde36c58f489279',
+                           '68a292d2337da33f80bf80c8e01bc81f',
+                           '680a12a7055ca78f51e9a3e80a9af8fd'])
+
     # def test_azlyrics_01(self):
     #     self.check_plugin('azlyrics',
     #                       'Modern Talking', "You're My Heart, You're My Soul",

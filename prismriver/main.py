@@ -5,6 +5,7 @@ from multiprocessing import Queue
 
 from prismriver import util
 from prismriver.plugin.amalgama import AmalgamaPlugin
+from prismriver.plugin.animelyrics import AnimeLyricsPlugin
 from prismriver.plugin.azlyrics import AZLyricsPlugin
 from prismriver.plugin.chartlyrics import ChartlyricsPlugin
 from prismriver.plugin.elyrics import ELyricsPlugin
@@ -41,7 +42,8 @@ def get_plugins(enabled_plugins=None):
         JLyricPlugin(),
         KGetPlugin(),
         LololyricsPlugin(),
-        AmalgamaPlugin()
+        AmalgamaPlugin(),
+        AnimeLyricsPlugin()
     ]
 
     plugins = []
