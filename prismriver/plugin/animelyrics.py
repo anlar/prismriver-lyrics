@@ -136,6 +136,11 @@ class AnimeLyricsPlugin(Plugin):
                 return mobj.group('id')
 
         for value in values:
+            if value.startswith('Performer'):
+                mobj = re.match('Performer([:]*) (?P<id>.*)', value)
+                return mobj.group('id')
+
+        for value in values:
             if value.startswith('by'):
                 mobj = re.match('by([:]*) (?P<id>.*)', value)
                 return mobj.group('id')
@@ -143,6 +148,11 @@ class AnimeLyricsPlugin(Plugin):
         for value in values:
             if value.startswith('Sung by'):
                 mobj = re.match('Sung by([:]*) (?P<id>.*)', value)
+                return mobj.group('id')
+
+        for value in values:
+            if value.startswith('Singers'):
+                mobj = re.match('Singers([:]*) (?P<id>.*)', value)
                 return mobj.group('id')
 
     def parse_lyric_block(self, block):
