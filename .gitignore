@@ -8,3 +8,6 @@ __pycache__/
 
 # dev launcher
 run-dev-prismriver.sh
+
+# log files
+*.log

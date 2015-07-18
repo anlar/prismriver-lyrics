@@ -54,14 +54,22 @@ def format_output(songs, output_format, txt_template=None):
         pass
 
 
-def init_logging(quiet, verbose):
+def init_logging(quiet, verbose, log_file):
     log_format = '%(asctime)s %(levelname)s [%(module)s] %(message)s'
+
     if quiet:
-        logging.basicConfig(format=log_format, level=logging.WARNING)
+        log_level = logging.WARNING
     elif verbose:
-        logging.basicConfig(format=log_format, level=logging.DEBUG)
+        log_level = logging.DEBUG
     else:
-        logging.basicConfig(format=log_format, level=logging.INFO)
+        log_level = logging.INFO
+
+    if log_file:
+        log_handlers = [logging.FileHandler(log_file), logging.StreamHandler()]
+    else:
+        log_handlers = [logging.StreamHandler()]
+
+    logging.basicConfig(format=log_format, level=log_level, handlers=log_handlers)
 
 
 def run():
@@ -91,10 +99,11 @@ def run():
 
     parser.add_argument("-q", "--quiet", help="disable logging info (show only errors)", action="store_true")
     parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
+    parser.add_argument('--log', type=str, help='if set will redirect log info to that file')
 
     params = parser.parse_args()
 
-    init_logging(params.quiet, params.verbose)
+    init_logging(params.quiet, params.verbose, params.log)
 
     logging.debug('Search lyrics with following parameters: {}'.format(params.__dict__))
 
