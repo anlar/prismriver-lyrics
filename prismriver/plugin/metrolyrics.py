@@ -28,4 +28,6 @@ class MetroLyricsPlugin(Plugin):
                 verse = self.parse_verse_block(verse_pane)
                 lyric += (verse + '\n\n')
 
-            return Song(artist, title, self.sanitize_lyrics([lyric]))
+            if lyric.strip():
+                # if lyric is empty that mean that they've only empty stub page for that song
+                return Song(artist, title, self.sanitize_lyrics([lyric]))
