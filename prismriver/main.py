@@ -16,6 +16,7 @@ from prismriver.plugin.lololyrics import LololyricsPlugin
 from prismriver.plugin.lyricalnonsense import LyricalNonsensePlugin
 from prismriver.plugin.lyricshuddle import LyricsHuddlePlugin
 from prismriver.plugin.lyricsmania import LyricsManiaPlugin
+from prismriver.plugin.lyricsnmusic import LyricsNMusicPlugin
 from prismriver.plugin.lyricwiki import LyricWikiPlugin
 from prismriver.plugin.lyrster import LyrsterPlugin
 from prismriver.plugin.megalyrics import MegalyricsPlugin
@@ -47,7 +48,8 @@ def get_plugins(enabled_plugins=None):
         AmalgamaPlugin(),
         AnimeLyricsPlugin(),
         LyricalNonsensePlugin(),
-        VagalumePlugin()
+        VagalumePlugin(),
+        LyricsNMusicPlugin()
     ]
 
     plugins = []

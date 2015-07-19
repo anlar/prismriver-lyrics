@@ -171,6 +171,11 @@ class TestPlugins(unittest.TestCase):
                           'Joe Esposito', 'You\'re The Best',
                           ['ee9de08277a90ad90f0caae8bcb2ae23'])
 
+    def test_lyricsnmusic_01(self):
+        self.check_plugin('lyricsnmusic',
+                          'Joe Dassin', 'Le Moustique',
+                          ['492a37b433c45767a589eefbec8060a3'])
+
     def test_lyricwiki_01(self):
         self.check_plugin('lyricwiki',
                           'Sound Holic', 'Grip & Break Down !!',
