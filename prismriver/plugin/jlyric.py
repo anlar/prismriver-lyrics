@@ -6,7 +6,7 @@ class JLyricPlugin(Plugin):
     def __init__(self):
         super().__init__('jlyric', 'J-Lyric')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         link = "http://search.j-lyric.net/index.php?kt={}&ct=0&ka={}&ca=0".format(
             self.prepare_url_parameter(title, delimiter='+'),
             self.prepare_url_parameter(artist))

@@ -8,7 +8,7 @@ class LyricsManiaPlugin(Plugin):
     def __init__(self):
         super().__init__('lyricsmania', 'LyricsMania')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         to_delete = ['.', "'", '?', '(', ')']
         to_replace = [' ', ' & ']
 

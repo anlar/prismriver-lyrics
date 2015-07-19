@@ -6,7 +6,7 @@ class ChartlyricsPlugin(Plugin):
     def __init__(self):
         super().__init__('chartlyrics', 'Chartlyrics')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         link = "http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist={}&song={}".format(
             self.prepare_url_parameter(artist),
             self.prepare_url_parameter(title))

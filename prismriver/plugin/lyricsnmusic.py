@@ -10,7 +10,7 @@ class LyricsNMusicPlugin(Plugin):
     def __init__(self):
         super(LyricsNMusicPlugin, self).__init__('lyricsnmusic', 'Lyrics N Music')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         link = 'http://api.lyricsnmusic.com/songs?artist={}&track={}'.format(
             self.prepare_url_parameter(artist), self.prepare_url_parameter(title)
         )

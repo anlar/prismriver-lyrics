@@ -6,7 +6,7 @@ class LyricsHuddlePlugin(Plugin):
     def __init__(self):
         super().__init__('lyricshuddle', 'LyricsHuddle')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         to_delete = ['!', '?', '(', ')', "'", '"', ',']
         to_replace = [' ', ' & ', ' / ', '/', ':']
 

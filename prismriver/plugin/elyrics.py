@@ -6,7 +6,7 @@ class ELyricsPlugin(Plugin):
     def __init__(self):
         super().__init__('elyrics', 'eLyrics')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         to_replace = [' ']
         safe_chars = '()'
 

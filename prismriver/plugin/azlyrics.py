@@ -13,7 +13,7 @@ class AZLyricsPlugin(Plugin):
     def __init__(self):
         super(AZLyricsPlugin, self).__init__('azlyrics', 'AZLyrics')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         to_delete = [' ', ',', '.', '-', '?', '!', '/', '&', "'", '(', ')']
 
         link = 'http://www.azlyrics.com/lyrics/{}/{}.html'.format(

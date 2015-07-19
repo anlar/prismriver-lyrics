@@ -9,7 +9,7 @@ class VagalumePlugin(Plugin):
     def __init__(self):
         super(VagalumePlugin, self).__init__('vagalume', 'Vagalume')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         link = 'http://api.vagalume.com.br/search.php?art={}&mus={}'.format(
             self.prepare_url_parameter(artist), self.prepare_url_parameter(title)
         )

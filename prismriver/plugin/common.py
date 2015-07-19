@@ -18,11 +18,8 @@ class Plugin:
         self.plugin_id = plugin_id
         self.plugin_name = plugin_name
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         pass
-
-    def is_valid_request(self, artist, title):
-        return artist and title
 
     def quote_uri(self, value, safe_chars=None):
         if safe_chars:

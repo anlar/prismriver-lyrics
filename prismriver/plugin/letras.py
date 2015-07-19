@@ -6,7 +6,7 @@ class LetrasPlugin(Plugin):
     def __init__(self):
         super(LetrasPlugin, self).__init__('letras', 'Letras')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         link = 'http://letras.mus.br/winamp.php?t={}{}{}'.format(
             self.prepare_url_parameter(artist),
             self.prepare_url_parameter(' - '),

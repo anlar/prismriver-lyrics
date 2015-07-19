@@ -6,7 +6,7 @@ class LeosLyricsPlugin(Plugin):
     def __init__(self):
         super().__init__('leoslyrics', "Leo's Lyrics")
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         to_delete = [',', '"', '?', '!', '(', ')', '[', ']']
         to_replace = [' ', '.', "'", ' & ']
 

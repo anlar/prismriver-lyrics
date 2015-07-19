@@ -12,7 +12,7 @@ class AmalgamaPlugin(Plugin):
     def __init__(self):
         super(AmalgamaPlugin, self).__init__('amalgama', 'Amalgama')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         to_delete = ['.', ',', '!', '?', '(', ')', '*']
         to_replace = [' ', "'", '-']
 

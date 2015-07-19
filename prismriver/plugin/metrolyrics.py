@@ -6,7 +6,7 @@ class MetroLyricsPlugin(Plugin):
     def __init__(self):
         super().__init__('metrolyrics', 'MetroLyrics')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         to_delete = ["'", '(', ')']
         to_replace = [' ']
 

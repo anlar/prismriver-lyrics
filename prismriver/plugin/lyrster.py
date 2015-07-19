@@ -6,7 +6,7 @@ class LyrsterPlugin(Plugin):
     def __init__(self):
         super().__init__('lyrster', "Lyrster")
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         to_delete = ["'", '!', '(', ')', '[', ']']
 
         link = "http://www.lyrster.com/lyrics/{}-lyrics-{}.html".format(

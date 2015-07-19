@@ -10,7 +10,7 @@ class LyricWikiPlugin(Plugin):
     def __init__(self):
         super(LyricWikiPlugin, self).__init__('lyricwiki', 'LyricWiki')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         url = 'http://lyrics.wikia.com/api.php?action=lyrics&artist={}&song={}&fmt=realjson&func=getSong'.format(
             self.prepare_url_parameter(artist), self.prepare_url_parameter(title))
 

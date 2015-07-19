@@ -74,29 +74,25 @@ def is_enabled(plugin, enabled_plugins):
 
 
 def do_search(plugin, artist, title):
-    if plugin.is_valid_request(artist, title):
-        logging.info('Search lyrics on "{}" [{}]...'.format(plugin.plugin_name, plugin.plugin_id))
-        try:
-            start_time = time.time()
-            song = plugin.search(artist, title)
-            total_time = time.time() - start_time
+    logging.info('Search lyrics on "{}" [{}]...'.format(plugin.plugin_name, plugin.plugin_id))
+    try:
+        start_time = time.time()
+        song = plugin.search_song(artist, title)
+        total_time = time.time() - start_time
 
-            if song:
-                song.plugin_id = plugin.plugin_id
-                song.plugin_name = plugin.plugin_name
+        if song:
+            song.plugin_id = plugin.plugin_id
+            song.plugin_name = plugin.plugin_name
 
-                logging.info('Found song info on "{}" [{}], {}'.format(plugin.plugin_name, plugin.plugin_id,
-                                                                       util.format_time_ms(total_time)))
-                return song
-            else:
-                logging.info('Found nothing on "{}" [{}], {}'.format(plugin.plugin_name, plugin.plugin_id,
-                                                                     util.format_time_ms(total_time)))
-        except Exception:
-            logging.exception('Failed to get info from "{}" [{}]'.format(plugin.plugin_name, plugin.plugin_id))
-            pass
-
-    else:
-        logging.info('Skip search on "{}" [{}] - request not valid'.format(plugin.plugin_name, plugin.plugin_id))
+            logging.info('Found song info on "{}" [{}], {}'.format(plugin.plugin_name, plugin.plugin_id,
+                                                                   util.format_time_ms(total_time)))
+            return song
+        else:
+            logging.info('Nothing was found on "{}" [{}], {}'.format(plugin.plugin_name, plugin.plugin_id,
+                                                                 util.format_time_ms(total_time)))
+    except Exception:
+        logging.exception('Failed to get info from "{}" [{}]'.format(plugin.plugin_name, plugin.plugin_id))
+        pass
 
 
 # sync search

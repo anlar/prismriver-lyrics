@@ -6,7 +6,7 @@ class KGetPlugin(Plugin):
     def __init__(self):
         super(KGetPlugin, self).__init__('kget', 'KGet')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         link = 'http://www.kget.jp/search/index.php?r={}&t={}'.format(
             self.prepare_url_parameter(artist, delimiter='+'),
             self.prepare_url_parameter(title, delimiter='+'))

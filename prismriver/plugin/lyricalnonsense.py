@@ -6,7 +6,7 @@ class LyricalNonsensePlugin(Plugin):
     def __init__(self):
         super(LyricalNonsensePlugin, self).__init__('lyricalnonsense', "Lyrical Nonsense")
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         artist_page = self.get_artist_page(artist)
         if artist_page:
             song_page = self.get_song_page(artist_page, title)

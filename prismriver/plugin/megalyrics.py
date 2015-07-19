@@ -6,7 +6,7 @@ class MegalyricsPlugin(Plugin):
     def __init__(self):
         super().__init__('megalyrics', 'Megalyrics')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         link = "http://megalyrics.ru/lyric/{}/{}.htm".format(self.prepare_url_parameter(artist),
                                                              self.prepare_url_parameter(title))
         page = self.download_webpage(link)

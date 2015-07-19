@@ -6,7 +6,7 @@ class LololyricsPlugin(Plugin):
     def __init__(self):
         super(LololyricsPlugin, self).__init__('lololyrics', 'Lololyrics')
 
-    def search(self, artist, title):
+    def search_song(self, artist, title):
         link = 'http://api.lololyrics.com/0.5/getLyric?artist={}&track={}'.format(
             self.prepare_url_parameter(artist), self.prepare_url_parameter(title)
         )
