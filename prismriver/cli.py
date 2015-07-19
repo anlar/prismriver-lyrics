@@ -1,12 +1,11 @@
 import argparse
-from json import JSONEncoder
 import json
 import logging
 
-from prismriver.main import search_sync, search_async
+from prismriver.main import search_sync, search_async, get_plugins
 
 
-class SongJsonEncoder(JSONEncoder):
+class SongJsonEncoder(json.JSONEncoder):
     def default(self, o):
         return o.__dict__
 
@@ -72,8 +71,20 @@ def init_logging(quiet, verbose, log_file):
     logging.basicConfig(format=log_format, level=log_level, handlers=log_handlers)
 
 
+def list_plugins():
+    plugins = get_plugins()
+    plugins.sort(key=lambda x: x.plugin_name.lower())
+    for plugin in plugins:
+        print('{:<20} [id: {}]'.format(plugin.plugin_name, plugin.plugin_id))
+
+
 def run():
     parser = argparse.ArgumentParser()
+
+    parser.add_argument('--list', action='store_true', help='list available search plugins')
+    parser.add_argument('--song', action='store_true',
+                        help='search for song information by artist and title (default action)')
+
     parser.add_argument("-a", "--artist", help="song artist")
     parser.add_argument("-t", "--title", help="song title")
 
@@ -105,14 +116,17 @@ def run():
 
     init_logging(params.quiet, params.verbose, params.log)
 
-    logging.debug('Search lyrics with following parameters: {}'.format(params.__dict__))
-
-    enabled_plugins = params.plugins.split(',') if params.plugins else None
-
-    if params.async:
-        result = search_async(params.artist, params.title, params.limit, enabled_plugins)
+    if params.list:
+        list_plugins()
     else:
-        result = search_sync(params.artist, params.title, params.limit, enabled_plugins)
+        logging.debug('Search lyrics with following parameters: {}'.format(params.__dict__))
 
-    if result:
-        print(format_output(result, params.format, params.output))
+        enabled_plugins = params.plugins.split(',') if params.plugins else None
+
+        if params.async:
+            result = search_async(params.artist, params.title, params.limit, enabled_plugins)
+        else:
+            result = search_sync(params.artist, params.title, params.limit, enabled_plugins)
+
+        if result:
+            print(format_output(result, params.format, params.output))
