@@ -6,6 +6,7 @@ import urllib.error
 import sys
 import time
 import xml.etree.ElementTree
+import socket
 
 from bs4 import NavigableString, Tag, Comment, BeautifulSoup
 
@@ -55,7 +56,7 @@ class Plugin:
         req = urllib.request.Request(url, headers={
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/20.0 (Chrome)'})
         try:
-            with urllib.request.urlopen(req) as response:
+            with urllib.request.urlopen(req, timeout=10) as response:
                 the_page = response.read()
                 page_size = sys.getsizeof(the_page)
                 logging.debug('Download web-page from "{}", {}, {}'.format(url, util.format_file_size(page_size),
@@ -68,6 +69,8 @@ class Plugin:
         except ConnectionResetError as err:
             logging.debug('Failed to download web-page from "{}", error: {}, {}'.format(url, err.errno, err.strerror))
             return None
+        except socket.timeout:
+            logging.debug('Failed to download web-page from "{}", timed out'.format(url))
 
     def download_webpage_text(self, url):
         page = self.download_webpage(url)
