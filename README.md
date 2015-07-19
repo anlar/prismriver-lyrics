@@ -10,7 +10,77 @@ Prismriver is a search engine for song information (generally for it's lyrics).
 
 ## Usage
 
-## TODO sites
+    usage: prismriver.py [-h] [--list] [--song] [-a ARTIST] [-t TITLE] [-l LIMIT]
+                         [-p PLUGINS] [-f FORMAT] [--async] [-o OUTPUT] [-q] [-v]
+                         [--log LOG]
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      --list                list available search plugins
+      --song                search for song information by artist and title
+                            (default action)
+      -a ARTIST, --artist ARTIST
+                            song artist
+      -t TITLE, --title TITLE
+                            song title
+      -l LIMIT, --limit LIMIT
+                            maximum results count
+      -p PLUGINS, --plugins PLUGINS
+                            comma separated listed of enabled plugins (empty list
+                            means that everything is enabled - by default)
+      -f FORMAT, --format FORMAT
+                            lyrics output format (txt (default), json, json_ascii)
+      --async               search info from all plugins simultaneously
+      -o OUTPUT, --output OUTPUT
+                            output template for txt format. Available parameters:
+                            %TITLE% - song title, %ARTIST% - song artist, %LYRICS%
+                            - song lyrics, %PLUGIN_ID% - plugin id, %PLUGIN_NAME%
+                            - plugin name (default value: %ARTIST% -
+                            %TITLE%\nSource: %PLUGIN_NAME%\n\n%LYRICS%)
+      -q, --quiet           disable logging info (show only errors)
+      -v, --verbose         increase output verbosity
+      --log LOG             if set will redirect log info to that file
+
+### Examples
+
+Search for song information using all plugins in parallel:
+
+    python3 prismriver.py -a ARTIST_NAME -t SONG_TITLE --async
+
+List all available plugins:
+
+    python3 prismriver.py --list
+
+## Supported lyric databases
+
+* Amalgama             [id: amalgama]
+* Anime Lyrics         [id: animelyrics]
+* AZLyrics             [id: azlyrics]
+* Chartlyrics          [id: chartlyrics]
+* eLyrics              [id: elyrics]
+* J-Lyric              [id: jlyric]
+* KGet                 [id: kget]
+* Leo's Lyrics         [id: leoslyrics]
+* Letras               [id: letras]
+* Lololyrics           [id: lololyrics]
+* Lyrical Nonsense     [id: lyricalnonsense]
+* Lyrics N Music       [id: lyricsnmusic]
+* LyricsHuddle         [id: lyricshuddle]
+* LyricsMania          [id: lyricsmania]
+* LyricWiki            [id: lyricwiki]
+* Lyrster              [id: lyrster]
+* Megalyrics           [id: megalyrics]
+* MetroLyrics          [id: metrolyrics]
+* NitroLyrics          [id: nitrolyrics]
+* TouhouWiki           [id: touhouwiki]
+* Vagalume             [id: vagalume]
+
+
+## TODO
+
+### General features
+
+### Lyric databases
 
 * http://genius.com/
 * http://www.darklyrics.com/
