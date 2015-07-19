@@ -133,6 +133,11 @@ class TestPlugins(unittest.TestCase):
                           'Ace of Base', "Never Gonna Say I'm Sorry [Long]",
                           ['f3e7fbdfd3c1bc85a21dad24188b75b4'])
 
+    def test_letras_01(self):
+        self.check_plugin('letras',
+                          'Ayumi Hamasaki', 'Is This Love?',
+                          ['8a8ffe4e08b0d438bc145eaff0a1eec5'])
+
     def test_lololyrics_01(self):
         self.check_plugin('lololyrics',
                           'Daft Punk', 'Harder, Better, Faster, Stronger',
