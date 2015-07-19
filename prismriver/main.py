@@ -22,6 +22,7 @@ from prismriver.plugin.megalyrics import MegalyricsPlugin
 from prismriver.plugin.metrolyrics import MetroLyricsPlugin
 from prismriver.plugin.nitrolyrics import NitroLyricsPlugin
 from prismriver.plugin.touhouwiki import TouhouWikiPlugin
+from prismriver.plugin.vagalume import VagalumePlugin
 
 
 # common methods
@@ -45,7 +46,8 @@ def get_plugins(enabled_plugins=None):
         LololyricsPlugin(),
         AmalgamaPlugin(),
         AnimeLyricsPlugin(),
-        LyricalNonsensePlugin()
+        LyricalNonsensePlugin(),
+        VagalumePlugin()
     ]
 
     plugins = []

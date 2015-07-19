@@ -242,3 +242,8 @@ class TestPlugins(unittest.TestCase):
                           ['bf8cc305e81594b38d5b282b58e53d68',
                            'a7de7b5e4460d573c87feded75709bce',
                            '3b5ae103d34b8a1e5d782f8439b400ad'])
+
+    def test_vagalume_01(self):
+        self.check_plugin('vagalume',
+                          'Ito Kanako', 'Hacking To The Gate',
+                          ['34a5b44635a7aeaac6242fdac86198f5'])
