@@ -12,14 +12,10 @@ Prismriver is a search engine for song information (generally for it's lyrics).
 
 ## TODO sites
 
-* http://www.lyricsnmusic.com/
 * http://genius.com/
-* http://letras.mus.br/
-* http://www.vagalume.com.br/
 * http://www.darklyrics.com/
 * http://www.lyricfind.com/ (available only via their mobile app)
 * https://bandcamp.com/
-* http://www.animelyrics.com/
 * http://mp3lyrics.com/
 * http://www.lyricsmode.com/
 * http://www.lyricsfreak.com/
@@ -36,6 +32,13 @@ Prismriver is a search engine for song information (generally for it's lyrics).
 * http://showmelyrics.com/
 * http://www.lyricsmansion.com/
 * http://animeasialyrics.free.fr/
+* http://lyrics.jetmute.com/
+* http://lyrics.astraweb.com/ (search engine is dead)
+* http://www.alivelyrics.com/
+* http://alphabetlyrics.com/
+* http://www.stlyrics.com/
+* http://www.lyred.com/
+* http://metal-lyrics.narod.ru/
 
 See also:
 
@@ -62,6 +65,14 @@ Genius
 
 * https://github.com/geecko86/QuickLyric;
 Java;
+multiple sites
+
+* https://github.com/dmo60/lLyrics
+Python;
+multiple sites
+
+* https://git.gnome.org/browse/rhythmbox/tree/plugins/lyrics
+Python;
 multiple sites
 
 ## Copyright
