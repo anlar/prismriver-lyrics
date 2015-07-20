@@ -1,3 +1,4 @@
+import hashlib
 import logging
 import re
 import urllib.parse
@@ -7,6 +8,8 @@ import sys
 import time
 import xml.etree.ElementTree
 import socket
+import os
+from os import path
 
 from bs4 import NavigableString, Tag, Comment, BeautifulSoup
 
@@ -20,6 +23,10 @@ class Plugin:
 
     def search_song(self, artist, title):
         pass
+
+    #
+    # URI quote helpers
+    #
 
     def quote_uri(self, value, safe_chars=None):
         if safe_chars:
@@ -47,19 +54,36 @@ class Plugin:
         else:
             return new_value
 
+    #
+    # Page download helpers
+    #
+
     def download_webpage(self, url):
         start = time.time()
+
+        cache_file_name = self.get_cache_file_name(url)
+        cached_page = self.get_page_from_cache(cache_file_name)
+        if cached_page:
+            logging.debug(
+                'Get web-page from cache "{}": "{}", {}, {}'.format(url, cache_file_name,
+                                                                    util.format_file_size(self.get_psize(cached_page)),
+                                                                    util.format_time_ms(time.time() - start)))
+            return cached_page
 
         req = urllib.request.Request(url, headers={
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/20.0 (Chrome)'})
         try:
             with urllib.request.urlopen(req, timeout=10) as response:
-                the_page = response.read()
-                page_size = sys.getsizeof(the_page)
-                logging.debug('Download web-page from "{}", {}, {}'.format(url, util.format_file_size(page_size),
-                                                                           util.format_time_ms(time.time() - start)))
+                page = response.read()
 
-                return the_page
+                self.put_page_to_cache(cache_file_name, page, url)
+
+                logging.debug(
+                    'Download web-page from "{}", {}, {}'.format(url,
+                                                                 util.format_file_size(self.get_psize(page)),
+                                                                 util.format_time_ms(time.time() - start)))
+
+                return page
         except urllib.error.HTTPError as err:
             logging.debug('Failed to download web-page from "{}", error: {}, {}'.format(url, err.code, err.reason))
             return None
@@ -80,6 +104,37 @@ class Plugin:
             xml_string = re.sub(' xmlns="[^"]+"', '', page, count=1)
             root = xml.etree.ElementTree.fromstring(xml_string)
             return root
+
+    def get_page_from_cache(self, cache_file_name, history_limit_sec=60*60*24):
+        try:
+            with open(cache_file_name, 'rb') as cache_file:
+                now = time.time()
+                mtime = path.getmtime(cache_file_name)
+
+                if now - mtime < history_limit_sec:
+                    return cache_file.read()
+        except IOError:
+            pass
+
+    def put_page_to_cache(self, cache_file_name, page, link):
+        if not path.exists(path.dirname(cache_file_name)):
+            os.makedirs(path.dirname(cache_file_name))
+
+        with open(cache_file_name, 'wb') as cache_file:
+            cache_file.write(page)
+            logging.debug(
+                'Put web-page to cache "{}": "", {}, {}'.format(link, cache_file_name,
+                                                                util.format_file_size(self.get_psize(page))))
+
+    def get_cache_file_name(self, link):
+        return path.expanduser("~") + '/.cache/prismriver/' + hashlib.md5(link.encode('utf-8')).hexdigest() + '.cache'
+
+    def get_psize(self, page):
+        return sys.getsizeof(page)
+
+    #
+    # Page parsing helpers
+    #
 
     def sanitize_lyrics(self, lyrics):
         if lyrics:

@@ -11,3 +11,6 @@ run-dev-prismriver.sh
 
 # log files
 *.log
+
+# web-page cache
+*.cache
