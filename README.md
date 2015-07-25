@@ -109,6 +109,12 @@ List all available plugins:
 * http://www.stlyrics.com/
 * http://www.lyred.com/
 * http://metal-lyrics.narod.ru/
+* http://www.directlyrics.com/
+* http://www.songlyrics.com/
+* http://www.nautiljon.com/paroles/
+* http://ostanimepluslyrics.blogspot.ru/search/label/Lyrics%20Music
+* http://lyrics.snakeroot.ru/lyrics.html
+* https://www.musixmatch.com/
 
 See also:
 
