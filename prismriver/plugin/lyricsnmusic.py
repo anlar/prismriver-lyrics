@@ -3,6 +3,7 @@ import json
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
 
+
 # API doc: http://www.lyricsnmusic.com/api
 # It says that you need key to access it but it works fine without it (you still can generate it without registration).
 
@@ -42,6 +43,3 @@ class LyricsNMusicPlugin(Plugin):
                     lyric = self.parse_verse_block(lyric_block)
 
                     return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
-
-    def compare_strings(self, s1, s2):
-        return s1 and s2 and s1.lower() == s2.lower()

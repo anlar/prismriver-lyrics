@@ -167,3 +167,10 @@ class Plugin:
                 lyric += '\n'
 
         return lyric.strip()
+
+    #
+    # Other
+    #
+
+    def compare_strings(self, s1, s2):
+        return s1 and s2 and s1.lower() == s2.lower()

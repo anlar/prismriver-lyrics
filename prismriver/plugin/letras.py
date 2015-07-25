@@ -26,6 +26,10 @@ class LetrasPlugin(Plugin):
                 song_title = header.h1.a.text
                 song_artist = header.h2.a.text
 
+                if not self.compare_strings(artist, song_artist):
+                    # sometimes it may search song only by it's title and return things from another artist
+                    return
+
                 lyric_block = soup.find('div', {'id': 'letra'})
 
                 lyric = ''
