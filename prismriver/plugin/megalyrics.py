@@ -3,8 +3,10 @@ from prismriver.struct import Song
 
 
 class MegalyricsPlugin(Plugin):
-    def __init__(self):
-        super().__init__('megalyrics', 'Megalyrics')
+    PLUGIN_ID = 'megalyrics'
+
+    def __init__(self, config):
+        super(MegalyricsPlugin, self).__init__(self.PLUGIN_ID, 'Megalyrics', config)
 
     def search_song(self, artist, title):
         link = "http://megalyrics.ru/lyric/{}/{}.htm".format(self.prepare_url_parameter(artist),

@@ -3,8 +3,10 @@ from prismriver.struct import Song
 
 
 class ChartlyricsPlugin(Plugin):
-    def __init__(self):
-        super().__init__('chartlyrics', 'Chartlyrics')
+    PLUGIN_ID = 'chartlyrics'
+
+    def __init__(self, config):
+        super(ChartlyricsPlugin, self).__init__(self.PLUGIN_ID, 'Chartlyrics', config)
 
     def search_song(self, artist, title):
         link = "http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist={}&song={}".format(

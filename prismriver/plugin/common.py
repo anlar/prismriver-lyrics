@@ -17,9 +17,10 @@ from prismriver import util
 
 
 class Plugin:
-    def __init__(self, plugin_id, plugin_name):
+    def __init__(self, plugin_id, plugin_name, config):
         self.plugin_id = plugin_id
         self.plugin_name = plugin_name
+        self.config = config
 
     def search_song(self, artist, title):
         pass
@@ -105,13 +106,13 @@ class Plugin:
             root = xml.etree.ElementTree.fromstring(xml_string)
             return root
 
-    def get_page_from_cache(self, cache_file_name, history_limit_sec=60*60*24):
+    def get_page_from_cache(self, cache_file_name):
         try:
             with open(cache_file_name, 'rb') as cache_file:
                 now = time.time()
                 mtime = path.getmtime(cache_file_name)
 
-                if now - mtime < history_limit_sec:
+                if now - mtime < self.config.cache_web_ttl_sec:
                     return cache_file.read()
         except IOError:
             pass
@@ -127,7 +128,7 @@ class Plugin:
                                                                 util.format_file_size(self.get_psize(page))))
 
     def get_cache_file_name(self, link):
-        return path.expanduser("~") + '/.cache/prismriver/' + hashlib.md5(link.encode('utf-8')).hexdigest() + '.cache'
+        return self.config.cache_web_dir + hashlib.md5(link.encode('utf-8')).hexdigest() + '.cache'
 
     def get_psize(self, page):
         return sys.getsizeof(page)

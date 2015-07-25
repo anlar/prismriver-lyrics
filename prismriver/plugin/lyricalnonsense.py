@@ -3,8 +3,10 @@ from prismriver.struct import Song
 
 
 class LyricalNonsensePlugin(Plugin):
-    def __init__(self):
-        super(LyricalNonsensePlugin, self).__init__('lyricalnonsense', "Lyrical Nonsense")
+    PLUGIN_ID = 'lyricalnonsense'
+
+    def __init__(self, config):
+        super(LyricalNonsensePlugin, self).__init__(self.PLUGIN_ID, 'Lyrical Nonsense', config)
 
     def search_song(self, artist, title):
         artist_page = self.get_artist_page(artist)

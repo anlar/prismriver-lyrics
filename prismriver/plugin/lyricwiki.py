@@ -7,8 +7,10 @@ from prismriver.struct import Song
 
 
 class LyricWikiPlugin(Plugin):
-    def __init__(self):
-        super(LyricWikiPlugin, self).__init__('lyricwiki', 'LyricWiki')
+    PLUGIN_ID = 'lyricwiki'
+
+    def __init__(self, config):
+        super(LyricWikiPlugin, self).__init__(self.PLUGIN_ID, 'LyricWiki', config)
 
     def search_song(self, artist, title):
         url = 'http://lyrics.wikia.com/api.php?action=lyrics&artist={}&song={}&fmt=realjson&func=getSong'.format(

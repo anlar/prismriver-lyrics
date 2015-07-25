@@ -3,8 +3,10 @@ from prismriver.struct import Song
 
 
 class LyricsHuddlePlugin(Plugin):
-    def __init__(self):
-        super().__init__('lyricshuddle', 'LyricsHuddle')
+    PLUGIN_ID = 'lyricshuddle'
+
+    def __init__(self, config):
+        super(LyricsHuddlePlugin, self).__init__(self.PLUGIN_ID, 'LyricsHuddle', config)
 
     def search_song(self, artist, title):
         to_delete = ['!', '?', '(', ')', "'", '"', ',']

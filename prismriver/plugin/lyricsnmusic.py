@@ -7,8 +7,10 @@ from prismriver.struct import Song
 # It says that you need key to access it but it works fine without it (you still can generate it without registration).
 
 class LyricsNMusicPlugin(Plugin):
-    def __init__(self):
-        super(LyricsNMusicPlugin, self).__init__('lyricsnmusic', 'Lyrics N Music')
+    PLUGIN_ID = 'lyricsnmusic'
+
+    def __init__(self, config):
+        super(LyricsNMusicPlugin, self).__init__(self.PLUGIN_ID, 'Lyrics N Music', config)
 
     def search_song(self, artist, title):
         link = 'http://api.lyricsnmusic.com/songs?artist={}&track={}'.format(

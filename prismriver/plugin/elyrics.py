@@ -3,8 +3,10 @@ from prismriver.struct import Song
 
 
 class ELyricsPlugin(Plugin):
-    def __init__(self):
-        super().__init__('elyrics', 'eLyrics')
+    PLUGIN_ID = 'elyrics'
+
+    def __init__(self, config):
+        super(ELyricsPlugin, self).__init__(self.PLUGIN_ID, 'eLyrics', config)
 
     def search_song(self, artist, title):
         to_replace = [' ']

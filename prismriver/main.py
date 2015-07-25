@@ -29,35 +29,35 @@ from prismriver.plugin.vagalume import VagalumePlugin
 
 # common methods
 
-def get_plugins(enabled_plugins=None):
+def get_plugins(config):
     all_plugins = [
-        AZLyricsPlugin(),
-        TouhouWikiPlugin(),
-        LyricWikiPlugin(),
-        MegalyricsPlugin(),
-        LyricsManiaPlugin(),
-        ChartlyricsPlugin(),
-        MetroLyricsPlugin(),
-        LeosLyricsPlugin(),
-        LyrsterPlugin(),
-        LyricsHuddlePlugin(),
-        ELyricsPlugin(),
-        NitroLyricsPlugin(),
-        JLyricPlugin(),
-        KGetPlugin(),
-        LololyricsPlugin(),
-        AmalgamaPlugin(),
-        AnimeLyricsPlugin(),
-        LyricalNonsensePlugin(),
-        VagalumePlugin(),
-        LyricsNMusicPlugin(),
-        LetrasPlugin()
+        AZLyricsPlugin,
+        TouhouWikiPlugin,
+        LyricWikiPlugin,
+        MegalyricsPlugin,
+        LyricsManiaPlugin,
+        ChartlyricsPlugin,
+        MetroLyricsPlugin,
+        LeosLyricsPlugin,
+        LyrsterPlugin,
+        LyricsHuddlePlugin,
+        ELyricsPlugin,
+        NitroLyricsPlugin,
+        JLyricPlugin,
+        KGetPlugin,
+        LololyricsPlugin,
+        AmalgamaPlugin,
+        AnimeLyricsPlugin,
+        LyricalNonsensePlugin,
+        VagalumePlugin,
+        LyricsNMusicPlugin,
+        LetrasPlugin
     ]
 
     plugins = []
     for plugin in all_plugins:
-        if is_enabled(plugin, enabled_plugins):
-            plugins.append(plugin)
+        if is_enabled(plugin, config.enabled_plugins):
+            plugins.append(plugin(config))
 
     return plugins
 
@@ -65,7 +65,7 @@ def get_plugins(enabled_plugins=None):
 def is_enabled(plugin, enabled_plugins):
     if enabled_plugins:
         for enabled_plugin in enabled_plugins:
-            if plugin.plugin_id == enabled_plugin:
+            if plugin.PLUGIN_ID == enabled_plugin:
                 return True
 
         return False
@@ -97,14 +97,14 @@ def do_search(plugin, artist, title):
 
 # sync search
 
-def search_sync(artist, title, limit=None, enabled_plugins=None):
+def search_sync(artist, title, config):
     result = []
-    for plugin in get_plugins(enabled_plugins):
+    for plugin in get_plugins(config):
         song = do_search(plugin, artist, title)
         if song:
             result.append(song)
 
-        if limit and len(result) >= limit:
+        if config.result_limit and len(result) >= config.result_limit:
             break
 
     return result
@@ -112,10 +112,10 @@ def search_sync(artist, title, limit=None, enabled_plugins=None):
 
 # async search
 
-def search_async(artist, title, limit=None, enabled_plugins=None):
+def search_async(artist, title, config):
     queue = Queue()
     threads = []
-    for plugin in get_plugins(enabled_plugins):
+    for plugin in get_plugins(config):
         thread = Thread(target=do_search_async, args=(artist, title, plugin, queue))
         threads.append(thread)
         thread.start()
@@ -127,8 +127,8 @@ def search_async(artist, title, limit=None, enabled_plugins=None):
     for items in range(0, queue.qsize()):
         result.append(queue.get())
 
-    if limit:
-        return result[:limit]
+    if config.result_limit:
+        return result[:config.result_limit]
     else:
         return result
 

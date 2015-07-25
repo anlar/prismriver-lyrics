@@ -3,8 +3,10 @@ from prismriver.struct import Song
 
 
 class JLyricPlugin(Plugin):
-    def __init__(self):
-        super().__init__('jlyric', 'J-Lyric')
+    PLUGIN_ID = 'jlyric'
+
+    def __init__(self, config):
+        super(JLyricPlugin, self).__init__(self.PLUGIN_ID, 'J-Lyric', config)
 
     def search_song(self, artist, title):
         link = "http://search.j-lyric.net/index.php?kt={}&ct=0&ka={}&ca=0".format(

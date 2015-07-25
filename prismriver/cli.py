@@ -3,6 +3,7 @@ import json
 import logging
 
 from prismriver.main import search_sync, search_async, get_plugins
+from prismriver.struct import SearchConfig
 
 
 class SongJsonEncoder(json.JSONEncoder):
@@ -98,6 +99,11 @@ def run():
     parser.add_argument('--async', action='store_true',
                         help='search info from all plugins simultaneously')
 
+    parser.add_argument('--cache_dir', type=str,
+                        help='cache directory for downloaded web pages (default: ~/.cache/prismriver)')
+    parser.add_argument('--cache_ttl', type=str,
+                        help='cache ttl for downloaded web pages in seconds (default: one week)')
+
     parser.add_argument("-o", "--output", type=str, default='%ARTIST% - %TITLE%\nSource: %PLUGIN_NAME%\n\n%LYRICS%',
                         help="output template for txt format. Available parameters: "
                              "%%TITLE%% - song title, "
@@ -121,12 +127,16 @@ def run():
     else:
         logging.debug('Search lyrics with following parameters: {}'.format(params.__dict__))
 
-        enabled_plugins = params.plugins.split(',') if params.plugins else None
+        search_config = SearchConfig(
+            params.plugins.split(',') if params.plugins else None,
+            params.limit,
+            params.cache_dir,
+            params.cache_ttl)
 
         if params.async:
-            result = search_async(params.artist, params.title, params.limit, enabled_plugins)
+            result = search_async(params.artist, params.title, search_config)
         else:
-            result = search_sync(params.artist, params.title, params.limit, enabled_plugins)
+            result = search_sync(params.artist, params.title, search_config)
 
         if result:
             print(format_output(result, params.format, params.output))

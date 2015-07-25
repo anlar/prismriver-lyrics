@@ -7,8 +7,10 @@ from prismriver.struct import Song
 
 
 class AnimeLyricsPlugin(Plugin):
-    def __init__(self):
-        super(AnimeLyricsPlugin, self).__init__('animelyrics', 'Anime Lyrics')
+    PLUGIN_ID = 'animelyrics'
+
+    def __init__(self, config):
+        super(AnimeLyricsPlugin, self).__init__(self.PLUGIN_ID, 'Anime Lyrics', config)
 
     def search_song(self, artist, title):
         link = 'http://www.animelyrics.com/search.php?q={}&t=title&searchcat=anime'.format(
