@@ -197,6 +197,11 @@ class TestPlugins(unittest.TestCase):
                           ['a2cf1a1d1b54145d262418d22cac9381',
                            '3a8a2b0b4ec438a9cef665b861ef0f43'])
 
+    def test_lyricwiki_03(self):
+        self.check_plugin('lyricwiki',
+                          'Jeff Williams & Casey Lee Williams', 'Red Like Roses (Red Trailer)',
+                          ['e27047e110f688d3b0a8ba8ea381f245'])
+
     def test_lyrster_01(self):
         self.check_plugin('lyrster',
                           'Groove Coverage', 'Damn!',
