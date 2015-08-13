@@ -19,5 +19,10 @@ class ChartlyricsPlugin(Plugin):
             song_title = xml_root.find("LyricSong").text
             song_lyric = xml_root.find("Lyric").text
 
+            if not self.compare_strings(artist, song_artist):
+                # search engine usually may return songs that has at least one matching word in title and artist,
+                # so we should check at least one of them
+                return
+
             if song_lyric:
                 return Song(song_artist, song_title, self.sanitize_lyrics([song_lyric]))
