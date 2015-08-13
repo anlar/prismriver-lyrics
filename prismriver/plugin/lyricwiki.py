@@ -14,9 +14,8 @@ class LyricWikiPlugin(Plugin):
 
     def search_song(self, artist, title):
         # they don't understand quoted '&' as a delimiter between artists
-        safe_chars = '&'
         url = 'http://lyrics.wikia.com/api.php?action=lyrics&artist={}&song={}&fmt=realjson&func=getSong'.format(
-            self.prepare_url_parameter(artist, safe_chars=safe_chars), self.prepare_url_parameter(title, safe_chars=safe_chars))
+            self.prepare_url_parameter(artist, safe_chars='&'), self.prepare_url_parameter(title))
 
         page = self.download_webpage_text(url)
 
