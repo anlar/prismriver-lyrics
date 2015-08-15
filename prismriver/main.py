@@ -14,6 +14,7 @@ from prismriver.plugin.jlyric import JLyricPlugin
 from prismriver.plugin.kget import KGetPlugin
 from prismriver.plugin.leoslyrics import LeosLyricsPlugin
 from prismriver.plugin.letras import LetrasPlugin
+from prismriver.plugin.letssingit import LetsSingItPlugin
 from prismriver.plugin.lololyrics import LololyricsPlugin
 from prismriver.plugin.lyricalnonsense import LyricalNonsensePlugin
 from prismriver.plugin.lyricshuddle import LyricsHuddlePlugin
@@ -53,7 +54,8 @@ def get_plugins(config):
         VagalumePlugin,
         LyricsNMusicPlugin,
         LetrasPlugin,
-        BopFmPlugin
+        BopFmPlugin,
+        LetsSingItPlugin
     ]
 
     plugins = []

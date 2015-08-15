@@ -1,0 +1,44 @@
+from prismriver.plugin.common import Plugin
+from prismriver.struct import Song
+
+
+class LetsSingItPlugin(Plugin):
+    PLUGIN_ID = 'letssingit'
+
+    def __init__(self, config):
+        super(LetsSingItPlugin, self).__init__(self.PLUGIN_ID, 'LetsSingIt', config)
+
+    def search_song(self, artist, title):
+        link = 'http://search.letssingit.com/cgi-exe/am.cgi?a=search&l=song&s={}+{}'.format(
+            self.prepare_url_parameter(artist),
+            self.prepare_url_parameter(title))
+
+        page = self.download_webpage(link)
+
+        if page:
+            soup = self.prepare_soup(page)
+            search_result = self.parse_search_page(soup, artist, title)
+
+            if search_result:
+                page = self.download_webpage(search_result[2])
+                soup = self.prepare_soup(page)
+
+                lyric_pane = soup.find('div', {'id': 'lyrics'})
+                lyric = self.parse_verse_block(lyric_pane)
+
+                return Song(search_result[0], search_result[1], self.sanitize_lyrics([lyric]))
+
+    def parse_search_page(self, soup, artist, title):
+        search_table = soup.find('table', {'class': 'table_as_list haspicture'}).find('tbody', recursive=False)
+        if not search_table:
+            return []
+
+        for item in search_table.findAll('tr', recursive=False):
+            info_pane = item.findAll('td')[1]
+            info_items = info_pane.findAll('a', {'href': not None})
+
+            song_title = info_items[0].text
+            song_artist = info_items[1].text
+
+            if self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
+                return [song_artist, song_title, info_items[0]['href']]

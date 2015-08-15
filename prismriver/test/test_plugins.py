@@ -148,6 +148,11 @@ class TestPlugins(unittest.TestCase):
                           'Ayumi Hamasaki', 'Is This Love?',
                           ['8a8ffe4e08b0d438bc145eaff0a1eec5'])
 
+    def test_letssingit_01(self):
+        self.check_plugin('letssingit',
+                          "Blackmore's Night", 'Shadow Of The Moon',
+                          ['d41eb27d17ea1adcd1f1eabc7e27ce37'])
+
     def test_lololyrics_01(self):
         self.check_plugin('lololyrics',
                           'Daft Punk', 'Harder, Better, Faster, Stronger',
