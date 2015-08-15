@@ -30,5 +30,8 @@ class LyrsterPlugin(Plugin):
             lyric_pane = soup.find("div", {"id": "lyrics"})
             lyric = self.parse_verse_block(lyric_pane)
 
-            if lyric != "We do not have the complete song's lyrics just yet.":
+            if lyric == "We do not have the complete song's lyrics just yet." or lyric.startswith('Shortcut to '):
+                # empty song page without lyric
+                return None
+            else:
                 return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))

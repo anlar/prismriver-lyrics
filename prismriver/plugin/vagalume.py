@@ -26,4 +26,8 @@ class VagalumePlugin(Plugin):
             song_title = resp['mus'][0]['name']
             lyric = resp['mus'][0]['text']
 
-            return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
+            if lyric.startswith('Shortcut to '):
+                # lyric is empty, just list of other songs
+                return None
+            else:
+                return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
