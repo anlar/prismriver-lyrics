@@ -49,6 +49,10 @@ class LyricWikiPlugin(Plugin):
                 if not elem.strip().startswith('(function()'):
                     lyric += elem.strip()
             elif isinstance(elem, Tag):
-                lyric += '\n'
+                if elem.name == 'b':
+                    # bold elements, usually just 'Instrumental' tag
+                    lyric += elem.text.strip()
+                else:
+                    lyric += '\n'
 
         return lyric
