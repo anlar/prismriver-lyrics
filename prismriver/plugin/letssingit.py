@@ -24,6 +24,11 @@ class LetsSingItPlugin(Plugin):
                 soup = self.prepare_soup(page)
 
                 lyric_pane = soup.find('div', {'id': 'lyrics'})
+
+                if lyric_pane.find('span', {'id': 'container_lyrics_request'}, recursive=False):
+                    # song without lyric, contains "request these lyrics" button
+                    return None
+
                 lyric = self.parse_verse_block(lyric_pane)
 
                 return Song(search_result[0], search_result[1], self.sanitize_lyrics([lyric]))
