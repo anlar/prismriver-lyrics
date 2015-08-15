@@ -7,6 +7,7 @@ from prismriver import util
 from prismriver.plugin.amalgama import AmalgamaPlugin
 from prismriver.plugin.animelyrics import AnimeLyricsPlugin
 from prismriver.plugin.azlyrics import AZLyricsPlugin
+from prismriver.plugin.bopfmp import BopFmPlugin
 from prismriver.plugin.chartlyrics import ChartlyricsPlugin
 from prismriver.plugin.elyrics import ELyricsPlugin
 from prismriver.plugin.jlyric import JLyricPlugin
@@ -51,7 +52,8 @@ def get_plugins(config):
         LyricalNonsensePlugin,
         VagalumePlugin,
         LyricsNMusicPlugin,
-        LetrasPlugin
+        LetrasPlugin,
+        BopFmPlugin
     ]
 
     plugins = []

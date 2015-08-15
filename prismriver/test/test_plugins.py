@@ -88,6 +88,11 @@ class TestPlugins(unittest.TestCase):
     #                       'Modern Talking', "Atlantis Is Calling (S.O.S. For Love)",
     #                       ['4b826df521c5a9ca057796daa760b5b7'])
 
+    def test_bopfm_01(self):
+        self.check_plugin('bopfm',
+                          'Modern Talking', "You're My Heart, You're My Soul",
+                          ['aa7dac06fc6c3b820f588f8b0b702541'])
+
     # def test_chartlyrics_01(self):
     #     self.check_plugin('chartlyrics',
     #                       'James Brown', 'Prisoner of Love',
