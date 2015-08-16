@@ -29,8 +29,9 @@ class LyricsNMusicPlugin(Plugin):
             for elem in resp:
                 song_artist = elem['artist']['name']
                 song_title = elem['title']
+                viewable = elem['viewable']  # may be unavailable due to licensing issue
 
-                if self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
+                if viewable and self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
                     song_link = elem['url']
                     break
 
