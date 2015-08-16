@@ -31,7 +31,7 @@ from prismriver.plugin.vagalume import VagalumePlugin
 
 # common methods
 
-def get_plugins(config):
+def get_plugins(config=None):
     all_plugins = [
         AZLyricsPlugin,
         TouhouWikiPlugin,
@@ -60,7 +60,7 @@ def get_plugins(config):
 
     plugins = []
     for plugin in all_plugins:
-        if is_enabled(plugin, config.enabled_plugins):
+        if not config or is_enabled(plugin, config.enabled_plugins):
             plugins.append(plugin(config))
 
     return plugins
