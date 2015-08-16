@@ -1,8 +1,11 @@
-from PyQt5.QtCore import Qt, QAbstractTableModel, QVariant
+import time
+
+from PyQt5.QtCore import Qt, QAbstractTableModel, QVariant, pyqtSignal, QThread
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QGridLayout, \
     QGroupBox, QVBoxLayout, QTextEdit, QPushButton, QStyle, QSplitter, QTableView, QHeaderView, QAbstractItemView
 
+from prismriver import util
 from prismriver.main import search_async
 from prismriver.struct import SearchConfig
 
@@ -29,7 +32,11 @@ class MainWindow(QMainWindow):
                                       'Search')
         self.btn_search.setAutoDefault(True)
         self.btn_search.setDefault(True)
-        self.btn_search.clicked.connect(self.do_search)
+        self.btn_search.clicked.connect(self.start_search)
+
+        self.btn_stop = QPushButton(QIcon.fromTheme('process-stop', self.style().standardIcon(QStyle.SP_BrowserStop)),
+                                    'Stop')
+        self.btn_stop.clicked.connect(self.stop_search)
 
         label_artist = QLabel('Artist')
         label_title = QLabel('Title')
@@ -47,11 +54,13 @@ class MainWindow(QMainWindow):
 
         grid.addWidget(label_title, 1, 0)
         grid.addWidget(self.edit_title, 1, 1)
+        grid.addWidget(self.btn_stop, 1, 2)
 
         group_box.setLayout(grid)
 
         group_box.setTabOrder(self.edit_artist, self.edit_title)
         group_box.setTabOrder(self.edit_title, self.btn_search)
+        group_box.setTabOrder(self.btn_search, self.btn_stop)
 
         return group_box
 
@@ -88,12 +97,31 @@ class MainWindow(QMainWindow):
     def init_ui(self):
         self.setGeometry(0, 0, 1024, 1000)
         self.setWindowTitle('Prismriver')
+        self.toggle_search_buttons(False)
+        self.set_status_message(None)
         self.show()
 
-    def do_search(self):
-        result = search_async(self.edit_artist.text(), self.edit_title.text(), SearchConfig())
-        self.lyric_table.update_data(result)
+    def set_status_message(self, message):
+        self.statusBar().showMessage(message)
+
+    def start_search(self):
+        self.toggle_search_buttons(True)
+        self.set_status_message('Searching...')
+        self.worker = SearchThread(self.edit_artist.text(), self.edit_title.text())
+        self.worker.resultReady.connect(self.update_search_results)
+        self.worker.start()
+
+    def stop_search(self):
+        if self.worker and self.worker.isRunning():
+            self.worker.terminate()
+            self.toggle_search_buttons(False)
+            self.set_status_message('Search process terminated')
+
+    def update_search_results(self, songs, process_time_sec):
+        self.lyric_table.update_data(songs)
         self.update_lyric_pane()
+        self.toggle_search_buttons(False)
+        self.set_status_message('Search completed in {}'.format(util.format_time_ms(process_time_sec)))
 
     def update_lyric_pane(self):
         selected = self.lyric_table_view.selectionModel().selectedRows()
@@ -102,6 +130,10 @@ class MainWindow(QMainWindow):
             songs.append(sel.data(LyricTableModel.DataRole))
 
         self.lyric_text.setText(self.format_lyrics(songs))
+
+    def toggle_search_buttons(self, searching):
+        self.btn_search.setEnabled(not searching)
+        self.btn_stop.setEnabled(searching)
 
     def format_lyrics(self, songs):
         formatted_songs = []
@@ -179,3 +211,19 @@ class LyricTableModel(QAbstractTableModel):
     def update_data(self, songs):
         self.songs = songs
         self.layoutChanged.emit()
+
+
+class SearchThread(QThread):
+    resultReady = pyqtSignal(list, float)
+
+    def __init__(self, artist, title):
+        super().__init__()
+        self.artist = artist
+        self.title = title
+
+    def run(self):
+        start_time = time.time()
+        songs = search_async(self.artist, self.title, SearchConfig())
+        total_time = time.time() - start_time
+
+        self.resultReady.emit(songs, total_time)
