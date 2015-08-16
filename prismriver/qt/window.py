@@ -96,7 +96,7 @@ class MainWindow(QMainWindow):
 
     def init_ui(self):
         self.setGeometry(0, 0, 1024, 1000)
-        self.setWindowTitle('Prismriver')
+        self.setWindowTitle('Lunasa Prismriver')
         self.toggle_search_buttons(False)
         self.set_status_message(None)
         self.show()
