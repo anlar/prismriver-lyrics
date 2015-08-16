@@ -4,6 +4,7 @@ import logging
 
 from prismriver.main import search_sync, search_async, get_plugins
 from prismriver.struct import SearchConfig
+from prismriver import util
 
 
 class SongJsonEncoder(json.JSONEncoder):
@@ -54,24 +55,6 @@ def format_output(songs, output_format, txt_template=None):
         pass
 
 
-def init_logging(quiet, verbose, log_file):
-    log_format = '%(asctime)s %(levelname)s [%(module)s] %(message)s'
-
-    if quiet:
-        log_level = logging.WARNING
-    elif verbose:
-        log_level = logging.DEBUG
-    else:
-        log_level = logging.INFO
-
-    if log_file:
-        log_handlers = [logging.FileHandler(log_file), logging.StreamHandler()]
-    else:
-        log_handlers = [logging.StreamHandler()]
-
-    logging.basicConfig(format=log_format, level=log_level, handlers=log_handlers)
-
-
 def list_plugins():
     plugins = get_plugins()
     plugins.sort(key=lambda x: x.plugin_name.lower())
@@ -120,7 +103,7 @@ def run():
 
     params = parser.parse_args()
 
-    init_logging(params.quiet, params.verbose, params.log)
+    util.init_logging(params.quiet, params.verbose, params.log)
 
     if params.list:
         list_plugins()
