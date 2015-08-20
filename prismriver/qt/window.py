@@ -3,16 +3,23 @@ import time
 from PyQt5.QtCore import Qt, QAbstractTableModel, QVariant, pyqtSignal, QThread
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QGridLayout, \
-    QGroupBox, QVBoxLayout, QTextEdit, QPushButton, QStyle, QSplitter, QTableView, QHeaderView, QAbstractItemView
+    QGroupBox, QVBoxLayout, QTextEdit, QPushButton, QStyle, QSplitter, QTableView, QHeaderView, QAbstractItemView, \
+    QComboBox
 
 from prismriver import util
 from prismriver.main import search_async
+from prismriver.mpris import MprisConnector
 from prismriver.struct import SearchConfig
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        self.worker_search = None
+        self.worker_mpris = None
+
+        self.mpris_connect = MprisConnector()
 
         main_widget = QWidget()
         main_layout = QVBoxLayout()
@@ -29,22 +36,32 @@ class MainWindow(QMainWindow):
         group_box = QGroupBox('Search')
 
         self.btn_search = QPushButton(QIcon.fromTheme('edit-find', self.style().standardIcon(QStyle.SP_BrowserReload)),
-                                      'Search')
+                                      'Search...')
         self.btn_search.setAutoDefault(True)
         self.btn_search.setDefault(True)
-        self.btn_search.clicked.connect(self.start_search)
+        self.btn_search.clicked.connect(lambda: self.start_search(True))
 
         self.btn_stop = QPushButton(QIcon.fromTheme('process-stop', self.style().standardIcon(QStyle.SP_BrowserStop)),
                                     'Stop')
         self.btn_stop.clicked.connect(self.stop_search)
 
+        self.btn_connect = QPushButton(
+            QIcon.fromTheme('multimedia-player', self.style().standardIcon(QStyle.SP_BrowserStop)),
+            'Connect...')
+        self.btn_connect.clicked.connect(self.toggle_mpris_listener)
+
         label_artist = QLabel('Artist')
         label_title = QLabel('Title')
+        label_player = QLabel('Player')
 
         self.edit_artist = QLineEdit()
         self.edit_title = QLineEdit()
         self.edit_artist.returnPressed.connect(self.btn_search.click)
         self.edit_title.returnPressed.connect(self.btn_search.click)
+
+        self.edit_player = QComboBox()
+        players = self.mpris_connect.get_active_players()
+        self.edit_player.addItems(players)
 
         grid = QGridLayout()
 
@@ -55,6 +72,10 @@ class MainWindow(QMainWindow):
         grid.addWidget(label_title, 1, 0)
         grid.addWidget(self.edit_title, 1, 1)
         grid.addWidget(self.btn_stop, 1, 2)
+
+        grid.addWidget(label_player, 2, 0)
+        grid.addWidget(self.edit_player, 2, 1)
+        grid.addWidget(self.btn_connect, 2, 2)
 
         group_box.setLayout(grid)
 
@@ -97,31 +118,76 @@ class MainWindow(QMainWindow):
     def init_ui(self):
         self.setGeometry(0, 0, 1024, 1000)
         self.setWindowTitle('Lunasa Prismriver')
-        self.toggle_search_buttons(False)
+        self.toggle_buttons_on_search(False)
         self.set_status_message(None)
         self.show()
 
     def set_status_message(self, message):
         self.statusBar().showMessage(message)
 
-    def start_search(self):
-        self.toggle_search_buttons(True)
+    def start_search(self, is_manual):
+        if is_manual:
+            self.toggle_buttons_on_search(True)
+
         self.set_status_message('Searching...')
-        self.worker = SearchThread(self.edit_artist.text(), self.edit_title.text())
-        self.worker.resultReady.connect(self.update_search_results)
-        self.worker.start()
+
+        self.worker_search = SearchThread(self.edit_artist.text(), self.edit_title.text(), is_manual)
+        self.worker_search.resultReady.connect(self.update_search_results)
+        self.worker_search.start()
 
     def stop_search(self):
-        if self.worker and self.worker.isRunning():
-            self.worker.terminate()
-            self.toggle_search_buttons(False)
-            self.set_status_message('Search process terminated')
+        if self.worker_search and self.worker_search.isRunning():
+            self.worker_search.terminate()
+            self.toggle_buttons_on_search(False)
+            self.set_status_message('Search stopped')
 
-    def update_search_results(self, songs, process_time_sec):
+    def toggle_mpris_listener(self):
+        if self.worker_mpris is None or not self.worker_mpris.isRunning():
+            self.worker_mpris = MprisThread(self.mpris_connect, self.edit_player.currentText())
+            self.worker_mpris.metaReady.connect(self.update_search_results_mpris)
+            self.worker_mpris.start()
+            self.toggle_buttons_on_connect(True)
+            self.set_status_message('Listening to the player...')
+        else:
+            self.worker_mpris.terminate()
+            self.toggle_buttons_on_connect(False)
+            self.set_status_message('Player listener stopped')
+
+    def toggle_buttons_on_search(self, is_started):
+        self.btn_search.setEnabled(not is_started)
+        self.btn_stop.setEnabled(is_started)
+        self.btn_connect.setEnabled(not is_started)
+
+    def toggle_buttons_on_connect(self, is_connected):
+        self.btn_search.setEnabled(not is_connected)
+
+        self.edit_artist.setReadOnly(is_connected)
+        self.edit_title.setReadOnly(is_connected)
+        self.edit_player.setEnabled(not is_connected)
+
+        if is_connected:
+            self.btn_connect.setText('Disconnect')
+        else:
+            self.btn_connect.setText('Connect...')
+
+    def update_search_results(self, songs, process_time_sec, is_manual):
         self.lyric_table.update_data(songs)
         self.update_lyric_pane()
-        self.toggle_search_buttons(False)
-        self.set_status_message('Search completed in {}'.format(util.format_time_ms(process_time_sec)))
+
+        if is_manual:
+            self.toggle_buttons_on_search(False)
+            self.set_status_message('Search completed in {}'.format(util.format_time_ms(process_time_sec)))
+        else:
+            self.set_status_message('Listening to the player...')
+
+    def update_search_results_mpris(self, meta):
+        current_artist = self.edit_artist.text()
+        current_title = self.edit_title.text()
+
+        if (current_artist != meta[0] or current_title != meta[1]) and (meta[0] and meta[1]):
+            self.edit_artist.setText(meta[0])
+            self.edit_title.setText(meta[1])
+            self.start_search(False)
 
     def update_lyric_pane(self):
         selected = self.lyric_table_view.selectionModel().selectedRows()
@@ -129,36 +195,7 @@ class MainWindow(QMainWindow):
         for sel in selected:
             songs.append(sel.data(LyricTableModel.DataRole))
 
-        self.lyric_text.setText(self.format_lyrics(songs))
-
-    def toggle_search_buttons(self, searching):
-        self.btn_search.setEnabled(not searching)
-        self.btn_stop.setEnabled(searching)
-
-    def format_lyrics(self, songs):
-        formatted_songs = []
-
-        for song in songs:
-            lyrics_txt = ''
-            if song.lyrics:
-                index = 0
-                for lyric in song.lyrics:
-                    lyrics_txt += lyric
-                    if index < len(song.lyrics) - 1:
-                        lyrics_txt += '\n\n<<< --- --- --- >>>\n\n'
-                    index += 1
-
-            formatted_songs.append(lyrics_txt)
-
-        result = ''
-        index = 0
-        for formatted_song in formatted_songs:
-            result += formatted_song
-            if index < len(formatted_songs) - 1:
-                result += '\n\n<<< --- --- --- --- --- >>>\n\n'
-            index += 1
-
-        return result
+        self.lyric_text.setText(format_lyrics(songs))
 
 
 class LyricTableModel(QAbstractTableModel):
@@ -214,16 +251,61 @@ class LyricTableModel(QAbstractTableModel):
 
 
 class SearchThread(QThread):
-    resultReady = pyqtSignal(list, float)
+    resultReady = pyqtSignal(list, float, bool)
 
-    def __init__(self, artist, title):
+    def __init__(self, artist, title, is_manual):
         super().__init__()
+
         self.artist = artist
         self.title = title
+        self.is_manual = is_manual
 
     def run(self):
         start_time = time.time()
         songs = search_async(self.artist, self.title, SearchConfig())
         total_time = time.time() - start_time
 
-        self.resultReady.emit(songs, total_time)
+        self.resultReady.emit(songs, total_time, self.is_manual)
+
+
+class MprisThread(QThread):
+    metaReady = pyqtSignal(list)
+
+    def __init__(self, connector, player):
+        super().__init__()
+
+        self.connector = connector
+        self.player = player
+
+    def run(self):
+        if self.connector.connect(self.player):
+            while True:
+                meta = self.connector.get_meta()
+                self.metaReady.emit(meta)
+                time.sleep(2)
+
+
+def format_lyrics(songs):
+    formatted_songs = []
+
+    for song in songs:
+        lyrics_txt = ''
+        if song.lyrics:
+            index = 0
+            for lyric in song.lyrics:
+                lyrics_txt += lyric
+                if index < len(song.lyrics) - 1:
+                    lyrics_txt += '\n\n<<< --- --- --- >>>\n\n'
+                index += 1
+
+        formatted_songs.append(lyrics_txt)
+
+    result = ''
+    index = 0
+    for formatted_song in formatted_songs:
+        result += formatted_song
+        if index < len(formatted_songs) - 1:
+            result += '\n\n<<< --- --- --- --- --- >>>\n\n'
+        index += 1
+
+    return result
