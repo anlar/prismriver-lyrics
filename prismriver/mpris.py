@@ -16,15 +16,21 @@ class MprisConnector(object):
         return active_players
 
     def connect(self, player_name):
-        proxy = self.bus.get_object(player_name, '/org/mpris/MediaPlayer2')
-        self.manager = dbus.Interface(proxy, 'org.freedesktop.DBus.Properties')
-        return True
+        try:
+            proxy = self.bus.get_object(player_name, '/org/mpris/MediaPlayer2')
+            self.manager = dbus.Interface(proxy, 'org.freedesktop.DBus.Properties')
+            return True
+        except dbus.exceptions.DBusException:
+            raise MprisConnectionException()
 
     def get_meta(self):
         if not self.manager:
-            return None
+            raise MprisConnectionException()
 
-        meta = self.manager.Get('org.mpris.MediaPlayer2.Player', 'Metadata')
+        try:
+            meta = self.manager.Get('org.mpris.MediaPlayer2.Player', 'Metadata')
+        except dbus.exceptions.DBusException:
+            raise MprisConnectionException()
 
         artist = meta.get('xesam:albumArtist')
         if not artist:
@@ -35,3 +41,7 @@ class MprisConnector(object):
         title = meta.get('xesam:title')
 
         return [str(artist) if artist else None, str(title) if title else None]
+
+
+class MprisConnectionException(Exception):
+    pass

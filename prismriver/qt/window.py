@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QGridLayout
 
 from prismriver import util
 from prismriver.main import search_async
-from prismriver.mpris import MprisConnector
+from prismriver.mpris import MprisConnector, MprisConnectionException
 from prismriver.struct import SearchConfig
 
 
@@ -145,17 +145,21 @@ class MainWindow(QMainWindow):
         self.edit_player.clear()
         self.edit_player.addItems(players)
 
-    def toggle_mpris_listener(self):
-        if self.worker_mpris is None or not self.worker_mpris.isRunning():
+    def toggle_mpris_listener(self, sudden_stop=False):
+        if not sudden_stop and (self.worker_mpris is None or not self.worker_mpris.isRunning()):
             self.worker_mpris = MprisThread(self.mpris_connect, self.edit_player.currentText())
-            self.worker_mpris.metaReady.connect(self.update_search_results_mpris)
+            self.worker_mpris.meta_ready.connect(self.update_search_results_mpris)
+            self.worker_mpris.connection_closed.connect(self.toggle_mpris_listener)
             self.worker_mpris.start()
             self.toggle_buttons_on_connect(True)
             self.set_status_message('Listening to the player...')
         else:
             self.worker_mpris.terminate()
             self.toggle_buttons_on_connect(False)
-            self.set_status_message('Player listener stopped')
+            if sudden_stop:
+                self.set_status_message('Player listener stopped (connection closed)')
+            else:
+                self.set_status_message('Player listener stopped')
 
     def toggle_buttons_on_search(self, is_started):
         try:
@@ -287,7 +291,8 @@ class SearchThread(QThread):
 
 
 class MprisThread(QThread):
-    metaReady = pyqtSignal(list)
+    meta_ready = pyqtSignal(list)
+    connection_closed = pyqtSignal(bool)
 
     def __init__(self, connector, player):
         super().__init__()
@@ -296,11 +301,14 @@ class MprisThread(QThread):
         self.player = player
 
     def run(self):
-        if self.connector.connect(self.player):
-            while True:
-                meta = self.connector.get_meta()
-                self.metaReady.emit(meta)
-                time.sleep(2)
+        try:
+            if self.connector.connect(self.player):
+                while True:
+                    meta = self.connector.get_meta()
+                    self.meta_ready.emit(meta)
+                    time.sleep(2)
+        except MprisConnectionException:
+            self.connection_closed.emit(True)
 
 
 def format_lyrics(songs):
