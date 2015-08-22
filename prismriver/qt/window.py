@@ -35,20 +35,20 @@ class MainWindow(QMainWindow):
     def create_search_pane(self):
         group_box = QGroupBox('Search')
 
-        self.btn_search = QPushButton(QIcon.fromTheme('edit-find', self.style().standardIcon(QStyle.SP_BrowserReload)),
-                                      'Search...')
+        self.btn_search = QPushButton()
         self.btn_search.setAutoDefault(True)
         self.btn_search.setDefault(True)
-        self.btn_search.clicked.connect(lambda: self.start_search(True))
-
-        self.btn_stop = QPushButton(QIcon.fromTheme('process-stop', self.style().standardIcon(QStyle.SP_BrowserStop)),
-                                    'Stop')
-        self.btn_stop.clicked.connect(self.stop_search)
 
         self.btn_connect = QPushButton(
             QIcon.fromTheme('multimedia-player', self.style().standardIcon(QStyle.SP_BrowserStop)),
             'Connect...')
         self.btn_connect.clicked.connect(self.toggle_mpris_listener)
+
+        self.btn_refresh = QPushButton(
+            QIcon.fromTheme('view-refresh', self.style().standardIcon(QStyle.SP_BrowserReload)),
+            'Refresh'
+        )
+        self.btn_refresh.clicked.connect(self.refresh_players)
 
         label_artist = QLabel('Artist')
         label_title = QLabel('Title')
@@ -71,17 +71,16 @@ class MainWindow(QMainWindow):
 
         grid.addWidget(label_title, 1, 0)
         grid.addWidget(self.edit_title, 1, 1)
-        grid.addWidget(self.btn_stop, 1, 2)
+        grid.addWidget(self.btn_connect, 1, 2)
 
         grid.addWidget(label_player, 2, 0)
         grid.addWidget(self.edit_player, 2, 1)
-        grid.addWidget(self.btn_connect, 2, 2)
+        grid.addWidget(self.btn_refresh, 2, 2)
 
         group_box.setLayout(grid)
 
         group_box.setTabOrder(self.edit_artist, self.edit_title)
         group_box.setTabOrder(self.edit_title, self.btn_search)
-        group_box.setTabOrder(self.btn_search, self.btn_stop)
 
         return group_box
 
@@ -141,6 +140,11 @@ class MainWindow(QMainWindow):
             self.toggle_buttons_on_search(False)
             self.set_status_message('Search stopped')
 
+    def refresh_players(self):
+        players = self.mpris_connect.get_active_players()
+        self.edit_player.clear()
+        self.edit_player.addItems(players)
+
     def toggle_mpris_listener(self):
         if self.worker_mpris is None or not self.worker_mpris.isRunning():
             self.worker_mpris = MprisThread(self.mpris_connect, self.edit_player.currentText())
@@ -154,12 +158,26 @@ class MainWindow(QMainWindow):
             self.set_status_message('Player listener stopped')
 
     def toggle_buttons_on_search(self, is_started):
-        self.btn_search.setEnabled(not is_started)
-        self.btn_stop.setEnabled(is_started)
+        try:
+            self.btn_search.clicked.disconnect()
+        except TypeError:
+            pass
+
+        if is_started:
+            self.btn_search.setIcon(QIcon.fromTheme('process-stop', self.style().standardIcon(QStyle.SP_BrowserStop)))
+            self.btn_search.setText('Stop')
+            self.btn_search.clicked.connect(self.stop_search)
+        else:
+            self.btn_search.setIcon(QIcon.fromTheme('edit-find', self.style().standardIcon(QStyle.SP_BrowserReload)))
+            self.btn_search.setText('Search...')
+            self.btn_search.clicked.connect(lambda: self.start_search(True))
+
         self.btn_connect.setEnabled(not is_started)
+        self.btn_refresh.setEnabled(not is_started)
 
     def toggle_buttons_on_connect(self, is_connected):
         self.btn_search.setEnabled(not is_connected)
+        self.btn_refresh.setEnabled(not is_connected)
 
         self.edit_artist.setReadOnly(is_connected)
         self.edit_title.setReadOnly(is_connected)
