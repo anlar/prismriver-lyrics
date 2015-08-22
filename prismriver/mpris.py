@@ -29,10 +29,9 @@ class MprisConnector(object):
         artist = meta.get('xesam:albumArtist')
         if not artist:
             artist = meta.get('xesam:artist')
+        if isinstance(artist, list):
+            artist = artist[0]
 
         title = meta.get('xesam:title')
 
-        if isinstance(artist, list):
-            return [str(artist[0]), str(title)]
-        else:
-            return [str(artist), str(title)]
+        return [str(artist) if artist else None, str(title) if title else None]
