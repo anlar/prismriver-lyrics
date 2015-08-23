@@ -1,6 +1,6 @@
 import time
 
-from PyQt5.QtCore import Qt, QAbstractTableModel, QVariant, pyqtSignal, QThread
+from PyQt5.QtCore import Qt, QAbstractTableModel, QVariant, pyqtSignal, QThread, QStringListModel
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QGridLayout, \
     QGroupBox, QVBoxLayout, QTextEdit, QPushButton, QStyle, QSplitter, QTableView, QHeaderView, QAbstractItemView, \
@@ -61,8 +61,9 @@ class MainWindow(QMainWindow):
         self.edit_title.returnPressed.connect(self.btn_search.click)
 
         self.edit_player = QComboBox()
-        players = self.mpris_connect.get_active_players()
-        self.edit_player.addItems(players)
+        self.edit_player_model = (PlayerListModel())
+        self.edit_player.setModel(self.edit_player_model)
+        self.refresh_players()
 
         grid = QGridLayout()
 
@@ -135,13 +136,15 @@ class MainWindow(QMainWindow):
             self.set_status_message('Search stopped')
 
     def refresh_players(self):
-        players = self.mpris_connect.get_active_players()
+        players = self.mpris_connect.get_players()
         self.edit_player.clear()
-        self.edit_player.addItems(players)
+        self.edit_player_model.update_data(players)
+        if players:
+            self.edit_player.setCurrentIndex(0)
 
     def toggle_mpris_listener(self, sudden_stop=False):
         if not sudden_stop and (self.worker_mpris is None or not self.worker_mpris.isRunning()):
-            self.worker_mpris = MprisThread(self.mpris_connect, self.edit_player.currentText())
+            self.worker_mpris = MprisThread(self.mpris_connect, self.edit_player.currentData(PlayerListModel.DataRole))
             self.worker_mpris.meta_ready.connect(self.update_search_results_mpris)
             self.worker_mpris.connection_closed.connect(self.toggle_mpris_listener)
             self.worker_mpris.start()
@@ -216,6 +219,31 @@ class MainWindow(QMainWindow):
             songs.append(sel.data(LyricTableModel.DataRole))
 
         self.lyric_text.setText(format_lyrics(songs))
+
+
+class PlayerListModel(QStringListModel):
+    DataRole = -101010
+
+    def __init__(self, *__args):
+        super().__init__(*__args)
+        self.players = []
+
+    def rowCount(self, parent=None, *args, **kwargs):
+        return len(self.players) if self.players else 0
+
+    def data(self, index, role=None):
+        row = index.row()
+        if role == Qt.DisplayRole:
+            if self.players[row]:
+                return QVariant('{} [{}]'.format(self.players[row].identity, self.players[row].name))
+        elif role == self.DataRole:
+            return self.players[row]
+
+        return QVariant()
+
+    def update_data(self, players):
+        self.players = players
+        self.layoutChanged.emit()
 
 
 class LyricTableModel(QAbstractTableModel):

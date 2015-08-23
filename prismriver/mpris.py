@@ -11,13 +11,27 @@ class MprisConnector(object):
         self.bus = dbus.SessionBus()
         self.manager = None
 
-    def get_active_players(self):
-        active_players = [name for name in self.bus.list_names() if self.mpris_re.match(name)]
-        return active_players
-
-    def connect(self, player_name):
+    def get_players(self):
         try:
-            proxy = self.bus.get_object(player_name, '/org/mpris/MediaPlayer2')
+            player_names = [name for name in self.bus.list_names() if self.mpris_re.match(name)]
+            players = [self.get_player(name) for name in player_names]
+            players.sort(key=lambda x: x.identity.lower())
+            return players
+        except dbus.exceptions.DBusException:
+            return None
+
+    def get_player(self, name):
+        try:
+            proxy = self.bus.get_object(name, '/org/mpris/MediaPlayer2')
+            manager = dbus.Interface(proxy, 'org.freedesktop.DBus.Properties')
+            identity = manager.Get('org.mpris.MediaPlayer2', 'Identity')
+            return MprisPlayer(name, identity)
+        except dbus.exceptions.DBusException:
+            return None
+
+    def connect(self, player):
+        try:
+            proxy = self.bus.get_object(player.name, '/org/mpris/MediaPlayer2')
             self.manager = dbus.Interface(proxy, 'org.freedesktop.DBus.Properties')
             return True
         except dbus.exceptions.DBusException:
@@ -41,6 +55,14 @@ class MprisConnector(object):
         title = meta.get('xesam:title')
 
         return [str(artist) if artist else None, str(title) if title else None]
+
+
+class MprisPlayer(object):
+    def __init__(self, name, identity):
+        super().__init__()
+
+        self.name = name
+        self.identity = identity
 
 
 class MprisConnectionException(Exception):
