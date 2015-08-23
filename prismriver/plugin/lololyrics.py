@@ -14,6 +14,6 @@ class LololyricsPlugin(Plugin):
         )
 
         xml_root = self.download_xml(link)
-        if xml_root:
+        if xml_root is not None:
             lyric = xml_root.find("response").text
             return Song(artist, title, self.sanitize_lyrics([lyric]))
