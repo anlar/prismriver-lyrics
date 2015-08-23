@@ -176,6 +176,10 @@ class MainWindow(QMainWindow):
             self.btn_search.setText('Search...')
             self.btn_search.clicked.connect(lambda: self.start_search(True))
 
+        self.edit_artist.setReadOnly(is_started)
+        self.edit_title.setReadOnly(is_started)
+        self.edit_player.setEnabled(not is_started)
+
         self.btn_connect.setEnabled(not is_started)
         self.btn_refresh.setEnabled(not is_started)
 
