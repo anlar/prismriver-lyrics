@@ -13,6 +13,7 @@ def run():
 
     app = QApplication(sys.argv)
     app.setWindowIcon(QIcon('prismriver/pixmaps/prismriver-lunasa.png'))
+    app.setApplicationName('Lunasa Prismriver')
 
     main = MainWindow()
     main.setGeometry(0, 0, 1024, 1000)
