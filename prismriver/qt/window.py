@@ -30,7 +30,8 @@ class MainWindow(QMainWindow):
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
 
-        self.init_ui()
+        self.toggle_buttons_on_search(False)
+        self.set_status_message(None)
 
     def create_search_pane(self):
         group_box = QGroupBox('Search')
@@ -113,13 +114,6 @@ class MainWindow(QMainWindow):
         main_group.setLayout(main_layout)
 
         return main_group
-
-    def init_ui(self):
-        self.setGeometry(0, 0, 1024, 1000)
-        self.setWindowTitle('Lunasa Prismriver')
-        self.toggle_buttons_on_search(False)
-        self.set_status_message(None)
-        self.show()
 
     def set_status_message(self, message):
         self.statusBar().showMessage(message)

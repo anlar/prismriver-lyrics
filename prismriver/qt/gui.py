@@ -15,5 +15,8 @@ def run():
     app.setWindowIcon(QIcon('prismriver/pixmaps/prismriver-lunasa.png'))
 
     main = MainWindow()
+    main.setGeometry(0, 0, 1024, 1000)
+    main.setWindowTitle('Lunasa Prismriver')
+    main.show()
 
     sys.exit(app.exec_())
