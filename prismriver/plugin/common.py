@@ -7,13 +7,13 @@ import xml.etree.ElementTree
 import socket
 import os
 from os import path
-
 from bs4 import NavigableString, Tag, Comment, BeautifulSoup
 
 from ..compat import (
     compat_urllib_error,
     compat_urllib_parse,
-    compat_urllib_request
+    compat_urllib_request,
+    ConnectionResetError
 )
 from prismriver import util
 
@@ -76,17 +76,17 @@ class Plugin(object):
         req = compat_urllib_request.Request(url, headers={
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/20.0 (Chrome)'})
         try:
-            with compat_urllib_request.urlopen(req, timeout=10) as response:
-                page = response.read()
+            response = compat_urllib_request.urlopen(req, timeout=10)
+            page = response.read()
 
-                self.put_page_to_cache(cache_file_name, page, url)
+            self.put_page_to_cache(cache_file_name, page, url)
 
-                logging.debug(
-                    'Download web-page from "{}", {}, {}'.format(url,
-                                                                 util.format_file_size(self.get_psize(page)),
-                                                                 util.format_time_ms(time.time() - start)))
+            logging.debug(
+                'Download web-page from "{}", {}, {}'.format(url,
+                                                             util.format_file_size(self.get_psize(page)),
+                                                             util.format_time_ms(time.time() - start)))
 
-                return page
+            return page
         except compat_urllib_error.HTTPError as err:
             logging.debug('Failed to download web-page from "{}", error: {}, {}'.format(url, err.code, err.reason))
             return None

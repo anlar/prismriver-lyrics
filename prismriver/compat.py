@@ -12,3 +12,11 @@ try:
     import urllib.request as compat_urllib_request
 except ImportError:  # Python 2
     import urllib2 as compat_urllib_request
+
+try:  # pragma: no cover
+    ConnectionResetError = ConnectionResetError
+except NameError:  # pragma: no cover
+    class ConnectionResetError(Exception):
+        """
+        A HTTP connection was unexpectedly reset.
+        """
