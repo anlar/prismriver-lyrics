@@ -264,6 +264,16 @@ class TestPlugins(unittest.TestCase):
                           'Bad Boys Blue', 'A World Without You (michelle)',
                           ['ad1240f4f772fc36e5286c4a4f29f187'])
 
+    def test_songlyrics_01(self):
+        self.check_plugin('songlyrics',
+                          'Modern Talking', "You're My Heart, You're My Soul",
+                          ['4599f1b95aa81922861067d4748d9c93'])
+
+    def test_songlyrics_02(self):
+        self.check_plugin('songlyrics',
+                          'Modern Talking', "Geronimo's Cadillac (New Version)",
+                          ['9b742a8e76bbecc7c3ece323400dd866'])
+
     def test_touhouwiki_01(self):
         self.check_plugin('touhouwiki',
                           'FELT', 'World Around Us',
