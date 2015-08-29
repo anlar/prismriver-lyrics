@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import logging
 import random
 from time import sleep

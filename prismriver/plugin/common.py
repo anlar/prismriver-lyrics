@@ -1,9 +1,6 @@
 import hashlib
 import logging
 import re
-import urllib.parse
-import urllib.request
-import urllib.error
 import sys
 import time
 import xml.etree.ElementTree
@@ -13,10 +10,15 @@ from os import path
 
 from bs4 import NavigableString, Tag, Comment, BeautifulSoup
 
+from ..compat import (
+    compat_urllib_error,
+    compat_urllib_parse,
+    compat_urllib_request
+)
 from prismriver import util
 
 
-class Plugin:
+class Plugin(object):
     def __init__(self, plugin_id, plugin_name, config):
         self.plugin_id = plugin_id
         self.plugin_name = plugin_name
@@ -31,9 +33,9 @@ class Plugin:
 
     def quote_uri(self, value, safe_chars=None):
         if safe_chars:
-            return urllib.parse.quote(value, safe=(safe_chars + '/'))
+            return compat_urllib_parse.quote(value, safe=(safe_chars + '/'))
         else:
-            return urllib.parse.quote(value)
+            return compat_urllib_parse.quote(value)
 
     def prepare_url_parameter(self, value, to_delete=None, to_replace=None, delimiter='-',
                               quote_uri=True, safe_chars=None):
@@ -71,10 +73,10 @@ class Plugin:
                                                                     util.format_time_ms(time.time() - start)))
             return cached_page
 
-        req = urllib.request.Request(url, headers={
+        req = compat_urllib_request.Request(url, headers={
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/20.0 (Chrome)'})
         try:
-            with urllib.request.urlopen(req, timeout=10) as response:
+            with compat_urllib_request.urlopen(req, timeout=10) as response:
                 page = response.read()
 
                 self.put_page_to_cache(cache_file_name, page, url)
@@ -85,7 +87,7 @@ class Plugin:
                                                                  util.format_time_ms(time.time() - start)))
 
                 return page
-        except urllib.error.HTTPError as err:
+        except compat_urllib_error.HTTPError as err:
             logging.debug('Failed to download web-page from "{}", error: {}, {}'.format(url, err.code, err.reason))
             return None
         except ConnectionResetError as err:
