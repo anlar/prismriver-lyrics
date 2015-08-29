@@ -117,6 +117,14 @@ List all available plugins:
 * http://ostanimepluslyrics.blogspot.ru/search/label/Lyrics%20Music
 * http://lyrics.snakeroot.ru/lyrics.html
 * https://www.musixmatch.com/
+* http://www.lyricsplugin.com/
+* https://www.jamendo.com/
+* http://www.lyriki.com/
+* http://www.lyricsbay.com/
+* http://www.directlyrics.com/
+* http://teksty.org/
+* http://www.sing365.com/
+* http://www.clickgratis.com.br/
 
 See also:
 
@@ -151,6 +159,14 @@ multiple sites
 
 * https://git.gnome.org/browse/rhythmbox/tree/plugins/lyrics
 Python;
+multiple sites
+
+* http://kde-apps.org/content/show.php/Ultimate+Lyrics?content=108967
+Javascript;
+multiple sites
+
+* https://github.com/BansheeMediaPlayer/banshee-community-extensions/tree/master/src/Lyrics
+C#;
 multiple sites
 
 ## Copyright
