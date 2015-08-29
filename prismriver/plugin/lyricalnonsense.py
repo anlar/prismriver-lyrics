@@ -48,7 +48,8 @@ class LyricalNonsensePlugin(Plugin):
                 for translated_title in translated_title_block.strings:
                     song_titles.append(translated_title.strip())
 
-            if title.lower() in map(lambda x: x.lower(), song_titles):
+            # explicitly convert title to Unicode because otherwise Python2 will try to convert it using 'ascii' codec
+            if unicode(title, 'utf-8').lower() in map(lambda x: x.lower(), song_titles):
                 return self.download_webpage(song_link)
 
     def get_song(self, page):
