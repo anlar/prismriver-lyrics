@@ -227,7 +227,10 @@ class PlayerListModel(QStringListModel):
     def __init__(self, *__args):
         super().__init__(*__args)
         self.players = []
-        self.player_icons = {'org.mpris.MediaPlayer2.deadbeef': 'deadbeef.png',
+        self.player_icons = {'org.mpris.MediaPlayer2.amarok': 'amarok.png',
+                             'org.mpris.MediaPlayer2.audacious': 'audacious.png',
+                             'org.mpris.MediaPlayer2.deadbeef': 'deadbeef.png',
+                             'org.mpris.MediaPlayer2.mpd': 'mpd.png',
                              'org.mpris.MediaPlayer2.rhythmbox': 'rhythmbox.png',
                              'org.mpris.MediaPlayer2.vlc': 'vlc.png'}
 
