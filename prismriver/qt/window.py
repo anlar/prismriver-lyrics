@@ -227,19 +227,35 @@ class PlayerListModel(QStringListModel):
     def __init__(self, *__args):
         super().__init__(*__args)
         self.players = []
+        self.player_icons = {'org.mpris.MediaPlayer2.deadbeef': 'deadbeef.png',
+                             'org.mpris.MediaPlayer2.rhythmbox': 'rhythmbox.png',
+                             'org.mpris.MediaPlayer2.vlc': 'vlc.png'}
 
     def rowCount(self, parent=None, *args, **kwargs):
         return len(self.players) if self.players else 0
 
     def data(self, index, role=None):
         row = index.row()
+
         if role == Qt.DisplayRole:
             if self.players[row]:
                 return QVariant('{} [{}]'.format(self.players[row].identity, self.players[row].name))
+
+        elif role == Qt.DecorationRole:
+            if self.players[row]:
+                return self.get_player_icon(self.players[row].name)
+
         elif role == self.DataRole:
             return self.players[row]
 
         return QVariant()
+
+    def get_player_icon(self, player_name):
+        icon_name = self.player_icons.get(player_name, 'default.png')
+        if icon_name:
+            return QIcon('prismriver/pixmaps/player/' + icon_name)
+        else:
+            return None
 
     def update_data(self, players):
         self.players = players

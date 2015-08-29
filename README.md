@@ -171,4 +171,14 @@ multiple sites
 
 ## Copyright
 
-Released under Expat license (aka MIT License), see [LICENSE](LICENSE) for details.
+Source code released under Expat license (aka MIT License), see [LICENSE](LICENSE) for details.
+
+Also it contains additional icons from the following projects:
+
+* *player/deadbeef.png*: [DeaDBeeF Player](https://github.com/Alexey-Yakovenko/deadbeef/blob/master/icons/256x256/deadbeef.png)
+
+* *player/default.png*: [MATE Desktop Environment icon theme](https://github.com/mate-desktop/mate-icon-theme/blob/master/mate/256x256/mimetypes/audio-x-generic.png)
+
+* *player/rhythmbox.png*: [Rhythmbox](https://git.gnome.org/browse/rhythmbox/plain/data/icons/hicolor/256x256/apps/rhythmbox.png)
+
+* *player/vlc.png*: [VLC media player](https://github.com/videolan/vlc/blob/master/share/icons/256x256/vlc.png)
