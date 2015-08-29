@@ -20,6 +20,7 @@ from prismriver.plugin.lyricalnonsense import LyricalNonsensePlugin
 from prismriver.plugin.lyricshuddle import LyricsHuddlePlugin
 from prismriver.plugin.lyricsmania import LyricsManiaPlugin
 from prismriver.plugin.lyricsnmusic import LyricsNMusicPlugin
+from prismriver.plugin.lyricsreg import LyricsRegPlugin
 from prismriver.plugin.lyricwiki import LyricWikiPlugin
 from prismriver.plugin.lyrster import LyrsterPlugin
 from prismriver.plugin.megalyrics import MegalyricsPlugin
@@ -55,7 +56,8 @@ def get_plugins(config=None):
         LyricsNMusicPlugin,
         LetrasPlugin,
         BopFmPlugin,
-        LetsSingItPlugin
+        LetsSingItPlugin,
+        LyricsRegPlugin
     ]
 
     plugins = []

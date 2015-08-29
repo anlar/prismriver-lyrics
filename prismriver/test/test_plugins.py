@@ -196,6 +196,11 @@ class TestPlugins(unittest.TestCase):
                           'Joe Dassin', 'Le Moustique',
                           ['492a37b433c45767a589eefbec8060a3'])
 
+    def test_lyricsreg_01(self):
+        self.check_plugin('lyricsreg',
+                          'Groove Coverage', '7 Years & 50 Days',
+                          ['de1d69411a7e4eada406fdd48d32281e'])
+
     def test_lyricwiki_01(self):
         self.check_plugin('lyricwiki',
                           'Sound Holic', 'Grip & Break Down !!',
