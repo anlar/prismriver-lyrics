@@ -98,6 +98,27 @@ List all available plugins:
 
 ### General features
 
+## Lyrica
+
+* Options for pre-processing artist and title: trim, remove redundant details (feat, remix, version etc), romanize...
+
+* Sort search results by site rating.
+
+* Support Python2.
+
+## Lunasa
+
+* Create application icon.
+
+* Add more player icons.
+
+* Make dbus optional dependency.
+
+* Make use of some cli options from Lyrica.
+
+* Implement proper dbus-listener.
+
+
 ### Lyric databases
 
 * http://genius.com/
