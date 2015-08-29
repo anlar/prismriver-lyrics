@@ -1,12 +1,26 @@
 # Prismriver Project [![Build Status](https://travis-ci.org/anlar/prismriver.svg?branch=master)](https://travis-ci.org/anlar/prismriver)
 
-Prismriver is a search engine for song information (generally for it's lyrics).
+Prismriver is a search engine for song information (generally for it's lyrics). It consists of the following modules:
+
+* Lyrica: core module, contains site search plugins and command line interface for lyrics searching.
+
+* Lunasa: Qt5-based graphical interface, can search lyrics which author/title details where entered manually or received via MPRIS protocol from audio-player.
 
 ## Requirements
 
-* Python 3.2+
-* Beautiful Soup 4
-* lxml
+Package names from Ubuntu 14.04 mentioned within brackets.
+
+### Lyrica
+
+* Python 3.2+ (python3)
+* Beautiful Soup 4 (python-beautifulsoup)
+* lxml (python3-lxml)
+
+### Lunasa
+
+* *everything from Lyrica*
+* PyQt5 (python3-pyqt5)
+* D-Bus Python 3 bindings (python3-dbus)
 
 ## Usage
 
@@ -69,11 +83,13 @@ List all available plugins:
 * Lyrics N Music       [id: lyricsnmusic]
 * LyricsHuddle         [id: lyricshuddle]
 * LyricsMania          [id: lyricsmania]
+* LyricsReg.com        [id: lyricsreg]
 * LyricWiki            [id: lyricwiki]
 * Lyrster              [id: lyrster]
 * Megalyrics           [id: megalyrics]
 * MetroLyrics          [id: metrolyrics]
 * NitroLyrics          [id: nitrolyrics]
+* SongLyrics.com       [id: songlyrics]
 * TouhouWiki           [id: touhouwiki]
 * Vagalume             [id: vagalume]
 
