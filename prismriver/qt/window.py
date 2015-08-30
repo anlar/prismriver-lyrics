@@ -12,7 +12,7 @@ from prismriver.mpris import MprisConnector, MprisConnectionException
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, default_artist, default_title, search_config):
+    def __init__(self, default_artist, default_title, default_player, connect_from_start, search_config):
         super().__init__()
 
         self.search_config = search_config
@@ -25,7 +25,7 @@ class MainWindow(QMainWindow):
         main_widget = QWidget()
         main_layout = QVBoxLayout()
 
-        main_layout.addWidget(self.create_search_pane(default_artist, default_title))
+        main_layout.addWidget(self.create_search_pane(default_artist, default_title, default_player))
         main_layout.addWidget(self.create_result_pane(), 2)
 
         main_widget.setLayout(main_layout)
@@ -34,7 +34,10 @@ class MainWindow(QMainWindow):
         self.toggle_buttons_on_search(False)
         self.set_status_message(None)
 
-    def create_search_pane(self, default_artist, default_title):
+        if connect_from_start:
+            self.toggle_mpris_listener()
+
+    def create_search_pane(self, default_artist, default_title, default_player):
         group_box = QGroupBox('Search')
 
         self.btn_search = QPushButton()
@@ -64,7 +67,7 @@ class MainWindow(QMainWindow):
         self.edit_player = QComboBox()
         self.edit_player_model = (PlayerListModel())
         self.edit_player.setModel(self.edit_player_model)
-        self.refresh_players()
+        self.refresh_players(default_player)
 
         grid = QGridLayout()
 
@@ -137,12 +140,20 @@ class MainWindow(QMainWindow):
             self.toggle_buttons_on_search(False)
             self.set_status_message('Search stopped')
 
-    def refresh_players(self):
+    def refresh_players(self, default_player=None):
         players = self.mpris_connect.get_players()
         self.edit_player.clear()
         self.edit_player_model.update_data(players)
         if players:
-            self.edit_player.setCurrentIndex(0)
+            if default_player:
+                for pl in players:
+                    if pl.name == default_player:
+                        self.edit_player.setCurrentIndex(players.index(pl))
+                        break
+                else:
+                    self.edit_player.setCurrentIndex(0)
+            else:
+                self.edit_player.setCurrentIndex(0)
 
     def toggle_mpris_listener(self, sudden_stop=False):
         if not sudden_stop and (self.worker_mpris is None or not self.worker_mpris.isRunning()):
