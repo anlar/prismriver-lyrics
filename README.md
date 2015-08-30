@@ -98,7 +98,7 @@ List all available plugins:
 
 ### General features
 
-## Lyrica
+#### Lyrica
 
 * Options for pre-processing artist and title: trim, remove redundant details (feat, remix, version etc), romanize...
 
@@ -106,7 +106,7 @@ List all available plugins:
 
 * Support Python2.
 
-## Lunasa
+#### Lunasa
 
 * Create application icon.
 
