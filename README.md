@@ -119,7 +119,6 @@ List all available plugins:
 
 ### Lyric databases
 
-* http://genius.com/
 * http://www.darklyrics.com/
 * http://www.lyricfind.com/ (available only via their mobile app)
 * https://bandcamp.com/
@@ -160,6 +159,13 @@ List all available plugins:
 * http://teksty.org/
 * http://www.sing365.com/
 * http://www.clickgratis.com.br/
+* http://www.absolutelyrics.com/
+* http://www.allmusicals.com/
+* http://www.hitslyrics.com/
+* http://www.cowboylyrics.com/
+* http://www.popular-lyrics.com/
+* http://www.lyricsby.com/
+* http://www.thebroadwaymusicals.com/
 
 See also:
 
