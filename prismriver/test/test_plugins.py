@@ -108,6 +108,11 @@ class TestPlugins(unittest.TestCase):
                           'Dschinghis Khan', 'Pistolero',
                           ['4be7cef73596ded5201904c31b4ced91'])
 
+    def test_genius_01(self):
+        self.check_plugin('genius',
+                          'The Bee Gees', "I Can't Help It (with Olivia Newton-John)",
+                          ['98cf0624d48892db275b16b865d8cc97'])
+
     def test_jlyric_01(self):
         self.check_plugin('jlyric',
                           '宇多田ヒカル', 'Beautiful World',

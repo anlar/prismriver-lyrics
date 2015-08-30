@@ -10,6 +10,7 @@ from prismriver.plugin.azlyrics import AZLyricsPlugin
 from prismriver.plugin.bopfmp import BopFmPlugin
 from prismriver.plugin.chartlyrics import ChartlyricsPlugin
 from prismriver.plugin.elyrics import ELyricsPlugin
+from prismriver.plugin.genius import GeniusPlugin
 from prismriver.plugin.jlyric import JLyricPlugin
 from prismriver.plugin.kget import KGetPlugin
 from prismriver.plugin.leoslyrics import LeosLyricsPlugin
@@ -59,7 +60,8 @@ def get_plugins(config=None):
         BopFmPlugin,
         LetsSingItPlugin,
         LyricsRegPlugin,
-        SongLyricsPlugin
+        SongLyricsPlugin,
+        GeniusPlugin
     ]
 
     plugins = []
