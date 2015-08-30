@@ -1,9 +1,7 @@
-import argparse
 import json
 import logging
 
-from prismriver.main import search_sync, search_async, get_plugins
-from prismriver.struct import SearchConfig
+from prismriver.main import get_plugins, search
 from prismriver import util
 
 
@@ -63,29 +61,14 @@ def list_plugins():
 
 
 def run():
-    parser = argparse.ArgumentParser()
+    parser = util.init_args_parser()
 
     parser.add_argument('--list', action='store_true', help='list available search plugins')
     parser.add_argument('--song', action='store_true',
                         help='search for song information by artist and title (default action)')
 
-    parser.add_argument("-a", "--artist", help="song artist")
-    parser.add_argument("-t", "--title", help="song title")
-
-    parser.add_argument("-l", "--limit", type=int, help="maximum results count")
-    parser.add_argument('-p', '--plugins', help='comma separated listed of enabled plugins '
-                                                '(empty list means that everything is enabled - by default)')
-
     parser.add_argument("-f", "--format", type=str, default='txt',
                         help="lyrics output format (txt (default), json, json_ascii)")
-
-    parser.add_argument('--async', action='store_true',
-                        help='search info from all plugins simultaneously')
-
-    parser.add_argument('--cache_dir', type=str,
-                        help='cache directory for downloaded web pages (default: ~/.cache/prismriver)')
-    parser.add_argument('--cache_ttl', type=str,
-                        help='cache ttl for downloaded web pages in seconds (default: one week)')
 
     parser.add_argument("-o", "--output", type=str, default='%ARTIST% - %TITLE%\nSource: %PLUGIN_NAME%\n\n%LYRICS%',
                         help="output template for txt format. Available parameters: "
@@ -97,10 +80,6 @@ def run():
                              "(default value: %%ARTIST%% - %%TITLE%%\\nSource: %%PLUGIN_NAME%%\\n\\n%%LYRICS%%)"
                         )
 
-    parser.add_argument("-q", "--quiet", help="disable logging info (show only errors)", action="store_true")
-    parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
-    parser.add_argument('--log', type=str, help='if set will redirect log info to that file')
-
     params = parser.parse_args()
 
     util.init_logging(params.quiet, params.verbose, params.log)
@@ -109,17 +88,8 @@ def run():
         list_plugins()
     else:
         logging.debug('Search lyrics with following parameters: {}'.format(params.__dict__))
-
-        search_config = SearchConfig(
-            params.plugins.split(',') if params.plugins else None,
-            params.limit,
-            params.cache_dir,
-            params.cache_ttl)
-
-        if params.async:
-            result = search_async(params.artist, params.title, search_config)
-        else:
-            result = search_sync(params.artist, params.title, search_config)
+        search_config = util.init_search_config(params)
+        result = search(params.artist, params.title, search_config)
 
         if result:
             print(format_output(result, params.format, params.output))

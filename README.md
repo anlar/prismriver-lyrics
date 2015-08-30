@@ -114,8 +114,6 @@ List all available plugins:
 
 * Make dbus optional dependency.
 
-* Make use of some cli options from Lyrica.
-
 * Implement proper dbus-listener.
 
 

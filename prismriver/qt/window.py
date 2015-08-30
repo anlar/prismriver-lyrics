@@ -9,12 +9,13 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QGridLayout
 from prismriver import util
 from prismriver.main import search_async
 from prismriver.mpris import MprisConnector, MprisConnectionException
-from prismriver.struct import SearchConfig
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, default_artist, default_title, search_config):
         super().__init__()
+
+        self.search_config = search_config
 
         self.worker_search = None
         self.worker_mpris = None
@@ -24,7 +25,7 @@ class MainWindow(QMainWindow):
         main_widget = QWidget()
         main_layout = QVBoxLayout()
 
-        main_layout.addWidget(self.create_search_pane())
+        main_layout.addWidget(self.create_search_pane(default_artist, default_title))
         main_layout.addWidget(self.create_result_pane(), 2)
 
         main_widget.setLayout(main_layout)
@@ -33,7 +34,7 @@ class MainWindow(QMainWindow):
         self.toggle_buttons_on_search(False)
         self.set_status_message(None)
 
-    def create_search_pane(self):
+    def create_search_pane(self, default_artist, default_title):
         group_box = QGroupBox('Search')
 
         self.btn_search = QPushButton()
@@ -55,8 +56,8 @@ class MainWindow(QMainWindow):
         label_title = QLabel('Title')
         label_player = QLabel('Player')
 
-        self.edit_artist = QLineEdit()
-        self.edit_title = QLineEdit()
+        self.edit_artist = QLineEdit(default_artist)
+        self.edit_title = QLineEdit(default_title)
         self.edit_artist.returnPressed.connect(self.btn_search.click)
         self.edit_title.returnPressed.connect(self.btn_search.click)
 
@@ -125,7 +126,8 @@ class MainWindow(QMainWindow):
 
         self.set_status_message('Searching...')
 
-        self.worker_search = SearchThread(self.edit_artist.text(), self.edit_title.text(), is_manual)
+        self.worker_search = SearchThread(self.edit_artist.text(), self.edit_title.text(), self.search_config,
+                                          is_manual)
         self.worker_search.resultReady.connect(self.update_search_results)
         self.worker_search.start()
 
@@ -320,16 +322,17 @@ class LyricTableModel(QAbstractTableModel):
 class SearchThread(QThread):
     resultReady = pyqtSignal(list, float, bool)
 
-    def __init__(self, artist, title, is_manual):
+    def __init__(self, artist, title, search_config, is_manual):
         super().__init__()
 
         self.artist = artist
         self.title = title
+        self.search_config = search_config
         self.is_manual = is_manual
 
     def run(self):
         start_time = time.time()
-        songs = search_async(self.artist, self.title, SearchConfig())
+        songs = search_async(self.artist, self.title, self.search_config)
         total_time = time.time() - start_time
 
         self.resultReady.emit(songs, total_time, self.is_manual)

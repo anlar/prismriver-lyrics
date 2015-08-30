@@ -31,7 +31,7 @@ from prismriver.plugin.touhouwiki import TouhouWikiPlugin
 from prismriver.plugin.vagalume import VagalumePlugin
 
 
-# common methods
+# plugin list
 
 def get_plugins(config=None):
     all_plugins = [
@@ -81,29 +81,14 @@ def is_enabled(plugin, enabled_plugins):
         return True
 
 
-def do_search(plugin, artist, title):
-    logging.info('Search lyrics on "{}" [{}]...'.format(plugin.plugin_name, plugin.plugin_id))
-    try:
-        start_time = time.time()
-        song = plugin.search_song(artist, title)
-        total_time = time.time() - start_time
+# lyrics search
 
-        if song:
-            song.plugin_id = plugin.plugin_id
-            song.plugin_name = plugin.plugin_name
+def search(artist, title, config):
+    if config.async:
+        return search_async(artist, title, config)
+    else:
+        return search_sync(artist, title, config)
 
-            logging.info('Found song info on "{}" [{}], {}'.format(plugin.plugin_name, plugin.plugin_id,
-                                                                   util.format_time_ms(total_time)))
-            return song
-        else:
-            logging.info('Nothing was found on "{}" [{}], {}'.format(plugin.plugin_name, plugin.plugin_id,
-                                                                 util.format_time_ms(total_time)))
-    except Exception:
-        logging.exception('Failed to get info from "{}" [{}]'.format(plugin.plugin_name, plugin.plugin_id))
-        pass
-
-
-# sync search
 
 def search_sync(artist, title, config):
     result = []
@@ -117,8 +102,6 @@ def search_sync(artist, title, config):
 
     return result
 
-
-# async search
 
 def search_async(artist, title, config):
     queue = Queue()
@@ -145,3 +128,25 @@ def do_search_async(artist, title, plugin, queue):
     song = do_search(plugin, artist, title)
     if song:
         queue.put(song)
+
+
+def do_search(plugin, artist, title):
+    logging.info('Search lyrics on "{}" [{}]...'.format(plugin.plugin_name, plugin.plugin_id))
+    try:
+        start_time = time.time()
+        song = plugin.search_song(artist, title)
+        total_time = time.time() - start_time
+
+        if song:
+            song.plugin_id = plugin.plugin_id
+            song.plugin_name = plugin.plugin_name
+
+            logging.info('Found song info on "{}" [{}], {}'.format(plugin.plugin_name, plugin.plugin_id,
+                                                                   util.format_time_ms(total_time)))
+            return song
+        else:
+            logging.info('Nothing was found on "{}" [{}], {}'.format(plugin.plugin_name, plugin.plugin_id,
+                                                                     util.format_time_ms(total_time)))
+    except Exception:
+        logging.exception('Failed to get info from "{}" [{}]'.format(plugin.plugin_name, plugin.plugin_id))
+        pass
