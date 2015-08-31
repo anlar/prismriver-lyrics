@@ -122,7 +122,6 @@ List all available plugins:
 * http://www.darklyrics.com/
 * http://www.lyricfind.com/ (available only via their mobile app)
 * https://bandcamp.com/
-* http://mp3lyrics.com/
 * http://www.lyricsmode.com/
 * http://www.lyricsfreak.com/
 * http://www.lyrics.com/
@@ -166,6 +165,11 @@ List all available plugins:
 * http://www.popular-lyrics.com/
 * http://www.lyricsby.com/
 * http://www.thebroadwaymusicals.com/
+* http://songmeanings.com/
+* http://www.kasi-time.com/
+* http://www.evesta.jp/
+* http://www.utamap.com/
+* http://www.uta-net.com/
 
 See also:
 
