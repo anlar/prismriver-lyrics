@@ -9,7 +9,9 @@ from prismriver import util
 
 def run():
     parser = create_args_parser()
-    params = parser.parse_args()
+    # skip unknown args, some of them may be handled as common qt options
+    # see: http://doc.qt.io/qt-5/qguiapplication.html
+    params, unknown = parser.parse_known_args()
 
     util.init_logging(params.quiet, params.verbose, params.log)
 
