@@ -26,6 +26,7 @@ from prismriver.plugin.lyricwiki import LyricWikiPlugin
 from prismriver.plugin.lyrster import LyrsterPlugin
 from prismriver.plugin.megalyrics import MegalyricsPlugin
 from prismriver.plugin.metrolyrics import MetroLyricsPlugin
+from prismriver.plugin.mp3lyrics import Mp3LyricsPlugin
 from prismriver.plugin.nitrolyrics import NitroLyricsPlugin
 from prismriver.plugin.songlyrics import SongLyricsPlugin
 from prismriver.plugin.touhouwiki import TouhouWikiPlugin
@@ -61,7 +62,8 @@ def get_plugins(config=None):
         LetsSingItPlugin,
         LyricsRegPlugin,
         SongLyricsPlugin,
-        GeniusPlugin
+        GeniusPlugin,
+        Mp3LyricsPlugin
     ]
 
     plugins = []

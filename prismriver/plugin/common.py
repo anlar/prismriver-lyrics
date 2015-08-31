@@ -1,4 +1,5 @@
 import hashlib
+import json
 import logging
 import re
 import urllib.parse
@@ -98,6 +99,11 @@ class Plugin:
         page = self.download_webpage(url)
         if page:
             return page.decode("utf-8")
+
+    def download_webpage_json(self, url):
+        page = self.download_webpage_text(url)
+        if page:
+            return json.loads(page)
 
     def download_xml(self, url):
         page = self.download_webpage_text(url)

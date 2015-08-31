@@ -259,6 +259,11 @@ class TestPlugins(unittest.TestCase):
                           'Joe Dassin', "Et Si Tu N'existais Pas",
                           ['fd488f806589f80ee18db6a78c051035'])
 
+    def test_mp3lyrics_01(self):
+        self.check_plugin('mp3lyrics',
+                          'Ace of Base', "Never Gonna Say I'm Sorry",
+                          ['4b368840c5b409d6107bf8fdca935b1b'])
+
     def test_nitrolyrics_01(self):
         self.check_plugin('nitrolyrics',
                           'C. C. Catch', "Can't Catch Me",
