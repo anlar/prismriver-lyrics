@@ -32,8 +32,8 @@ def init_args_parser():
     parser.add_argument('-p', '--plugins', help='comma separated listed of enabled plugins '
                                                 '(empty list means that everything is enabled - by default)')
 
-    parser.add_argument('--async', action='store_true',
-                        help='search info from all plugins simultaneously')
+    parser.add_argument('--sync', action='store_true',
+                        help='search info from all plugins consecutively')
 
     parser.add_argument('--cache_dir', type=str,
                         help='cache directory for downloaded web pages (default: ~/.cache/prismriver)')
@@ -53,7 +53,7 @@ def init_search_config(params):
         params.limit,
         params.cache_dir,
         params.cache_ttl,
-        params.async)
+        params.sync)
 
     return config
 

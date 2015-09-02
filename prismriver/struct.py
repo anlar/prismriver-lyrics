@@ -10,7 +10,7 @@ class Song:
 
 class SearchConfig:
     def __init__(self, enabled_plugins=None, result_limit=None, cache_web_dir=None, cache_web_ttl_sec=None,
-                 async=False):
+                 sync=False):
 
         if cache_web_dir is None:
             cache_web_dir = os.path.expanduser('~') + '/.cache/prismriver/'
@@ -23,4 +23,4 @@ class SearchConfig:
         self.cache_web_dir = cache_web_dir
         self.cache_web_ttl_sec = cache_web_ttl_sec
 
-        self.async = async
+        self.sync = sync

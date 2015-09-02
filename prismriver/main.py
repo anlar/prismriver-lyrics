@@ -88,10 +88,10 @@ def is_enabled(plugin, enabled_plugins):
 # lyrics search
 
 def search(artist, title, config):
-    if config.async:
-        return search_async(artist, title, config)
-    else:
+    if config.sync:
         return search_sync(artist, title, config)
+    else:
+        return search_async(artist, title, config)
 
 
 def search_sync(artist, title, config):
