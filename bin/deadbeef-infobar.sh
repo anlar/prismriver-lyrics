@@ -17,4 +17,4 @@ unquote () {
 UNQ_ARTIST=$(unquote "$ARTIST")
 UNQ_TITLE=$(unquote "$TITLE")
 
-python3 $HOME/prismriver/prismriver-lyrica.py -t "$UNQ_TITLE" -a "$UNQ_ARTIST" --async
+python3 $HOME/prismriver/prismriver-lyrica.py -t "$UNQ_TITLE" -a "$UNQ_ARTIST"
