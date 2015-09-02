@@ -24,15 +24,15 @@ Package names from Ubuntu 14.04 mentioned within brackets.
 
 ## Usage
 
-    usage: prismriver.py [-h] [--list] [--song] [-a ARTIST] [-t TITLE] [-l LIMIT]
-                         [-p PLUGINS] [-f FORMAT] [--async] [-o OUTPUT] [-q] [-v]
-                         [--log LOG]
+    $ ./prismriver-lyrica.py --help
+    usage: prismriver-lyrica.py [-h] [-a ARTIST] [-t TITLE] [-l LIMIT]
+                                [-p PLUGINS] [--web_timeout WEB_TIMEOUT] [--sync]
+                                [--cache_dir CACHE_DIR] [--cache_ttl CACHE_TTL]
+                                [-q] [-v] [--log LOG] [--list] [--song]
+                                [-f FORMAT] [-o OUTPUT]
 
     optional arguments:
       -h, --help            show this help message and exit
-      --list                list available search plugins
-      --song                search for song information by artist and title
-                            (default action)
       -a ARTIST, --artist ARTIST
                             song artist
       -t TITLE, --title TITLE
@@ -42,18 +42,30 @@ Package names from Ubuntu 14.04 mentioned within brackets.
       -p PLUGINS, --plugins PLUGINS
                             comma separated listed of enabled plugins (empty list
                             means that everything is enabled - by default)
+      --web_timeout WEB_TIMEOUT
+                            timeout for web-page downloading in seconds (default:
+                            10 sec)
+      --sync                search info from all plugins consecutively
+      --cache_dir CACHE_DIR
+                            cache directory for downloaded web pages (default:
+                            ~/.cache/prismriver)
+      --cache_ttl CACHE_TTL
+                            cache ttl for downloaded web pages in seconds
+                            (default: one week)
+      -q, --quiet           disable logging info (show only errors)
+      -v, --verbose         increase output verbosity
+      --log LOG             if set will redirect log info to that file
+      --list                list available search plugins
+      --song                search for song information by artist and title
+                            (default action)
       -f FORMAT, --format FORMAT
                             lyrics output format (txt (default), json, json_ascii)
-      --async               search info from all plugins simultaneously
       -o OUTPUT, --output OUTPUT
                             output template for txt format. Available parameters:
                             %TITLE% - song title, %ARTIST% - song artist, %LYRICS%
                             - song lyrics, %PLUGIN_ID% - plugin id, %PLUGIN_NAME%
                             - plugin name (default value: %ARTIST% -
                             %TITLE%\nSource: %PLUGIN_NAME%\n\n%LYRICS%)
-      -q, --quiet           disable logging info (show only errors)
-      -v, --verbose         increase output verbosity
-      --log LOG             if set will redirect log info to that file
 
 ### Examples
 
