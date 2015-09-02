@@ -36,7 +36,7 @@ class TestPlugins(unittest.TestCase):
         return hashlib.md5(value.encode('utf-8')).hexdigest()
 
     def get_search_config(self, plugin_id):
-        return SearchConfig(enabled_plugins=[plugin_id], sync=True)
+        return SearchConfig(enabled_plugins=[plugin_id], web_timeout_sec=30, sync=True)
 
     def test_amalgama_01(self):
         self.check_plugin('amalgama',
