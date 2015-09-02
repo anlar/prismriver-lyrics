@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QGridLayout
     QComboBox
 
 from prismriver import util
-from prismriver.main import search_async
+from prismriver.main import search
 from prismriver.mpris import MprisConnector, MprisConnectionException
 
 
@@ -343,7 +343,7 @@ class SearchThread(QThread):
 
     def run(self):
         start_time = time.time()
-        songs = search_async(self.artist, self.title, self.search_config)
+        songs = search(self.artist, self.title, self.search_config)
         total_time = time.time() - start_time
 
         self.resultReady.emit(songs, total_time, self.is_manual)
