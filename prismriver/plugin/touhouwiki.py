@@ -10,6 +10,7 @@ from prismriver.struct import Song
 
 class TouhouWikiPlugin(Plugin):
     ID = 'touhouwiki'
+    RANK = 10
 
     def __init__(self, config):
         super(TouhouWikiPlugin, self).__init__('TouhouWiki', config)

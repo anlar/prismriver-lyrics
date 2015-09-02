@@ -7,6 +7,7 @@ from prismriver.struct import Song
 
 class VagalumePlugin(Plugin):
     ID = 'vagalume'
+    RANK = 4
 
     def __init__(self, config):
         super(VagalumePlugin, self).__init__('Vagalume', config)

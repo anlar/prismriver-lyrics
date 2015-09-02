@@ -4,6 +4,7 @@ from prismriver.struct import Song
 
 class KGetPlugin(Plugin):
     ID = 'kget'
+    RANK = 9
 
     def __init__(self, config):
         super(KGetPlugin, self).__init__('KGet', config)

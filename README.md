@@ -102,8 +102,6 @@ List all available plugins:
 
 * Options for pre-processing artist and title: trim, remove redundant details (feat, remix, version etc), romanize...
 
-* Sort search results by site rating.
-
 * Support Python2.
 
 #### Lunasa

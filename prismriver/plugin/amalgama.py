@@ -10,6 +10,7 @@ from prismriver.struct import Song
 
 class AmalgamaPlugin(Plugin):
     ID = 'amalgama'
+    RANK = 8
 
     def __init__(self, config):
         super(AmalgamaPlugin, self).__init__('Amalgama', config)

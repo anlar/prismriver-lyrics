@@ -36,7 +36,7 @@ from prismriver.plugin.vagalume import VagalumePlugin
 # plugin list
 
 def get_plugins(config=None):
-    all_plugins = [
+    all_plugins = sorted([
         AZLyricsPlugin,
         TouhouWikiPlugin,
         LyricWikiPlugin,
@@ -64,7 +64,7 @@ def get_plugins(config=None):
         SongLyricsPlugin,
         GeniusPlugin,
         Mp3LyricsPlugin
-    ]
+    ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []
     for plugin in all_plugins:
@@ -122,6 +122,8 @@ def search_async(artist, title, config):
     for items in range(0, queue.qsize()):
         result.append(queue.get())
 
+    result.sort(key=lambda x: x.plugin_rank, reverse=True)
+
     if config.result_limit:
         return result[:config.result_limit]
     else:
@@ -143,6 +145,7 @@ def do_search(plugin, artist, title):
 
         if song:
             song.plugin_id = plugin.ID
+            song.plugin_rank = plugin.RANK
             song.plugin_name = plugin.plugin_name
 
             logging.info('Found song info on "{}" [{}], {}'.format(plugin.plugin_name, plugin.ID,

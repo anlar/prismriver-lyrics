@@ -8,6 +8,7 @@ from prismriver.struct import Song
 
 class LyricWikiPlugin(Plugin):
     ID = 'lyricwiki'
+    RANK = 7
 
     def __init__(self, config):
         super(LyricWikiPlugin, self).__init__('LyricWiki', config)

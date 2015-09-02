@@ -4,6 +4,7 @@ from prismriver.struct import Song
 
 class JLyricPlugin(Plugin):
     ID = 'jlyric'
+    RANK = 9
 
     def __init__(self, config):
         super(JLyricPlugin, self).__init__('J-Lyric', config)

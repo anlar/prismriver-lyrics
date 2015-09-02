@@ -4,6 +4,7 @@ from prismriver.struct import Song
 
 class LetrasPlugin(Plugin):
     ID = 'letras'
+    RANK = 4
 
     def __init__(self, config):
         super(LetrasPlugin, self).__init__('Letras', config)
