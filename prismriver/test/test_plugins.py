@@ -5,7 +5,7 @@ import unittest
 import hashlib
 import os
 
-from prismriver.main import search_sync
+from prismriver.main import search
 from prismriver.struct import SearchConfig
 
 
@@ -14,7 +14,7 @@ class TestPlugins(unittest.TestCase):
         logging.basicConfig(format='%(asctime)s %(levelname)s [%(module)s] %(message)s', level=logging.DEBUG)
 
         config = self.get_search_config(plugin_id)
-        result = search_sync(artist, title, config)
+        result = search(artist, title, config)
 
         self.assertEqual(1, len(result), 'Wrong songs count')
         self.assertEqual(len(lyric_hashes), len(result[0].lyrics), 'Wrong lyrics count')
@@ -36,7 +36,7 @@ class TestPlugins(unittest.TestCase):
         return hashlib.md5(value.encode('utf-8')).hexdigest()
 
     def get_search_config(self, plugin_id):
-        return SearchConfig(enabled_plugins=[plugin_id])
+        return SearchConfig(enabled_plugins=[plugin_id], sync=True)
 
     def test_amalgama_01(self):
         self.check_plugin('amalgama',
