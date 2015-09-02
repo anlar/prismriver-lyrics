@@ -9,10 +9,10 @@ from prismriver.struct import Song
 
 
 class AmalgamaPlugin(Plugin):
-    PLUGIN_ID = 'amalgama'
+    ID = 'amalgama'
 
     def __init__(self, config):
-        super(AmalgamaPlugin, self).__init__(self.PLUGIN_ID, 'Amalgama', config)
+        super(AmalgamaPlugin, self).__init__('Amalgama', config)
 
     def search_song(self, artist, title):
         to_delete = ['.', ',', '!', '?', '(', ')', '*']

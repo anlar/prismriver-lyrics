@@ -9,10 +9,10 @@ from prismriver.struct import Song
 
 
 class GeniusPlugin(Plugin):
-    PLUGIN_ID = 'genius'
+    ID = 'genius'
 
     def __init__(self, config):
-        super(GeniusPlugin, self).__init__(self.PLUGIN_ID, 'Genius', config)
+        super(GeniusPlugin, self).__init__('Genius', config)
 
     def search_song(self, artist, title):
         to_delete = ["'", '(', ')', '.', '?']

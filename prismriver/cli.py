@@ -57,7 +57,7 @@ def list_plugins():
     plugins = get_plugins()
     plugins.sort(key=lambda x: x.plugin_name.lower())
     for plugin in plugins:
-        print('{:<20} [id: {}]'.format(plugin.plugin_name, plugin.plugin_id))
+        print('{:<20} [id: {}]'.format(plugin.plugin_name, plugin.ID))
 
 
 def run():

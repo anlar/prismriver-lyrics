@@ -5,10 +5,10 @@ from prismriver.struct import Song
 
 
 class LyricsManiaPlugin(Plugin):
-    PLUGIN_ID = 'lyricsmania'
+    ID = 'lyricsmania'
 
     def __init__(self, config):
-        super(LyricsManiaPlugin, self).__init__(self.PLUGIN_ID, 'LyricsMania', config)
+        super(LyricsManiaPlugin, self).__init__('LyricsMania', config)
 
     def search_song(self, artist, title):
         to_delete = ['.', "'", '?', '(', ')']

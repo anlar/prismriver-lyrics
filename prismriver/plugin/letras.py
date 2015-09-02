@@ -3,10 +3,10 @@ from prismriver.struct import Song
 
 
 class LetrasPlugin(Plugin):
-    PLUGIN_ID = 'letras'
+    ID = 'letras'
 
     def __init__(self, config):
-        super(LetrasPlugin, self).__init__(self.PLUGIN_ID, 'Letras', config)
+        super(LetrasPlugin, self).__init__('Letras', config)
 
     def search_song(self, artist, title):
         link = 'http://letras.mus.br/winamp.php?t={}{}{}'.format(

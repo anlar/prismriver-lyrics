@@ -3,10 +3,10 @@ from prismriver.struct import Song
 
 
 class NitroLyricsPlugin(Plugin):
-    PLUGIN_ID = 'nitrolyrics'
+    ID = 'nitrolyrics'
 
     def __init__(self, config):
-        super(NitroLyricsPlugin, self).__init__(self.PLUGIN_ID, 'NitroLyrics', config)
+        super(NitroLyricsPlugin, self).__init__('NitroLyrics', config)
 
     def search_song(self, artist, title):
         to_delete = ['.', '(', ')', "'", ',', '.', '?', '-']

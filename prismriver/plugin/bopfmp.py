@@ -5,10 +5,10 @@ from prismriver.struct import Song
 
 
 class BopFmPlugin(Plugin):
-    PLUGIN_ID = 'bopfm'
+    ID = 'bopfm'
 
     def __init__(self, config):
-        super(BopFmPlugin, self).__init__(self.PLUGIN_ID, 'bop.fm', config)
+        super(BopFmPlugin, self).__init__('bop.fm', config)
 
     def search_song(self, artist, title):
         to_delete = [',', '-', '!', '/', "'", '(', ')', '[', ']']

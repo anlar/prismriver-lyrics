@@ -77,7 +77,7 @@ def get_plugins(config=None):
 def is_enabled(plugin, enabled_plugins):
     if enabled_plugins:
         for enabled_plugin in enabled_plugins:
-            if plugin.PLUGIN_ID == enabled_plugin:
+            if plugin.ID == enabled_plugin:
                 return True
 
         return False
@@ -135,22 +135,22 @@ def do_search_async(artist, title, plugin, queue):
 
 
 def do_search(plugin, artist, title):
-    logging.info('Search lyrics on "{}" [{}]...'.format(plugin.plugin_name, plugin.plugin_id))
+    logging.info('Search lyrics on "{}" [{}]...'.format(plugin.plugin_name, plugin.ID))
     try:
         start_time = time.time()
         song = plugin.search_song(artist, title)
         total_time = time.time() - start_time
 
         if song:
-            song.plugin_id = plugin.plugin_id
+            song.plugin_id = plugin.ID
             song.plugin_name = plugin.plugin_name
 
-            logging.info('Found song info on "{}" [{}], {}'.format(plugin.plugin_name, plugin.plugin_id,
+            logging.info('Found song info on "{}" [{}], {}'.format(plugin.plugin_name, plugin.ID,
                                                                    util.format_time_ms(total_time)))
             return song
         else:
-            logging.info('Nothing was found on "{}" [{}], {}'.format(plugin.plugin_name, plugin.plugin_id,
+            logging.info('Nothing was found on "{}" [{}], {}'.format(plugin.plugin_name, plugin.ID,
                                                                      util.format_time_ms(total_time)))
     except Exception:
-        logging.exception('Failed to get info from "{}" [{}]'.format(plugin.plugin_name, plugin.plugin_id))
+        logging.exception('Failed to get info from "{}" [{}]'.format(plugin.plugin_name, plugin.ID))
         pass

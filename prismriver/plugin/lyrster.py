@@ -3,10 +3,10 @@ from prismriver.struct import Song
 
 
 class LyrsterPlugin(Plugin):
-    PLUGIN_ID = 'lyrster'
+    ID = 'lyrster'
 
     def __init__(self, config):
-        super(LyrsterPlugin, self).__init__(self.PLUGIN_ID, 'Lyrster', config)
+        super(LyrsterPlugin, self).__init__('Lyrster', config)
 
     def search_song(self, artist, title):
         to_delete = ["'", '!', '(', ')', '[', ']']

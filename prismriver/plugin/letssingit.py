@@ -3,10 +3,10 @@ from prismriver.struct import Song
 
 
 class LetsSingItPlugin(Plugin):
-    PLUGIN_ID = 'letssingit'
+    ID = 'letssingit'
 
     def __init__(self, config):
-        super(LetsSingItPlugin, self).__init__(self.PLUGIN_ID, 'LetsSingIt', config)
+        super(LetsSingItPlugin, self).__init__('LetsSingIt', config)
 
     def search_song(self, artist, title):
         link = 'http://search.letssingit.com/cgi-exe/am.cgi?a=search&l=song&s={}+{}'.format(

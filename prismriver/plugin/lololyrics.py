@@ -3,10 +3,10 @@ from prismriver.struct import Song
 
 
 class LololyricsPlugin(Plugin):
-    PLUGIN_ID = 'lololyrics'
+    ID = 'lololyrics'
 
     def __init__(self, config):
-        super(LololyricsPlugin, self).__init__(self.PLUGIN_ID, 'Lololyrics', config)
+        super(LololyricsPlugin, self).__init__('Lololyrics', config)
 
     def search_song(self, artist, title):
         link = 'http://api.lololyrics.com/0.5/getLyric?artist={}&track={}'.format(

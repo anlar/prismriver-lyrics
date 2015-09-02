@@ -6,10 +6,10 @@ from prismriver.struct import Song
 # API doc: http://api.vagalume.com.br/docs/
 
 class VagalumePlugin(Plugin):
-    PLUGIN_ID = 'vagalume'
+    ID = 'vagalume'
 
     def __init__(self, config):
-        super(VagalumePlugin, self).__init__(self.PLUGIN_ID, 'Vagalume', config)
+        super(VagalumePlugin, self).__init__('Vagalume', config)
 
     def search_song(self, artist, title):
         link = 'http://api.vagalume.com.br/search.php?art={}&mus={}'.format(

@@ -3,10 +3,10 @@ from prismriver.struct import Song
 
 
 class KGetPlugin(Plugin):
-    PLUGIN_ID = 'kget'
+    ID = 'kget'
 
     def __init__(self, config):
-        super(KGetPlugin, self).__init__(self.PLUGIN_ID, 'KGet', config)
+        super(KGetPlugin, self).__init__('KGet', config)
 
     def search_song(self, artist, title):
         link = 'http://www.kget.jp/search/index.php?r={}&t={}'.format(

@@ -18,8 +18,7 @@ from prismriver import util
 
 
 class Plugin:
-    def __init__(self, plugin_id, plugin_name, config):
-        self.plugin_id = plugin_id
+    def __init__(self, plugin_name, config):
         self.plugin_name = plugin_name
         self.config = config
 

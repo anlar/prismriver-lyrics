@@ -7,10 +7,10 @@ from prismriver.struct import Song
 
 
 class LyricWikiPlugin(Plugin):
-    PLUGIN_ID = 'lyricwiki'
+    ID = 'lyricwiki'
 
     def __init__(self, config):
-        super(LyricWikiPlugin, self).__init__(self.PLUGIN_ID, 'LyricWiki', config)
+        super(LyricWikiPlugin, self).__init__('LyricWiki', config)
 
     def search_song(self, artist, title):
         # they don't understand quoted '&' as a delimiter between artists

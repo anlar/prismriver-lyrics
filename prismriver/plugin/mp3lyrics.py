@@ -3,10 +3,10 @@ from prismriver.struct import Song
 
 
 class Mp3LyricsPlugin(Plugin):
-    PLUGIN_ID = 'mp3lyrics'
+    ID = 'mp3lyrics'
 
     def __init__(self, config):
-        super(Mp3LyricsPlugin, self).__init__(self.PLUGIN_ID, 'Mp3Lyrics', config)
+        super(Mp3LyricsPlugin, self).__init__('Mp3Lyrics', config)
 
     def search_song(self, artist, title):
         link = 'http://mp3lyrics.com/?_return_json_=/Search/Advanced/?Artist={}&Track={}'.format(

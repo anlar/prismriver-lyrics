@@ -9,10 +9,10 @@ from prismriver.struct import Song
 # - songs with different lyrics but same name
 
 class TouhouWikiPlugin(Plugin):
-    PLUGIN_ID = 'touhouwiki'
+    ID = 'touhouwiki'
 
     def __init__(self, config):
-        super(TouhouWikiPlugin, self).__init__(self.PLUGIN_ID, 'TouhouWiki', config)
+        super(TouhouWikiPlugin, self).__init__('TouhouWiki', config)
 
     def search_song(self, artist, title):
         link = "http://en.touhouwiki.net/wiki/Lyrics:_" + self.prepare_url_parameter(title)
