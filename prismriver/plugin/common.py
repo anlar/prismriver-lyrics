@@ -1,4 +1,3 @@
-import gzip
 import hashlib
 import json
 import logging
@@ -14,7 +13,6 @@ import os
 from os import path
 
 from bs4 import NavigableString, Tag, Comment, BeautifulSoup
-import io
 
 from prismriver import util
 
@@ -78,8 +76,7 @@ class Plugin:
         req = urllib.request.Request(url, headers={
             'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate'
+            'Accept-Language': 'en-US,en;q=0.5'
         })
 
         try:
@@ -107,14 +104,7 @@ class Plugin:
         page = self.download_webpage(url)
 
         if page:
-            # detect gzipped stream
-            if page[0:2] == b'\x1f\x8b':
-                buf = io.BytesIO(page)
-                file = gzip.GzipFile(fileobj=buf)
-                unzipped = file.read()
-                return unzipped.decode('utf-8')
-            else:
-                return page.decode("utf-8")
+            return page.decode("utf-8")
 
     def download_webpage_json(self, url):
         page = self.download_webpage_text(url)
