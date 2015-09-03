@@ -284,6 +284,11 @@ class TestPlugins(unittest.TestCase):
                           'Modern Talking', "Geronimo's Cadillac (New Version)",
                           ['9b742a8e76bbecc7c3ece323400dd866'])
 
+    def test_sonichits_01(self):
+        self.check_plugin('sonichits',
+                          'Bee Gees', "Stayin' Alive",
+                          ['3515879f09e701c8961e16c754ea5b4e'])
+
     def test_touhouwiki_01(self):
         self.check_plugin('touhouwiki',
                           'FELT', 'World Around Us',
