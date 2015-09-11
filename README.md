@@ -180,6 +180,9 @@ List all available plugins:
 * http://www.evesta.jp/
 * http://www.utamap.com/
 * http://www.uta-net.com/
+* https://www.song365.co/
+* http://lyrics.alsong.co.kr/alsongwebservice/service1.asmx (soap api)
+* http://www.viewlyrics.com/ (api)
 
 See also:
 
@@ -222,6 +225,10 @@ multiple sites
 
 * https://github.com/BansheeMediaPlayer/banshee-community-extensions/tree/master/src/Lyrics
 C#;
+multiple sites
+
+* http://gnome-look.org/content/show.php/Lyrics+screenlet?content=98762
+Python;
 multiple sites
 
 ## Copyright
