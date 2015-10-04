@@ -227,6 +227,13 @@ class TestPlugins(unittest.TestCase):
                           "Blackmore's Night", 'Beyond The Sunset',
                           ['c68011d57b164ae6c719fcf116a31541'])
 
+    def test_lyricwiki_05(self):
+        self.check_plugin('lyricwiki',
+                          "Kotoko & Hiromi Sato", 'Second Flight',
+                          ['611161c9feeb34ed117ccccfd6277722',
+                           '6fdc1b2c608a847f9f89c635eba09be9',
+                           'd0ce0dd39f3bb0d645480093d84b254e'])
+
     def test_lyrster_01(self):
         self.check_plugin('lyrster',
                           'Groove Coverage', 'Damn!',

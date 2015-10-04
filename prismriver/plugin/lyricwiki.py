@@ -36,7 +36,9 @@ class LyricWikiPlugin(Plugin):
             lyrics = []
             for lyric_pane in soup.findAll("div", {"class": "lyricbox"}):
                 lyric = self.parse_verse_block(lyric_pane)
-                lyrics.append(lyric)
+                # skip empty invisible block with licensing warning
+                if lyric.strip():
+                    lyrics.append(lyric)
 
             return Song(song_artist, song_title, self.sanitize_lyrics(lyrics))
 
