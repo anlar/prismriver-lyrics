@@ -114,6 +114,9 @@ List all available plugins:
 
 * Options for pre-processing artist and title: trim, remove redundant details (feat, remix, version etc), romanize...
 
+* Support multiple html-parsers (lxml, html5lib, html.parser); select parser in config; move lxml to optional dependencies
+(see: http://www.crummy.com/software/BeautifulSoup/bs4/doc/#differences-between-parsers).
+
 * Support Python2.
 
 #### Lunasa
@@ -125,6 +128,10 @@ List all available plugins:
 * Make dbus optional dependency.
 
 * Implement proper dbus-listener.
+
+* Tray icon and menu.
+
+* Popup notifications when connected to player.
 
 
 ### Lyric databases
@@ -183,6 +190,10 @@ List all available plugins:
 * https://www.song365.co/
 * http://lyrics.alsong.co.kr/alsongwebservice/service1.asmx (soap api)
 * http://www.viewlyrics.com/ (api)
+* http://lyrsense.com/
+* http://webkind.ru/
+* https://www.google.com/ (filetype:lrc)
+* http://mp3.sogou.com/
 
 See also:
 
@@ -228,6 +239,10 @@ C#;
 multiple sites
 
 * http://gnome-look.org/content/show.php/Lyrics+screenlet?content=98762
+Python;
+multiple sites
+
+* http://kde-apps.org/content/show.php/lrcShow-X?content=103055
 Python;
 multiple sites
 
