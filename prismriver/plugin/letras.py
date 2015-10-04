@@ -31,7 +31,7 @@ class LetrasPlugin(Plugin):
                     # sometimes it may search song only by it's title and return things from another artist
                     return
 
-                lyric_block = soup.find('div', {'id': 'letra'})
+                lyric_block = soup.find('div', {'id': 'letra-cnt'})
 
                 lyric = ''
                 for elem in lyric_block.findAll('p', recursive=False):
