@@ -173,7 +173,6 @@ class TestPlugins(unittest.TestCase):
                           'supercell', 'ワールドイズマイン',
                           ['e8ec2964d298caa61aeddb2e353ec574',
                            '57e83798afde4fc3aa0fdd65adf0012f',
-                           '85cb77dbc3635102f118205672311ea8',
                            '7baa703eab3a32e76cc2c86f0a8e1c04'])
 
     # def test_lyricshuddle_01(self):
