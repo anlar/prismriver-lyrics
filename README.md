@@ -129,9 +129,7 @@ List all available plugins:
 
 * Implement proper dbus-listener.
 
-* Tray icon and menu.
-
-* Popup notifications when connected to player.
+* Tray menu: connection options and search status.
 
 
 ### Lyric databases

@@ -12,6 +12,8 @@ from prismriver.mpris import MprisConnector, MprisConnectionException
 
 
 class MainWindow(QMainWindow):
+    search_results_updated = pyqtSignal(str, str, list)
+
     def __init__(self, default_artist, default_title, default_player, connect_from_start, search_config):
         super().__init__()
 
@@ -206,7 +208,7 @@ class MainWindow(QMainWindow):
         else:
             self.btn_connect.setText('Connect...')
 
-    def update_search_results(self, songs, process_time_sec, is_manual):
+    def update_search_results(self, artist, title, songs, process_time_sec, is_manual):
         self.lyric_table.update_data(songs)
         self.update_lyric_pane()
 
@@ -215,6 +217,8 @@ class MainWindow(QMainWindow):
             self.set_status_message('Search completed in {}'.format(util.format_time_ms(process_time_sec)))
         else:
             self.set_status_message('Listening to the player...')
+
+        self.search_results_updated.emit(artist, title, songs)
 
     def update_search_results_mpris(self, meta):
         current_artist = self.edit_artist.text()
@@ -331,7 +335,7 @@ class LyricTableModel(QAbstractTableModel):
 
 
 class SearchThread(QThread):
-    resultReady = pyqtSignal(list, float, bool)
+    resultReady = pyqtSignal(str, str, list, float, bool)
 
     def __init__(self, artist, title, search_config, is_manual):
         super().__init__()
@@ -346,7 +350,7 @@ class SearchThread(QThread):
         songs = search(self.artist, self.title, self.search_config)
         total_time = time.time() - start_time
 
-        self.resultReady.emit(songs, total_time, self.is_manual)
+        self.resultReady.emit(self.artist, self.title, songs, total_time, self.is_manual)
 
 
 class MprisThread(QThread):
