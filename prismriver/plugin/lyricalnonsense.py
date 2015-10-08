@@ -67,7 +67,9 @@ class LyricalNonsensePlugin(Plugin):
         main_lyric_block = soup.find('div', {'class': 'draggable'})
         # we should reverse list order to move original japanese lyric to the top
         for lyric_block in main_lyric_block.findAll('div', id=True)[::-1]:
-            if lyric_block['id'] != 'Details':
+            block_id = lyric_block['id']
+            # skip 'Details' (song info) and all '*-tv' (tv-size versions) blocks
+            if (not block_id.startswith('Details')) and (not block_id.endswith('-tv')):
                 lyric = ''
                 for verse_block in lyric_block.findAll('p', recursive=False):
                     lyric += (self.parse_verse_block(verse_block) + '\n\n')

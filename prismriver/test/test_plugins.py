@@ -175,6 +175,14 @@ class TestPlugins(unittest.TestCase):
                            '57e83798afde4fc3aa0fdd65adf0012f',
                            '7baa703eab3a32e76cc2c86f0a8e1c04'])
 
+    def test_lyricalnonsense_02(self):
+        self.check_plugin('lyricalnonsense',
+                          'CHiCO with HoneyWorks', 'Pride Kakumei',
+                          ['efc6e4a2298cfeaa6e3c8f2cc0a1bc5e',
+                           'd0b66bcfbd9137cf4432b536e605a39c',
+                           'bc314595cd2dc89c6ce32e1cf566d0f7',
+                           'e484ce4bbfbcefe56db7eb6e9a35c5d3'])
+
     # def test_lyricshuddle_01(self):
     #     self.check_plugin('lyricshuddle',
     #                       'Daft Punk', "One More Time (romanthony's Unplugged Version)",
