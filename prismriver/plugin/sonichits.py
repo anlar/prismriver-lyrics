@@ -22,7 +22,7 @@ class SonicHitsPlugin(Plugin):
         if page:
             song_artist = page['artist']
             song_title = page['track']
-            lyrics = page['lyrics'].replace('<br>', '').replace('\r', '\n')
+            lyrics = page['lyrics'].replace('\r', '').replace('<br>', '\n')
 
             if lyrics.startswith('<span class="lyrics-text">No lyrics found for this song.'):
                 return None
