@@ -183,6 +183,11 @@ class TestPlugins(unittest.TestCase):
                            'bc314595cd2dc89c6ce32e1cf566d0f7',
                            'e484ce4bbfbcefe56db7eb6e9a35c5d3'])
 
+    def test_lyricscom_01(self):
+        self.check_plugin('lyricscom',
+                          'Metallica', 'That Was Just Your Life',
+                          ['e501f7b53fb4fda7ba638be5170b248d'])
+
     # def test_lyricshuddle_01(self):
     #     self.check_plugin('lyricshuddle',
     #                       'Daft Punk', "One More Time (romanthony's Unplugged Version)",

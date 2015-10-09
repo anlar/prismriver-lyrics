@@ -18,6 +18,7 @@ from prismriver.plugin.letras import LetrasPlugin
 from prismriver.plugin.letssingit import LetsSingItPlugin
 from prismriver.plugin.lololyrics import LololyricsPlugin
 from prismriver.plugin.lyricalnonsense import LyricalNonsensePlugin
+from prismriver.plugin.lyricscom import LyricsComPlugin
 from prismriver.plugin.lyricshuddle import LyricsHuddlePlugin
 from prismriver.plugin.lyricsmania import LyricsManiaPlugin
 from prismriver.plugin.lyricsnmusic import LyricsNMusicPlugin
@@ -65,7 +66,8 @@ def get_plugins(config=None):
         SongLyricsPlugin,
         GeniusPlugin,
         Mp3LyricsPlugin,
-        SonicHitsPlugin
+        SonicHitsPlugin,
+        LyricsComPlugin,
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []
