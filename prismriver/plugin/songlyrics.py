@@ -28,6 +28,7 @@ class SongLyricsPlugin(Plugin):
             song_title = re.findall('.*? - (.*?) Lyrics', title_header)[0]
 
             lyric_pane = soup.find('p', {'id': 'songLyricsDiv'})
-            lyric = self.parse_verse_block(lyric_pane)
+            # lyrics pane may contain hidden image - and that will cause double newline in it's place
+            lyric = self.parse_verse_block(lyric_pane, tags_to_skip=['img'])
 
             return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))

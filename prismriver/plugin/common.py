@@ -167,7 +167,7 @@ class Plugin:
         for tag in tags:
             [x.extract() for x in pane.findAll(tag)]
 
-    def parse_verse_block(self, verse_block):
+    def parse_verse_block(self, verse_block, tags_to_skip=None):
         lyric = ''
 
         for elem in verse_block.childGenerator():
@@ -176,7 +176,8 @@ class Plugin:
             elif isinstance(elem, NavigableString):
                 lyric += elem.strip()
             elif isinstance(elem, Tag):
-                lyric += '\n'
+                if not (tags_to_skip and elem.name in tags_to_skip):
+                    lyric += '\n'
 
         return lyric.strip()
 

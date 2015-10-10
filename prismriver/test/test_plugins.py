@@ -296,12 +296,12 @@ class TestPlugins(unittest.TestCase):
     def test_songlyrics_01(self):
         self.check_plugin('songlyrics',
                           'Modern Talking', "You're My Heart, You're My Soul",
-                          ['4599f1b95aa81922861067d4748d9c93'])
+                          ['9001e873f6125b5677491fb2012cc947'])
 
     def test_songlyrics_02(self):
         self.check_plugin('songlyrics',
                           'Modern Talking', "Geronimo's Cadillac (New Version)",
-                          ['9b742a8e76bbecc7c3ece323400dd866'])
+                          ['5ce4ce7e3be27a0ba4c4fe86b55fb767'])
 
     def test_sonichits_01(self):
         self.check_plugin('sonichits',
