@@ -1,10 +1,10 @@
 # Prismriver Project [![Build Status](https://travis-ci.org/anlar/prismriver.svg?branch=master)](https://travis-ci.org/anlar/prismriver)
 
-Prismriver is a search engine for song information (generally for it's lyrics). It consists of the following modules:
+Prismriver Project is a plugin-based search engine for song lyrics. It consists of the following modules:
 
 * Lyrica: core module, contains site search plugins and command line interface for lyrics searching.
 
-* Lunasa: Qt5-based graphical interface, can search lyrics which author/title details where entered manually or received via MPRIS protocol from audio-player.
+* Lunasa: Qt5-based graphical interface, can search lyrics, which author/title details were entered manually or received via MPRIS protocol from audio-player.
 
 ## Requirements
 
@@ -85,6 +85,7 @@ List all available plugins:
 * bop.fm               [id: bopfm]
 * Chartlyrics          [id: chartlyrics]
 * eLyrics              [id: elyrics]
+* Genius               [id: genius]
 * J-Lyric              [id: jlyric]
 * KGet                 [id: kget]
 * Leo's Lyrics         [id: leoslyrics]
@@ -93,6 +94,7 @@ List all available plugins:
 * Lololyrics           [id: lololyrics]
 * Lyrical Nonsense     [id: lyricalnonsense]
 * Lyrics N Music       [id: lyricsnmusic]
+* Lyrics.com           [id: lyricscom]
 * LyricsHuddle         [id: lyricshuddle]
 * LyricsMania          [id: lyricsmania]
 * LyricsReg.com        [id: lyricsreg]
@@ -100,8 +102,10 @@ List all available plugins:
 * Lyrster              [id: lyrster]
 * Megalyrics           [id: megalyrics]
 * MetroLyrics          [id: metrolyrics]
+* Mp3Lyrics            [id: mp3lyrics]
 * NitroLyrics          [id: nitrolyrics]
 * SongLyrics.com       [id: songlyrics]
+* SonicHits            [id: sonichits]
 * TouhouWiki           [id: touhouwiki]
 * Vagalume             [id: vagalume]
 
@@ -139,7 +143,6 @@ List all available plugins:
 * https://bandcamp.com/
 * http://www.lyricsmode.com/
 * http://www.lyricsfreak.com/
-* http://www.lyrics.com/
 * http://www.lyrics.net/
 * http://www.urbanlyrics.com/
 * http://www.plyrics.com/
@@ -192,6 +195,8 @@ List all available plugins:
 * http://webkind.ru/
 * https://www.google.com/ (filetype:lrc)
 * http://mp3.sogou.com/
+* http://www.1musiclyrics.net/
+* http://www.lyricsaction.com/
 
 See also:
 
