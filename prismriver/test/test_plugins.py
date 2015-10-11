@@ -293,6 +293,11 @@ class TestPlugins(unittest.TestCase):
                           'Bad Boys Blue', 'A World Without You (michelle)',
                           ['ad1240f4f772fc36e5286c4a4f29f187'])
 
+    def test_seekalyric_01(self):
+        self.check_plugin('seekalyric',
+                          'Megumi Hayashibara', 'Give A Reason (From Slayers Next)',
+                          ['d9a7905a87a11de3c99bd3176e1e905f'])
+
     def test_songlyrics_01(self):
         self.check_plugin('songlyrics',
                           'Modern Talking', "You're My Heart, You're My Soul",

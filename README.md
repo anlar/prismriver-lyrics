@@ -104,6 +104,7 @@ List all available plugins:
 * MetroLyrics          [id: metrolyrics]
 * Mp3Lyrics            [id: mp3lyrics]
 * NitroLyrics          [id: nitrolyrics]
+* SeekaLyric           [id: seekalyric]
 * SongLyrics.com       [id: songlyrics]
 * SonicHits            [id: sonichits]
 * TouhouWiki           [id: touhouwiki]
@@ -149,7 +150,6 @@ List all available plugins:
 * http://www.metal-archives.com/
 * http://www.allyrics.net/
 * http://www.songs-lyrics.net/
-* http://www.seekalyric.com/
 * http://www.1songlyrics.com/
 * http://www.stlyrics.com/
 * http://showmelyrics.com/
