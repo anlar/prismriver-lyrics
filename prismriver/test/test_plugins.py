@@ -4,6 +4,7 @@ from time import sleep
 import unittest
 import hashlib
 import os
+from unittest.case import SkipTest
 
 from prismriver.main import search
 from prismriver.struct import SearchConfig
@@ -12,6 +13,8 @@ from prismriver.struct import SearchConfig
 class TestPlugins(unittest.TestCase):
     def check_plugin(self, plugin_id, artist, title, lyric_hashes):
         logging.basicConfig(format='%(asctime)s %(levelname)s [%(module)s] %(message)s', level=logging.DEBUG)
+
+        self.is_skipped(plugin_id)
 
         config = self.get_search_config(plugin_id)
         result = search(artist, title, config)
@@ -25,6 +28,11 @@ class TestPlugins(unittest.TestCase):
             self.assertEqual(lyric_hash, self.get_md5(result[0].lyrics[index]),
                              'Different text in #{} lyrics'.format(index))
             index += 1
+
+    def is_skipped(self, plugin_id):
+        disabled_plugins = os.getenv('PRISMRIVER_TEST_DISABLED_PLUGINS', '').split(',')
+        if plugin_id in disabled_plugins:
+            raise SkipTest('plugin test disabled')
 
     def setUp(self):
         max_delay = int(os.getenv('PRISMRIVER_TEST_MAX_DELAY', '0'))
