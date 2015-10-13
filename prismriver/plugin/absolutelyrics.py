@@ -27,7 +27,7 @@ class AbsoluteLyricsPlugin(Plugin):
                 return None
 
             song_artist = nav_a_panes[1].text.replace(' Lyrics', '')
-            song_title = nav_a_panes[1].next_sibling.strip().replace(' Lyrics', '')
+            song_title = nav_a_panes[1].next_sibling.strip().replace(' Lyrics', '')[2:]
 
             lyrics_pane = soup.find('p', {'id': 'view_lyrics'})
             lyrics = self.parse_verse_block(lyrics_pane)
