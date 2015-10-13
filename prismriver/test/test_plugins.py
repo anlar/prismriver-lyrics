@@ -56,6 +56,11 @@ class TestPlugins(unittest.TestCase):
                           'Ace Of Base', "Never Gonna Say I'm Sorry",
                           ['95c85dedd498ecfe8591fb09c98d47bb'])
 
+    def test_allyrics_01(self):
+        self.check_plugin('allyrics',
+                          'Megumi Hayashibara', 'Omokage (English)',
+                          ['caded604d9ec062a2e7236ab30728350'])
+
     def test_amalgama_01(self):
         self.check_plugin('amalgama',
                           'Modern Talking', "You're My Heart, You're My Soul",
