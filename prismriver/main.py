@@ -5,6 +5,7 @@ from multiprocessing import Queue
 
 from prismriver import util
 from prismriver.plugin.absolutelyrics import AbsoluteLyricsPlugin
+from prismriver.plugin.alivelyrics import AliveLyricsPlugin
 from prismriver.plugin.amalgama import AmalgamaPlugin
 from prismriver.plugin.animelyrics import AnimeLyricsPlugin
 from prismriver.plugin.azlyrics import AZLyricsPlugin
@@ -71,7 +72,8 @@ def get_plugins(config=None):
         SonicHitsPlugin,
         LyricsComPlugin,
         SeekaLyricPlugin,
-        AbsoluteLyricsPlugin
+        AbsoluteLyricsPlugin,
+        AliveLyricsPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

@@ -51,6 +51,11 @@ class TestPlugins(unittest.TestCase):
                           'Ace Of Base', "Cruel Summer (C'est Fini)",
                           ['ffc15aa756b305cbae8c3a7e0533f636'])
 
+    def test_alivelyrics_01(self):
+        self.check_plugin('alivelyrics',
+                          'Ace Of Base', "Never Gonna Say I'm Sorry",
+                          ['95c85dedd498ecfe8591fb09c98d47bb'])
+
     def test_amalgama_01(self):
         self.check_plugin('amalgama',
                           'Modern Talking', "You're My Heart, You're My Soul",
