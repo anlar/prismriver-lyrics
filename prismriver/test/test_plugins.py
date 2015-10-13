@@ -46,6 +46,11 @@ class TestPlugins(unittest.TestCase):
     def get_search_config(self, plugin_id):
         return SearchConfig(enabled_plugins=[plugin_id], web_timeout_sec=30, sync=True)
 
+    def test_absolutelyrics_01(self):
+        self.check_plugin('absolutelyrics',
+                          'Ace Of Base', "Cruel Summer (C'est Fini)",
+                          ['ffc15aa756b305cbae8c3a7e0533f636'])
+
     def test_amalgama_01(self):
         self.check_plugin('amalgama',
                           'Modern Talking', "You're My Heart, You're My Soul",
