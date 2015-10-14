@@ -24,7 +24,7 @@ class ELyricsPlugin(Plugin):
             head_pane = soup.find('div', {'class': ['navcnt', 'navcnt2']})
 
             song_artist = head_pane.findAll('a')[2].text.replace(' Lyrics', '')
-            song_title = head_pane.find('strong', recursive=False).text.replace(' Lyrics', '')
+            song_title = head_pane.find('h1').text.replace(' Lyrics', '')
 
             lyric_pane = soup.find('div', {'id': 'inlyr'})
             self.remove_tags_from_block(lyric_pane, ['p', 'div', 'form'])
