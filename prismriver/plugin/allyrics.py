@@ -19,11 +19,11 @@ class AlLyricsPlugin(Plugin):
         if page:
             soup = self.prepare_soup(page)
 
-            nav_bar = soup.find('div', {'class', 'top_cont'}).h2
-            artist_tag = nav_bar.find('b')
+            nav_bar = soup.find('div', {'class', 'sh_nav'})
+            nav_bar_parts = nav_bar.findAll('a', recursive=False)
 
-            song_artist = artist_tag.text[:-2]
-            song_title = artist_tag.next_sibling.strip()[:-7]
+            song_artist = nav_bar_parts[2].text[:-7]
+            song_title = nav_bar_parts[3].text[:-7]
 
             if not song_title:
                 # song not found
