@@ -100,6 +100,10 @@ def is_enabled(plugin, enabled_plugins):
 # lyrics search
 
 def search(artist, title, config):
+    if (not artist) or (not title):
+        logging.warning('Skip search - song artist and title can\'t be empty string')
+        return []
+
     if config.sync:
         return search_sync(artist, title, config)
     else:
