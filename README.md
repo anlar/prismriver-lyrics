@@ -79,6 +79,9 @@ List all available plugins:
 
 ## Supported lyric databases
 
+* AbsoluteLyrics       [id: absolutelyrics]
+* AliveLyrics          [id: alivelyrics]
+* AlLyrics.net         [id: allyrics]
 * Amalgama             [id: amalgama]
 * Anime Lyrics         [id: animelyrics]
 * AZLyrics             [id: azlyrics]
@@ -148,7 +151,6 @@ List all available plugins:
 * http://www.urbanlyrics.com/
 * http://www.plyrics.com/
 * http://www.metal-archives.com/
-* http://www.allyrics.net/
 * http://www.songs-lyrics.net/
 * http://www.1songlyrics.com/
 * http://www.stlyrics.com/
@@ -157,13 +159,10 @@ List all available plugins:
 * http://animeasialyrics.free.fr/
 * http://lyrics.jetmute.com/
 * http://lyrics.astraweb.com/ (search engine is dead)
-* http://www.alivelyrics.com/
 * http://alphabetlyrics.com/
-* http://www.stlyrics.com/
 * http://www.lyred.com/
 * http://metal-lyrics.narod.ru/
 * http://www.directlyrics.com/
-* http://www.songlyrics.com/
 * http://www.nautiljon.com/paroles/
 * http://ostanimepluslyrics.blogspot.ru/search/label/Lyrics%20Music
 * http://lyrics.snakeroot.ru/lyrics.html
@@ -172,11 +171,9 @@ List all available plugins:
 * https://www.jamendo.com/
 * http://www.lyriki.com/
 * http://www.lyricsbay.com/
-* http://www.directlyrics.com/
 * http://teksty.org/
 * http://www.sing365.com/
 * http://www.clickgratis.com.br/
-* http://www.absolutelyrics.com/
 * http://www.allmusicals.com/
 * http://www.hitslyrics.com/
 * http://www.cowboylyrics.com/
@@ -197,6 +194,12 @@ List all available plugins:
 * http://mp3.sogou.com/
 * http://www.1musiclyrics.net/
 * http://www.lyricsaction.com/
+* http://www.allthelyrics.com/
+* http://lyricsplace.com/
+* http://www.lyricsangel.com/
+* https://petitlyrics.com/
+* https://www.joysound.com/web/
+* http://utaten.com/
 
 See also:
 
