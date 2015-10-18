@@ -127,6 +127,10 @@ List all available plugins:
 
 * Support Python2.
 
+* Load artist and title from given file.
+
+* Ability to save lyrics to music file.
+
 #### Lunasa
 
 * Create application icon.
@@ -200,6 +204,7 @@ List all available plugins:
 * https://petitlyrics.com/
 * https://www.joysound.com/web/
 * http://utaten.com/
+* http://www.songtextemania.com/
 
 See also:
 
