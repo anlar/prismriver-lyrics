@@ -44,7 +44,7 @@ class TestPlugins(unittest.TestCase):
         return hashlib.md5(value.encode('utf-8')).hexdigest()
 
     def get_search_config(self, plugin_id):
-        return SearchConfig(enabled_plugins=[plugin_id], web_timeout_sec=30, sync=True)
+        return SearchConfig(enabled_plugins=[plugin_id], web_timeout_sec=60, sync=True)
 
     def test_absolutelyrics_01(self):
         self.check_plugin('absolutelyrics',
