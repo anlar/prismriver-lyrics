@@ -191,6 +191,11 @@ class TestPlugins(unittest.TestCase):
                           'Groove Coverage', 'Holy Virgin (Radio Edit)',
                           ['5348e8a8cb887b00ae918dffe518ed51'])
 
+    def test_lyricsaction_01(self):
+        self.check_plugin('lyricsaction',
+                          'Megumi Hayashibara', 'Northern Lights (Midnight Wedding Mix)',
+                          ['022039d57cc9138b0aa4827fd9d81f43'])
+
     def test_lyricalnonsense_01(self):
         self.check_plugin('lyricalnonsense',
                           'supercell', 'ワールドイズマイン',

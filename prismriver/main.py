@@ -21,6 +21,7 @@ from prismriver.plugin.letras import LetrasPlugin
 from prismriver.plugin.letssingit import LetsSingItPlugin
 from prismriver.plugin.lololyrics import LololyricsPlugin
 from prismriver.plugin.lyricalnonsense import LyricalNonsensePlugin
+from prismriver.plugin.lyricsaction import LyricsActionPlugin
 from prismriver.plugin.lyricscom import LyricsComPlugin
 from prismriver.plugin.lyricshuddle import LyricsHuddlePlugin
 from prismriver.plugin.lyricsmania import LyricsManiaPlugin
@@ -75,7 +76,8 @@ def get_plugins(config=None):
         SeekaLyricPlugin,
         AbsoluteLyricsPlugin,
         AliveLyricsPlugin,
-        AlLyricsPlugin
+        AlLyricsPlugin,
+        LyricsActionPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []
