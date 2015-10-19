@@ -157,6 +157,11 @@ class AnimeLyricsPlugin(Plugin):
                 mobj = re.match('Singers([:]*) (?P<id>.*)', value)
                 return mobj.group('id')
 
+        for value in values:
+            if value.startswith('Vocals'):
+                mobj = re.match('Vocals([:]*) (?P<id>.*)', value)
+                return mobj.group('id')
+
     def parse_lyric_block(self, block):
         song_block = block.find('span', {'class': 'lyrics'})
         return self.parse_verse_block(song_block)
