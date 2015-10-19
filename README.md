@@ -6,6 +6,7 @@ Prismriver Project is a plugin-based search engine for song lyrics. It consists 
 
 * Lunasa: Qt5-based graphical interface, can search lyrics, which author/title details were entered manually or received via MPRIS protocol from audio-player.
 
+
 ## Requirements
 
 Package names from Ubuntu 14.04 mentioned within brackets.
@@ -21,6 +22,7 @@ Package names from Ubuntu 14.04 mentioned within brackets.
 * *everything from Lyrica*
 * PyQt5 (python3-pyqt5)
 * D-Bus Python 3 bindings (python3-dbus)
+
 
 ## Usage
 
@@ -71,11 +73,12 @@ Package names from Ubuntu 14.04 mentioned within brackets.
 
 Search for song information using all plugins in parallel:
 
-    python3 prismriver.py -a ARTIST_NAME -t SONG_TITLE --async
+    prismriver-lyrica.py -a ARTIST_NAME -t SONG_TITLE --async
 
 List all available plugins:
 
-    python3 prismriver.py --list
+    prismriver-lyrica.py --list
+
 
 ## Supported lyric databases
 
@@ -114,148 +117,20 @@ List all available plugins:
 * Vagalume             [id: vagalume]
 
 
+## Changes
+
+[Check docs/changes.md](docs/changes.md)
+
+
 ## TODO
 
-### General features
+[Check docs/todo.md](docs/todo.md)
 
-#### Lyrica
-
-* Options for pre-processing artist and title: trim, remove redundant details (feat, remix, version etc), romanize...
-
-* Support multiple html-parsers (lxml, html5lib, html.parser); select parser in config; move lxml to optional dependencies
-(see: http://www.crummy.com/software/BeautifulSoup/bs4/doc/#differences-between-parsers).
-
-* Support Python2.
-
-* Load artist and title from given file.
-
-* Ability to save lyrics to music file.
-
-#### Lunasa
-
-* Create application icon.
-
-* Add more player icons.
-
-* Make dbus optional dependency.
-
-* Implement proper dbus-listener.
-
-* Tray menu: connection options and search status.
-
-
-### Lyric databases
-
-* http://www.darklyrics.com/
-* http://www.lyricfind.com/ (available only via their mobile app)
-* https://bandcamp.com/
-* http://www.lyricsmode.com/
-* http://www.lyricsfreak.com/
-* http://www.lyrics.net/
-* http://www.urbanlyrics.com/
-* http://www.plyrics.com/
-* http://www.metal-archives.com/
-* http://www.songs-lyrics.net/
-* http://www.1songlyrics.com/
-* http://www.stlyrics.com/
-* http://showmelyrics.com/
-* http://www.lyricsmansion.com/
-* http://animeasialyrics.free.fr/
-* http://lyrics.jetmute.com/
-* http://lyrics.astraweb.com/ (search engine is dead)
-* http://alphabetlyrics.com/
-* http://www.lyred.com/
-* http://metal-lyrics.narod.ru/
-* http://www.directlyrics.com/
-* http://www.nautiljon.com/paroles/
-* http://ostanimepluslyrics.blogspot.ru/search/label/Lyrics%20Music
-* http://lyrics.snakeroot.ru/lyrics.html
-* https://www.musixmatch.com/
-* http://www.lyricsplugin.com/
-* https://www.jamendo.com/
-* http://www.lyriki.com/
-* http://www.lyricsbay.com/
-* http://teksty.org/
-* http://www.sing365.com/
-* http://www.clickgratis.com.br/
-* http://www.allmusicals.com/
-* http://www.hitslyrics.com/
-* http://www.cowboylyrics.com/
-* http://www.popular-lyrics.com/
-* http://www.lyricsby.com/
-* http://www.thebroadwaymusicals.com/
-* http://songmeanings.com/
-* http://www.kasi-time.com/
-* http://www.evesta.jp/
-* http://www.utamap.com/
-* http://www.uta-net.com/
-* https://www.song365.co/
-* http://lyrics.alsong.co.kr/alsongwebservice/service1.asmx (soap api)
-* http://www.viewlyrics.com/ (api)
-* http://lyrsense.com/
-* http://webkind.ru/
-* https://www.google.com/ (filetype:lrc)
-* http://mp3.sogou.com/
-* http://www.1musiclyrics.net/
-* http://www.lyricsaction.com/
-* http://www.allthelyrics.com/
-* http://lyricsplace.com/
-* http://www.lyricsangel.com/
-* https://petitlyrics.com/
-* https://www.joysound.com/web/
-* http://utaten.com/
-* http://www.songtextemania.com/
-
-See also:
-
-* https://en.wikipedia.org/wiki/Category:Online_music_and_lyrics_databases
-* http://www.kiwi-musume.com/profiles/links.htm
 
 ## Similar projects
 
-* https://github.com/boyska/lyricseek;
-Python;
-multiple sites
+[Check docs/similar.md](docs/similar.md)
 
-* https://github.com/sahib/glyr;
-C;
-multiple sites
-
-* https://github.com/javichito/Lyricfy;
-Ruby;
-Wikia, MetroLyrics
-
-* https://github.com/timrogers/genius;
-Ruby;
-Genius
-
-* https://github.com/geecko86/QuickLyric;
-Java;
-multiple sites
-
-* https://github.com/dmo60/lLyrics
-Python;
-multiple sites
-
-* https://git.gnome.org/browse/rhythmbox/tree/plugins/lyrics
-Python;
-multiple sites
-
-* http://kde-apps.org/content/show.php/Ultimate+Lyrics?content=108967
-Javascript;
-multiple sites
-
-* https://github.com/BansheeMediaPlayer/banshee-community-extensions/tree/master/src/Lyrics
-C#;
-multiple sites
-
-* http://gnome-look.org/content/show.php/Lyrics+screenlet?content=98762
-Python;
-multiple sites
-
-* http://kde-apps.org/content/show.php/lrcShow-X?content=103055
-Python;
-multiple sites
 
 ## Copyright
 
