@@ -96,7 +96,7 @@ class TestPlugins(unittest.TestCase):
 
     def test_animelyrics_04(self):
         self.check_plugin('animelyrics',
-                          ' Luca Yumi', 'Truth',
+                          'Luca Yumi', 'Truth',
                           ['b67b5b76497a3bf3dfde36c58f489279',
                            '68a292d2337da33f80bf80c8e01bc81f',
                            '680a12a7055ca78f51e9a3e80a9af8fd'])

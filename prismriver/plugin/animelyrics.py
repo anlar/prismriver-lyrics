@@ -119,7 +119,7 @@ class AnimeLyricsPlugin(Plugin):
             lyric = self.parse_kanji_block(song_block)
             lyrics.insert(0, lyric)
 
-        return Song(artist, song_title, self.sanitize_lyrics(lyrics))
+        return Song(song_artist, song_title, self.sanitize_lyrics(lyrics))
 
     def get_artist(self, page_soup):
         top_block = page_soup.find('td', {'valign': 'top'})
@@ -137,8 +137,9 @@ class AnimeLyricsPlugin(Plugin):
         for name in names:
             for value in values:
                 if value.startswith(name):
-                    mobj = re.match(name + '([:]*) (?P<id>.*)', value)
-                    return mobj.group('id')
+                    mobj = re.match(name + '([:]*)\s+(?P<id>.*)', value)
+                    raw_value = mobj.group('id')
+                    return raw_value.strip()
 
     def parse_lyric_block(self, block):
         song_block = block.find('span', {'class': 'lyrics'})
