@@ -19,6 +19,10 @@ class AbsoluteLyricsPlugin(Plugin):
             soup = self.prepare_soup(page)
 
             nav_pane = soup.find('div', {'id': 'nav'})
+            if not nav_pane:
+                # song not found, we're redirected to search page which will not work without javascript
+                return None
+
             nav_a_panes = nav_pane.findAll('a', recursive=False)
 
             if len(nav_pane) == 1:
