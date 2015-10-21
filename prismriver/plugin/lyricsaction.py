@@ -25,6 +25,10 @@ class LyricsActionPlugin(Plugin):
             title_pane = main_pane.find('h2', recursive=False)
             title_parts = title_pane.text.split(' lyrics - ', 2)
 
+            if len(title_parts) < 2:
+                # song not found, redirected to main page
+                return None
+
             song_artist = title_parts[0]
             song_title = title_parts[1]
 
