@@ -326,6 +326,11 @@ class TestPlugins(unittest.TestCase):
                           'Megumi Hayashibara', 'Give A Reason (From Slayers Next)',
                           ['d9a7905a87a11de3c99bd3176e1e905f'])
 
+    def test_song5_01(self):
+        self.check_plugin('song5',
+                          'Megumi Hayashibara', 'Kujikenai Kara! (OST Рубаки)',
+                          ['931f9fae6741a8b689ebf7dfc964c55d'])
+
     def test_songlyrics_01(self):
         self.check_plugin('songlyrics',
                           'Modern Talking', "You're My Heart, You're My Soul",

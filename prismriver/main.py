@@ -34,6 +34,7 @@ from prismriver.plugin.metrolyrics import MetroLyricsPlugin
 from prismriver.plugin.mp3lyrics import Mp3LyricsPlugin
 from prismriver.plugin.nitrolyrics import NitroLyricsPlugin
 from prismriver.plugin.seekalyric import SeekaLyricPlugin
+from prismriver.plugin.song5 import SongFivePlugin
 from prismriver.plugin.songlyrics import SongLyricsPlugin
 from prismriver.plugin.sonichits import SonicHitsPlugin
 from prismriver.plugin.touhouwiki import TouhouWikiPlugin
@@ -77,7 +78,8 @@ def get_plugins(config=None):
         AbsoluteLyricsPlugin,
         AliveLyricsPlugin,
         AlLyricsPlugin,
-        LyricsActionPlugin
+        LyricsActionPlugin,
+        SongFivePlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []
