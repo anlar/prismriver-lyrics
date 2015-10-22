@@ -131,6 +131,11 @@ class TestPlugins(unittest.TestCase):
                           'Dschinghis Khan', 'Pistolero',
                           ['4be7cef73596ded5201904c31b4ced91'])
 
+    def test_evesta_01(self):
+        self.check_plugin('evesta',
+                          '林原 めぐみ', 'BRAVE SOULS ～give a reason',
+                          ['aa3322837c81e5dd4cd4be3e00e7868a'])
+
     def test_genius_01(self):
         self.check_plugin('genius',
                           'The Bee Gees', "I Can't Help It (with Olivia Newton-John)",

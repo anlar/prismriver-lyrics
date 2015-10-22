@@ -13,6 +13,7 @@ from prismriver.plugin.azlyrics import AZLyricsPlugin
 from prismriver.plugin.bopfmp import BopFmPlugin
 from prismriver.plugin.chartlyrics import ChartlyricsPlugin
 from prismriver.plugin.elyrics import ELyricsPlugin
+from prismriver.plugin.evesta import EvestaPlugin
 from prismriver.plugin.genius import GeniusPlugin
 from prismriver.plugin.jlyric import JLyricPlugin
 from prismriver.plugin.kget import KGetPlugin
@@ -79,7 +80,8 @@ def get_plugins(config=None):
         AliveLyricsPlugin,
         AlLyricsPlugin,
         LyricsActionPlugin,
-        SongFivePlugin
+        SongFivePlugin,
+        EvestaPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []
