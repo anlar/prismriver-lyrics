@@ -31,7 +31,6 @@
 * http://www.darklyrics.com/
 * http://www.lyricfind.com/ (available only via their mobile app)
 * https://bandcamp.com/
-* http://www.lyricsmode.com/
 * http://www.lyricsfreak.com/
 * http://www.lyrics.net/
 * http://www.urbanlyrics.com/
@@ -68,7 +67,6 @@
 * http://www.thebroadwaymusicals.com/
 * http://songmeanings.com/
 * http://www.kasi-time.com/
-* http://www.evesta.jp/
 * http://www.utamap.com/
 * http://www.uta-net.com/
 * https://www.song365.co/
@@ -79,7 +77,6 @@
 * https://www.google.com/ (filetype:lrc)
 * http://mp3.sogou.com/
 * http://www.1musiclyrics.net/
-* http://www.lyricsaction.com/
 * http://www.allthelyrics.com/
 * http://lyricsplace.com/
 * http://www.lyricsangel.com/
@@ -87,6 +84,14 @@
 * https://www.joysound.com/web/
 * http://utaten.com/
 * http://www.songtextemania.com/
+* http://j-lyrics.ru/
+* http://www.anime-lyrics.ru/
+* http://www.jpopasia.com/
+* http://www.sweetslyrics.com/
+* http://www.lyriczz.com/
+* http://www.lyricsplanet.com/
+* http://www.lyricsdepot.com/
+* http://www.lyricsera.com/
 
 See also:
 

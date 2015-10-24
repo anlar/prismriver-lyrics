@@ -91,6 +91,7 @@ List all available plugins:
 * bop.fm               [id: bopfm]
 * Chartlyrics          [id: chartlyrics]
 * eLyrics              [id: elyrics]
+* Evesta               [id: evesta]
 * Genius               [id: genius]
 * J-Lyric              [id: jlyric]
 * KGet                 [id: kget]
@@ -99,10 +100,12 @@ List all available plugins:
 * LetsSingIt           [id: letssingit]
 * Lololyrics           [id: lololyrics]
 * Lyrical Nonsense     [id: lyricalnonsense]
+* Lyrics Action        [id: lyricsaction]
 * Lyrics N Music       [id: lyricsnmusic]
 * Lyrics.com           [id: lyricscom]
 * LyricsHuddle         [id: lyricshuddle]
 * LyricsMania          [id: lyricsmania]
+* LyricsMode           [id: lyricsmode]
 * LyricsReg.com        [id: lyricsreg]
 * LyricWiki            [id: lyricwiki]
 * Lyrster              [id: lyrster]
@@ -111,6 +114,7 @@ List all available plugins:
 * Mp3Lyrics            [id: mp3lyrics]
 * NitroLyrics          [id: nitrolyrics]
 * SeekaLyric           [id: seekalyric]
+* Song5                [id: song5]
 * SongLyrics.com       [id: songlyrics]
 * SonicHits            [id: sonichits]
 * TouhouWiki           [id: touhouwiki]
@@ -119,17 +123,17 @@ List all available plugins:
 
 ## Changes
 
-[Check docs/changes.md](docs/changes.md)
+[See docs/changes.md](docs/changes.md)
 
 
 ## TODO
 
-[Check docs/todo.md](docs/todo.md)
+[See docs/todo.md](docs/todo.md)
 
 
 ## Similar projects
 
-[Check docs/similar.md](docs/similar.md)
+[See docs/similar.md](docs/similar.md)
 
 
 ## Copyright
