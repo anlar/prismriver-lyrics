@@ -61,6 +61,11 @@ class TestPlugins(unittest.TestCase):
                           'Megumi Hayashibara', 'Omokage (English)',
                           ['caded604d9ec062a2e7236ab30728350'])
 
+    def test_alphabetlyrics_01(self):
+        self.check_plugin('alphabetlyrics',
+                          'Ace of Base', "C'est La Vie (Always 21)",
+                          ['b31dc2a31407badc08efbfb782fd2f81'])
+
     def test_amalgama_01(self):
         self.check_plugin('amalgama',
                           'Modern Talking', "You're My Heart, You're My Soul",
