@@ -6,6 +6,7 @@ from prismriver.struct import Song
 
 class SongFivePlugin(Plugin):
     ID = 'song5'
+    RANK = 2
 
     def __init__(self, config):
         super(SongFivePlugin, self).__init__('Song5', config)
