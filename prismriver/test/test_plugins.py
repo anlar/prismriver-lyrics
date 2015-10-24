@@ -241,6 +241,11 @@ class TestPlugins(unittest.TestCase):
                           'Joe Esposito', 'You\'re The Best',
                           ['ee9de08277a90ad90f0caae8bcb2ae23'])
 
+    def test_lyricsmode_01(self):
+        self.check_plugin('lyricsmode',
+                          'MandoPony', 'Just Gold',
+                          ['98af949573e1cfdc8e5f5588e25e81b0'])
+
     def test_lyricsnmusic_01(self):
         self.check_plugin('lyricsnmusic',
                           'Joe Dassin', 'Le Moustique',

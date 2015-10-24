@@ -26,6 +26,7 @@ from prismriver.plugin.lyricsaction import LyricsActionPlugin
 from prismriver.plugin.lyricscom import LyricsComPlugin
 from prismriver.plugin.lyricshuddle import LyricsHuddlePlugin
 from prismriver.plugin.lyricsmania import LyricsManiaPlugin
+from prismriver.plugin.lyricsmode import LyricsModePlugin
 from prismriver.plugin.lyricsnmusic import LyricsNMusicPlugin
 from prismriver.plugin.lyricsreg import LyricsRegPlugin
 from prismriver.plugin.lyricwiki import LyricWikiPlugin
@@ -81,7 +82,8 @@ def get_plugins(config=None):
         AlLyricsPlugin,
         LyricsActionPlugin,
         SongFivePlugin,
-        EvestaPlugin
+        EvestaPlugin,
+        LyricsModePlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []
