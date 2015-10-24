@@ -36,6 +36,7 @@ from prismriver.plugin.metrolyrics import MetroLyricsPlugin
 from prismriver.plugin.mp3lyrics import Mp3LyricsPlugin
 from prismriver.plugin.nitrolyrics import NitroLyricsPlugin
 from prismriver.plugin.seekalyric import SeekaLyricPlugin
+from prismriver.plugin.showmelyrics import ShowMeLyricsPlugin
 from prismriver.plugin.song5 import SongFivePlugin
 from prismriver.plugin.songlyrics import SongLyricsPlugin
 from prismriver.plugin.sonichits import SonicHitsPlugin
@@ -83,7 +84,8 @@ def get_plugins(config=None):
         LyricsActionPlugin,
         SongFivePlugin,
         EvestaPlugin,
-        LyricsModePlugin
+        LyricsModePlugin,
+        ShowMeLyricsPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

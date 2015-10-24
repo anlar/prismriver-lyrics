@@ -336,6 +336,11 @@ class TestPlugins(unittest.TestCase):
                           'Megumi Hayashibara', 'Give A Reason (From Slayers Next)',
                           ['d9a7905a87a11de3c99bd3176e1e905f'])
 
+    def test_showmelyrics_01(self):
+        self.check_plugin('showmelyrics',
+                          'Joe Dassin', 'Don’t Sit Under the Apple Tree [Live]',
+                          ['4bfa677bc254640c6285483c7bb2f210'])
+
     def test_song5_01(self):
         # entry has only original lyrics
         self.check_plugin('song5',
