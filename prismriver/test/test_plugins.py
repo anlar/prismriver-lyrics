@@ -126,6 +126,11 @@ class TestPlugins(unittest.TestCase):
                           'James Brown', 'Prisoner of Love',
                           ['a4cc13ee79455148090068388b74b8cf'])
 
+    def test_directlyrics_01(self):
+        self.check_plugin('directlyrics',
+                          'Daft Punk', "Doin' It Right",
+                          ['780eeea5024d3c8208e4f98a3e1ad1f6'])
+
     def test_elyrics_01(self):
         self.check_plugin('elyrics',
                           'C.C. Catch', "V.i.p. (they're Calling Me Tonight)",
