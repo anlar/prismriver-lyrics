@@ -18,6 +18,7 @@ from prismriver.plugin.elyrics import ELyricsPlugin
 from prismriver.plugin.evesta import EvestaPlugin
 from prismriver.plugin.genius import GeniusPlugin
 from prismriver.plugin.jlyric import JLyricPlugin
+from prismriver.plugin.jlyricsru import JLyricsRuPlugin
 from prismriver.plugin.kget import KGetPlugin
 from prismriver.plugin.leoslyrics import LeosLyricsPlugin
 from prismriver.plugin.letras import LetrasPlugin
@@ -89,7 +90,8 @@ def get_plugins(config=None):
         LyricsModePlugin,
         ShowMeLyricsPlugin,
         AlphabetLyricsPlugin,
-        DirectLyricsPlugin
+        DirectLyricsPlugin,
+        JLyricsRuPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

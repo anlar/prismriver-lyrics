@@ -161,6 +161,30 @@ class TestPlugins(unittest.TestCase):
                           '浜崎あゆみ', 'Bold & Delicious',
                           ['87cdd3d59e867ece975a49c2129d3aa6'])
 
+    def test_jlyricsru_01(self):
+        # entry has only original lyrics
+        self.check_plugin('jlyricsru',
+                          'Nakabayashi May', "Welcome To My FanClub's Night!",
+                          ['80651e5c7478268ac3788244fa861b50'])
+
+    def test_jlyricsru_02(self):
+        # entry has original, en and ru translated lyrics
+        self.check_plugin('jlyricsru',
+                          'Access', 'Doubt & Trust',
+                          ['c76c0549bc0edc06c919f305d0dd506e',
+                           '2f6f3ccea179f44caa1ea2e969d1a36e',
+                           '40e0026f93add2f867971ac270726474'])
+
+    def test_jlyricsru_03(self):
+        # entry has original, en and 2 ru translated lyrics
+        # and there are 3 artist fields
+        self.check_plugin('jlyricsru',
+                          'Asumi Kana', 'Koi wa Konton no Reiya',
+                          ['ce2c22a9ba932d56446cb4bc7fddb4e7',
+                           '270916af302cb1483d61a55e5635cc06',
+                           '889aae7c3e241e26c8e57dc0753be969',
+                           'adbd8436ceecba9ed48eb78f93a2fb0b'])
+
     def test_kget_01(self):
         self.check_plugin('kget',
                           'YUI', 'CHE.R.RY ～Bossa Live Version～',
