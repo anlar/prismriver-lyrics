@@ -365,6 +365,19 @@ class TestPlugins(unittest.TestCase):
                           'C. C. Catch', "Can't Catch Me",
                           ['231af8f3447878ac33625e9e36c36047'])
 
+    def test_nautiljon_01(self):
+        # only original lyrics
+        self.check_plugin('nautiljon',
+                          'Perfume', 'Pick Me Up',
+                          ['53629b1686eb111e715b85392c3d9ae1'])
+
+    def test_nautiljon_02(self):
+        # original and translated lyrics
+        self.check_plugin('nautiljon',
+                          'Perfume', 'Cling Cling',
+                          ['85e912b195d6aaa816842f64828efaa2',
+                           '0503a47e1046b7f52128a652e81a1b06'])
+
     def test_nitrolyrics_02(self):
         self.check_plugin('nitrolyrics',
                           'Bad Boys Blue', 'A World Without You (michelle)',

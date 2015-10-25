@@ -38,6 +38,7 @@ from prismriver.plugin.lyrster import LyrsterPlugin
 from prismriver.plugin.megalyrics import MegalyricsPlugin
 from prismriver.plugin.metrolyrics import MetroLyricsPlugin
 from prismriver.plugin.mp3lyrics import Mp3LyricsPlugin
+from prismriver.plugin.nautiljon import NautiljonPlugin
 from prismriver.plugin.nitrolyrics import NitroLyricsPlugin
 from prismriver.plugin.onesonglyrics import OneSongLyricsPlugin
 from prismriver.plugin.seekalyric import SeekaLyricPlugin
@@ -95,7 +96,8 @@ def get_plugins(config=None):
         DirectLyricsPlugin,
         JLyricsRuPlugin,
         LyricsDepotPlugin,
-        OneSongLyricsPlugin
+        OneSongLyricsPlugin,
+        NautiljonPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []
