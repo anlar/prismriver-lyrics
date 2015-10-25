@@ -370,6 +370,11 @@ class TestPlugins(unittest.TestCase):
                           'Bad Boys Blue', 'A World Without You (michelle)',
                           ['ad1240f4f772fc36e5286c4a4f29f187'])
 
+    def test_onesonglyrics_01(self):
+        self.check_plugin('1songlyrics',
+                          'Megumi Hayashibara', 'Exit->Running',
+                          ['5ccc738d3df217f31682b25be6156a0f'])
+
     def test_seekalyric_01(self):
         self.check_plugin('seekalyric',
                           'Megumi Hayashibara', 'Give A Reason (From Slayers Next)',
