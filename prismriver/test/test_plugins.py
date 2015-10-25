@@ -265,6 +265,11 @@ class TestPlugins(unittest.TestCase):
                           'Daft Punk', "Harder, Better, Faster, Stronger (neptunes Remix)",
                           ['995db98bba775ccf4e8cbc97efd37e98'])
 
+    def test_lyricsdepot_01(self):
+        self.check_plugin('lyricsdepot',
+                          'Daft Punk', 'Harder, Better, Faster, Stronger',
+                          ['58032c5a972b3ea6b4ac7e597f75fb98'])
+
     def test_lyricsmania_01(self):
         self.check_plugin('lyricsmania',
                           'Ayumi Hamasaki', '(Miss)understood',

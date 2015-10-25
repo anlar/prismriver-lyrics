@@ -27,6 +27,7 @@ from prismriver.plugin.lololyrics import LololyricsPlugin
 from prismriver.plugin.lyricalnonsense import LyricalNonsensePlugin
 from prismriver.plugin.lyricsaction import LyricsActionPlugin
 from prismriver.plugin.lyricscom import LyricsComPlugin
+from prismriver.plugin.lyricsdepot import LyricsDepotPlugin
 from prismriver.plugin.lyricshuddle import LyricsHuddlePlugin
 from prismriver.plugin.lyricsmania import LyricsManiaPlugin
 from prismriver.plugin.lyricsmode import LyricsModePlugin
@@ -91,7 +92,8 @@ def get_plugins(config=None):
         ShowMeLyricsPlugin,
         AlphabetLyricsPlugin,
         DirectLyricsPlugin,
-        JLyricsRuPlugin
+        JLyricsRuPlugin,
+        LyricsDepotPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []
