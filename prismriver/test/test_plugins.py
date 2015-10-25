@@ -365,6 +365,11 @@ class TestPlugins(unittest.TestCase):
                           'C. C. Catch', "Can't Catch Me",
                           ['231af8f3447878ac33625e9e36c36047'])
 
+    def test_musixmatch_01(self):
+        self.check_plugin('musixmatch',
+                          '林原めぐみ', 'Over Soul',
+                          ['feb98569635577eeb9c4d16e63eed9dd'])
+
     def test_nautiljon_01(self):
         # only original lyrics
         self.check_plugin('nautiljon',
