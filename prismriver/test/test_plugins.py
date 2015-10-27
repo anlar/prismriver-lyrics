@@ -290,6 +290,11 @@ class TestPlugins(unittest.TestCase):
                           'Joe Dassin', 'Le Moustique',
                           ['492a37b433c45767a589eefbec8060a3'])
 
+    def test_lyricsplace_01(self):
+        self.check_plugin('lyricsplace',
+                          'Ace of Base', 'Never Gonna Say I\'m Sorry',
+                          ['adda1df81c49b9e8d55af164ceef35d5'])
+
     def test_lyricsreg_01(self):
         self.check_plugin('lyricsreg',
                           'Groove Coverage', '7 Years & 50 Days',

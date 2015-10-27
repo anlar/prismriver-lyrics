@@ -32,6 +32,7 @@ from prismriver.plugin.lyricshuddle import LyricsHuddlePlugin
 from prismriver.plugin.lyricsmania import LyricsManiaPlugin
 from prismriver.plugin.lyricsmode import LyricsModePlugin
 from prismriver.plugin.lyricsnmusic import LyricsNMusicPlugin
+from prismriver.plugin.lyricsplace import LyricsPlacePlugin
 from prismriver.plugin.lyricsreg import LyricsRegPlugin
 from prismriver.plugin.lyricwiki import LyricWikiPlugin
 from prismriver.plugin.lyrster import LyrsterPlugin
@@ -99,7 +100,8 @@ def get_plugins(config=None):
         LyricsDepotPlugin,
         OneSongLyricsPlugin,
         NautiljonPlugin,
-        MusixmatchPlugin
+        MusixmatchPlugin,
+        LyricsPlacePlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []
