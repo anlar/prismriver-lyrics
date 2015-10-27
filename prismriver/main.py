@@ -42,6 +42,7 @@ from prismriver.plugin.mp3lyrics import Mp3LyricsPlugin
 from prismriver.plugin.musixmatch import MusixmatchPlugin
 from prismriver.plugin.nautiljon import NautiljonPlugin
 from prismriver.plugin.nitrolyrics import NitroLyricsPlugin
+from prismriver.plugin.onemusiclyrics import OneMusicLyricsPlugin
 from prismriver.plugin.onesonglyrics import OneSongLyricsPlugin
 from prismriver.plugin.seekalyric import SeekaLyricPlugin
 from prismriver.plugin.showmelyrics import ShowMeLyricsPlugin
@@ -101,7 +102,8 @@ def get_plugins(config=None):
         OneSongLyricsPlugin,
         NautiljonPlugin,
         MusixmatchPlugin,
-        LyricsPlacePlugin
+        LyricsPlacePlugin,
+        OneMusicLyricsPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

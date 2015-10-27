@@ -370,6 +370,11 @@ class TestPlugins(unittest.TestCase):
                           'C. C. Catch', "Can't Catch Me",
                           ['231af8f3447878ac33625e9e36c36047'])
 
+    def test_1musiclyrics_01(self):
+        self.check_plugin('1musiclyrics',
+                          'Megumi Hayashibara', 'Give A Reason (From Slayers Next)',
+                          ['3197946854a8a14c188018f32764476c'])
+
     def test_musixmatch_01(self):
         self.check_plugin('musixmatch',
                           '林原めぐみ', 'Over Soul',
