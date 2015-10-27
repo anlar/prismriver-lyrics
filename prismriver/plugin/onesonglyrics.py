@@ -19,6 +19,10 @@ class OneSongLyricsPlugin(Plugin):
         if page:
             soup = self.prepare_soup(page)
 
+            if soup.html.title.text == '1 Song Lyrics':
+                # song not found, redirected to main page
+                return None
+
             main_pane = soup.find('div', {'id': 'wrapper'})
             headers = main_pane.findAll('h2', recursive=False)
 
