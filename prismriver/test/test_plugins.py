@@ -235,6 +235,11 @@ class TestPlugins(unittest.TestCase):
                           'Megumi Hayashibara', 'Northern Lights (Midnight Wedding Mix)',
                           ['022039d57cc9138b0aa4827fd9d81f43'])
 
+    def test_lyricsbay_01(self):
+        self.check_plugin('lyricsbay',
+                          'Megumi Hayashibara', 'Treat or Goblins',
+                          ['5096509edadf2fdcbb49f3295cd64d08'])
+
     def test_lyricalnonsense_01(self):
         self.check_plugin('lyricalnonsense',
                           'supercell', 'ワールドイズマイン',
