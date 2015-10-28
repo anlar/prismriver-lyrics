@@ -418,6 +418,11 @@ class TestPlugins(unittest.TestCase):
                           'Joe Dassin', 'Don’t Sit Under the Apple Tree [Live]',
                           ['4bfa677bc254640c6285483c7bb2f210'])
 
+    def test_snakie_01(self):
+        self.check_plugin('snakie',
+                          'Aoi Eir', 'Addicted...',
+                          ['5dfbff839820acafb8f63c32f3bcb70f'])
+
     def test_song5_01(self):
         # entry has only original lyrics
         self.check_plugin('song5',
