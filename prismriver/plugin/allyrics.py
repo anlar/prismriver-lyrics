@@ -23,7 +23,7 @@ class AlLyricsPlugin(Plugin):
             nav_bar_parts = nav_bar.findAll('a', recursive=False)
 
             song_artist = nav_bar_parts[2].text[:-7]
-            song_title = nav_bar_parts[3].text[:-7]
+            song_title = nav_bar_parts[3].text[:-7].strip()
 
             if not song_title:
                 # song not found
