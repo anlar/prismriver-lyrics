@@ -13,7 +13,7 @@ Package names from Ubuntu 14.04 mentioned within brackets.
 
 ### Lyrica
 
-* Python 3.2+ (python3)
+* Python 3.3+ (python3)
 * Beautiful Soup 4 (python-beautifulsoup)
 * lxml (python3-lxml)
 

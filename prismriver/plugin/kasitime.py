@@ -42,10 +42,20 @@ class KasiTimePlugin(Plugin):
                 song_artist = person_pane.find('a').text.strip()
 
                 lyric = self.get_lyrics(lyric_page)
+                if not lyric:
+                    return None
 
                 return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
 
     def get_lyrics(self, lyric_page):
         raw_lyric = re.findall('var lyrics = \'(.*?)\';', lyric_page, re.DOTALL)
-        html_lyric = html.unescape(raw_lyric[0])
+        html_lyric = self.unescape_html(raw_lyric[0])
         return html_lyric.replace('<br>', '\n')
+
+    def unescape_html(self, html_text):
+        try:
+            # python 3.4+
+            return html.unescape(html_text)
+        except AttributeError:
+            # python 3.3
+            return html.parser.HTMLParser().unescape(html_text)
