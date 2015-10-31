@@ -37,25 +37,17 @@
 * http://www.plyrics.com/
 * http://www.metal-archives.com/
 * http://www.songs-lyrics.net/
-* http://www.1songlyrics.com/
 * http://www.stlyrics.com/
-* http://showmelyrics.com/
 * http://www.lyricsmansion.com/
 * http://animeasialyrics.free.fr/
 * http://lyrics.jetmute.com/
 * http://lyrics.astraweb.com/ (search engine is dead)
-* http://alphabetlyrics.com/
 * http://www.lyred.com/
 * http://metal-lyrics.narod.ru/
-* http://www.directlyrics.com/
-* http://www.nautiljon.com/paroles/
 * http://ostanimepluslyrics.blogspot.ru/search/label/Lyrics%20Music
-* http://lyrics.snakeroot.ru/lyrics.html
-* https://www.musixmatch.com/
 * http://www.lyricsplugin.com/
 * https://www.jamendo.com/
 * http://www.lyriki.com/
-* http://www.lyricsbay.com/
 * http://teksty.org/
 * http://www.sing365.com/
 * http://www.clickgratis.com.br/
@@ -66,7 +58,6 @@
 * http://www.lyricsby.com/
 * http://www.thebroadwaymusicals.com/
 * http://songmeanings.com/
-* http://www.kasi-time.com/
 * http://www.utamap.com/
 * http://www.uta-net.com/
 * https://www.song365.co/
@@ -76,22 +67,20 @@
 * http://webkind.ru/
 * https://www.google.com/ (filetype:lrc)
 * http://mp3.sogou.com/
-* http://www.1musiclyrics.net/
 * http://www.allthelyrics.com/
-* http://lyricsplace.com/
 * http://www.lyricsangel.com/
 * https://petitlyrics.com/
 * https://www.joysound.com/web/
 * http://utaten.com/
 * http://www.songtextemania.com/
-* http://j-lyrics.ru/
 * http://www.anime-lyrics.ru/
 * http://www.jpopasia.com/
 * http://www.sweetslyrics.com/
 * http://www.lyriczz.com/
 * http://www.lyricsplanet.com/
-* http://www.lyricsdepot.com/
 * http://www.lyricsera.com/
+* http://www.musica.com/
+* http://findtexts.ru/
 
 See also:
 
