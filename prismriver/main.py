@@ -19,6 +19,7 @@ from prismriver.plugin.evesta import EvestaPlugin
 from prismriver.plugin.genius import GeniusPlugin
 from prismriver.plugin.jlyric import JLyricPlugin
 from prismriver.plugin.jlyricsru import JLyricsRuPlugin
+from prismriver.plugin.kasitime import KasiTimePlugin
 from prismriver.plugin.kget import KGetPlugin
 from prismriver.plugin.leoslyrics import LeosLyricsPlugin
 from prismriver.plugin.letras import LetrasPlugin
@@ -107,7 +108,8 @@ def get_plugins(config=None):
         LyricsPlacePlugin,
         OneMusicLyricsPlugin,
         LyricsBayPlugin,
-        SnakiePlugin
+        SnakiePlugin,
+        KasiTimePlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

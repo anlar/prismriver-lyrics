@@ -185,6 +185,11 @@ class TestPlugins(unittest.TestCase):
                            '889aae7c3e241e26c8e57dc0753be969',
                            'adbd8436ceecba9ed48eb78f93a2fb0b'])
 
+    def test_kasitime_01(self):
+        self.check_plugin('kasitime',
+                          'いとうかなこ', 'Hacking to the Gate',
+                          ['2917f7e96bcd394d6292696f83a47e52'])
+
     def test_kget_01(self):
         self.check_plugin('kget',
                           'YUI', 'CHE.R.RY ～Bossa Live Version～',
