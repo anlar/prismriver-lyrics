@@ -1,4 +1,5 @@
 import os
+import logging
 
 
 class Song:
@@ -10,7 +11,7 @@ class Song:
 
 class SearchConfig:
     def __init__(self, enabled_plugins=None, result_limit=None, cache_web_dir=None, cache_web_ttl_sec=None,
-                 web_timeout_sec=None, sync=False):
+                 web_timeout_sec=None, sync=False, parser='lxml'):
 
         if cache_web_dir is None:
             cache_web_dir = os.path.expanduser('~') + '/.cache/prismriver/'
@@ -28,3 +29,41 @@ class SearchConfig:
         self.web_timeout_sec = web_timeout_sec
 
         self.sync = sync
+
+        self.parser = self.get_parser_name(parser)
+
+    def get_parser_name(self, selected_parser):
+        if selected_parser == 'lxml':
+            if self.is_lxml_available():
+                return 'lxml'
+            elif self.is_html5lib_avaialable():
+                self.log_parser_warning(selected_parser, 'html5lib')
+                return 'html5lib'
+        elif selected_parser == 'html5lib':
+            if self.is_html5lib_avaialable():
+                return 'html5lib'
+            elif self.is_lxml_available():
+                self.log_parser_warning(selected_parser, 'lxml')
+                return 'lxml'
+        elif selected_parser == 'html.parser':
+            return 'html.parser'
+
+        self.log_parser_warning(selected_parser, 'html.parser')
+        return 'html.parser'
+
+    def is_lxml_available(self):
+        try:
+            import lxml
+            return True
+        except ImportError:
+            return False
+
+    def is_html5lib_avaialable(self):
+        try:
+            import html5lib
+            return True
+        except ImportError:
+            return False
+
+    def log_parser_warning(self, selected, actual):
+        logging.debug('Selected parser "{}" not available, fallback to "{}"'.format(selected, actual))

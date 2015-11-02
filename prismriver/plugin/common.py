@@ -161,7 +161,7 @@ class Plugin:
             return None
 
     def prepare_soup(self, page):
-        return BeautifulSoup(page, 'lxml')
+        return BeautifulSoup(page, self.config.parser)
 
     def remove_tags_from_block(self, pane, tags):
         for tag in tags:

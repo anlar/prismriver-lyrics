@@ -37,6 +37,9 @@ def init_args_parser():
     parser.add_argument('--sync', action='store_true',
                         help='search info from all plugins consecutively')
 
+    parser.add_argument('--parser', type=str, choices=['lxml', 'html5lib', 'html.parser'],
+                        help='html parser (default: lxml)')
+
     parser.add_argument('--cache_dir', type=str,
                         help='cache directory for downloaded web pages (default: ~/.cache/prismriver)')
     parser.add_argument('--cache_ttl', type=str,
@@ -56,7 +59,8 @@ def init_search_config(params):
         params.cache_dir,
         params.cache_ttl,
         params.web_timeout,
-        params.sync)
+        params.sync,
+        params.parser)
 
     return config
 
