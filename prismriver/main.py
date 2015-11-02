@@ -11,7 +11,6 @@ from prismriver.plugin.alphabetlyrics import AlphabetLyricsPlugin
 from prismriver.plugin.amalgama import AmalgamaPlugin
 from prismriver.plugin.animelyrics import AnimeLyricsPlugin
 from prismriver.plugin.azlyrics import AZLyricsPlugin
-from prismriver.plugin.bopfmp import BopFmPlugin
 from prismriver.plugin.chartlyrics import ChartlyricsPlugin
 from prismriver.plugin.directlyrics import DirectLyricsPlugin
 from prismriver.plugin.elyrics import ELyricsPlugin
@@ -81,7 +80,6 @@ def get_plugins(config=None):
         VagalumePlugin,
         LyricsNMusicPlugin,
         LetrasPlugin,
-        BopFmPlugin,
         LetsSingItPlugin,
         LyricsRegPlugin,
         SongLyricsPlugin,

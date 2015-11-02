@@ -91,7 +91,6 @@ List all available plugins:
 * Amalgama             [id: amalgama]
 * Anime Lyrics         [id: animelyrics]
 * AZLyrics             [id: azlyrics]
-* bop.fm               [id: bopfm]
 * Chartlyrics          [id: chartlyrics]
 * Directlyrics         [id: directlyrics]
 * eLyrics              [id: elyrics]
