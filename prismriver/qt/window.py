@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QLineEdit, QGridLayout
 
 from prismriver import util
 from prismriver.main import search
-from prismriver.mpris import MprisConnector, MprisConnectionException
+from prismriver.mpris import MprisConnector, MprisConnectionException, get_player_icon_path
 
 
 class MainWindow(QMainWindow):
@@ -157,9 +157,14 @@ class MainWindow(QMainWindow):
             else:
                 self.edit_player.setCurrentIndex(0)
 
-    def toggle_mpris_listener(self, sudden_stop=False):
+    def toggle_mpris_listener(self, sudden_stop=False, selected_player=None):
         if not sudden_stop and (self.worker_mpris is None or not self.worker_mpris.isRunning()):
-            self.worker_mpris = MprisThread(self.mpris_connect, self.edit_player.currentData(PlayerListModel.DataRole))
+            if selected_player:
+                self.worker_mpris = MprisThread(self.mpris_connect, selected_player)
+            else:
+                self.worker_mpris = MprisThread(self.mpris_connect,
+                                                self.edit_player.currentData(PlayerListModel.DataRole))
+
             self.worker_mpris.meta_ready.connect(self.update_search_results_mpris)
             self.worker_mpris.connection_closed.connect(self.toggle_mpris_listener)
             self.worker_mpris.start()
@@ -244,12 +249,6 @@ class PlayerListModel(QStringListModel):
     def __init__(self, *__args):
         super().__init__(*__args)
         self.players = []
-        self.player_icons = {'org.mpris.MediaPlayer2.amarok': 'amarok.png',
-                             'org.mpris.MediaPlayer2.audacious': 'audacious.png',
-                             'org.mpris.MediaPlayer2.deadbeef': 'deadbeef.png',
-                             'org.mpris.MediaPlayer2.mpd': 'mpd.png',
-                             'org.mpris.MediaPlayer2.rhythmbox': 'rhythmbox.png',
-                             'org.mpris.MediaPlayer2.vlc': 'vlc.png'}
 
     def rowCount(self, parent=None, *args, **kwargs):
         return len(self.players) if self.players else 0
@@ -263,19 +262,12 @@ class PlayerListModel(QStringListModel):
 
         elif role == Qt.DecorationRole:
             if self.players[row]:
-                return self.get_player_icon(self.players[row].name)
+                return QIcon(get_player_icon_path(self.players[row].name))
 
         elif role == self.DataRole:
             return self.players[row]
 
         return QVariant()
-
-    def get_player_icon(self, player_name):
-        icon_name = self.player_icons.get(player_name, 'default.png')
-        if icon_name:
-            return QIcon('prismriver/pixmaps/player/' + icon_name)
-        else:
-            return None
 
     def update_data(self, players):
         self.players = players

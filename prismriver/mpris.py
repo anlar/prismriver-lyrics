@@ -57,6 +57,17 @@ class MprisConnector(object):
         return [str(artist) if artist else None, str(title) if title else None]
 
 
+def get_player_icon_path(player_name):
+    player_icons = {'org.mpris.MediaPlayer2.amarok': 'amarok.png',
+                    'org.mpris.MediaPlayer2.audacious': 'audacious.png',
+                    'org.mpris.MediaPlayer2.deadbeef': 'deadbeef.png',
+                    'org.mpris.MediaPlayer2.mpd': 'mpd.png',
+                    'org.mpris.MediaPlayer2.rhythmbox': 'rhythmbox.png',
+                    'org.mpris.MediaPlayer2.vlc': 'vlc.png'}
+
+    return 'prismriver/pixmaps/player/' + player_icons.get(player_name, 'default.png')
+
+
 class MprisPlayer(object):
     def __init__(self, name, identity):
         super().__init__()
