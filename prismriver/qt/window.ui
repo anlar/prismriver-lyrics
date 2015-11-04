@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>1000</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Lunasa Prismriver</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QGroupBox" name="box_search">
+      <property name="title">
+       <string>Search</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_artist">
+         <property name="text">
+          <string>Artist</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="edit_artist"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="btn_search">
+         <property name="text">
+          <string>PushButton</string>
+         </property>
+         <property name="autoDefault">
+          <bool>true</bool>
+         </property>
+         <property name="default">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_title">
+         <property name="text">
+          <string>Title</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="edit_title"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_player">
+         <property name="text">
+          <string>Player</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="edit_player"/>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="btn_refresh">
+         <property name="text">
+          <string>Refresh</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="btn_connect">
+         <property name="text">
+          <string>PushButton</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="box_results">
+      <property name="title">
+       <string>Results</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QTableView" name="lyrics_table_view"/>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="edit_lyrics">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <tabstops>
+  <tabstop>edit_artist</tabstop>
+  <tabstop>edit_title</tabstop>
+  <tabstop>edit_player</tabstop>
+  <tabstop>btn_search</tabstop>
+  <tabstop>btn_connect</tabstop>
+  <tabstop>btn_refresh</tabstop>
+  <tabstop>lyrics_table_view</tabstop>
+  <tabstop>edit_lyrics</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
