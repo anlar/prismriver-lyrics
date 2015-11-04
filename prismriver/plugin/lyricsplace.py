@@ -22,6 +22,10 @@ class LyricsPlacePlugin(Plugin):
             soup = self.prepare_soup(page)
 
             nav_pane = soup.find('ul', {'class': 'breadcrumbs'})
+            if not nav_pane:
+                # song not found (not all of them return 404)
+                return None
+
             breadcrumbs = nav_pane.findAll('li', recursive=False)
 
             song_artist = breadcrumbs[2].a.text[:-7]
