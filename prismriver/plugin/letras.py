@@ -35,7 +35,12 @@ class LetrasPlugin(Plugin):
 
                 lyric = ''
                 for elem in lyric_block.findAll('p', recursive=False):
-                    lyric += (self.parse_verse_block(elem) + '\n\n')
+                    inner_blocks = elem.findAll('p', recursive=False)
+                    if inner_blocks:
+                        for inner_elem in inner_blocks:
+                            lyric += (self.parse_verse_block(inner_elem) + '\n\n')
+                    else:
+                        lyric += (self.parse_verse_block(elem) + '\n\n')
 
                 if lyric.startswith('\n\nShortcut to '):
                     # lyric is empty, just list of other songs

@@ -211,9 +211,16 @@ class TestPlugins(unittest.TestCase):
                           ['f3e7fbdfd3c1bc85a21dad24188b75b4'])
 
     def test_letras_01(self):
+        # simple case - lyrics: div.p.text
         self.check_plugin('letras',
                           'Ayumi Hamasaki', 'Is This Love?',
                           ['8a8ffe4e08b0d438bc145eaff0a1eec5'])
+
+    def test_letras_02(self):
+        # lyrics with additional paragraph level - lyrics: div.p.p.text
+        self.check_plugin('letras',
+                          'Mirai Nikki', 'Dead End',
+                          ['401b0af66d73d450cee0a7d134bf1c45'])
 
     def test_letssingit_01(self):
         self.check_plugin('letssingit',
