@@ -23,8 +23,6 @@
 
 * Implement proper dbus-listener.
 
-* Tray menu: connection options and search status.
-
 
 ### Lyric databases
 

@@ -1,30 +1,35 @@
 import random
 import sys
 import time
+from functools import partial
 
 from PyQt5.QtCore import pyqtSlot, QThread, pyqtSignal
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QStyle
+from PyQt5.QtWidgets import QApplication, QStyle, QSystemTrayIcon, QAction
 
-from prismriver import main, util
-from prismriver.mpris import MprisConnector, MprisConnectionException
+from prismriver import main, util, mpris
+from prismriver.mpris import MprisConnector, MprisConnectionException, MprisPlayer
+from prismriver.qt.tray import TrayIcon
 from prismriver.qt.window import MainWindow, PlayerListModel
 
 
 class MainController(object):
-    def __init__(self, search_config, default_artist, default_title, default_player, connect_to_player):
+    def __init__(self, search_config, default_artist, default_title, default_player, connect_to_player, tray_action):
         super().__init__()
 
         self.search_config = search_config
-        self.state = State.default
 
         self.mpris_connect = MprisConnector()
         self.worker_search = None
         self.worker_mpris = None
+        self.mpris_player = None
 
-        self.start_app(default_artist, default_title, default_player, connect_to_player)
+        self.main_window = None
+        self.tray = None
 
-    def start_app(self, default_artist, default_title, default_player, connect_to_player):
+        self.start_app(default_artist, default_title, default_player, connect_to_player, tray_action)
+
+    def start_app(self, default_artist, default_title, default_player, connect_to_player, tray_action):
         app = QApplication(sys.argv)
         app.setWindowIcon(QIcon('prismriver/pixmaps/prismriver-lunasa.png'))
         app.setApplicationName('Lunasa Prismriver')
@@ -46,7 +51,18 @@ class MainController(object):
         elif default_artist and default_title:
             self.start_search()
 
-        self.main_window.show()
+        show_tray = (tray_action != 'hide')
+        show_main = (tray_action != 'minimize')
+
+        if show_main:
+            self.main_window.show()
+
+        if show_tray:
+            self.tray = TrayIcon()
+            self.tray.activated.connect(self.toggle_main_window)
+            self.tray.right_menu.aboutToShow.connect(self.update_tray_menu)
+
+            self.tray.show()
 
         sys.exit(app.exec_())
 
@@ -115,13 +131,17 @@ class MainController(object):
         else:
             return
 
-        self.state = state
-
     def get_current_player(self):
         return self.main_window.edit_player.currentData(PlayerListModel.DataRole)
 
     def set_status_message(self, message):
         self.main_window.statusBar().showMessage(message)
+
+    def show_tray_notification(self, artist, title, songs):
+        if self.tray:
+            self.tray.showMessage(title + '\n' + artist,
+                                  'Found {} results'.format(len(songs)),
+                                  QSystemTrayIcon.NoIcon, 7000)
 
     @pyqtSlot()
     def start_search(self, background=False):
@@ -136,7 +156,7 @@ class MainController(object):
         self.worker_search.start()
 
     @pyqtSlot()
-    def finish_search(self, worker_id, songs, total_time, background):
+    def finish_search(self, worker_id, artist, title, songs, total_time, background):
         if background:
             self.set_status_message('Listening to the player...')
             self.main_window.lyrics_table_model.update_data(songs)
@@ -147,6 +167,8 @@ class MainController(object):
             self.init_layout(State.waiting)
             self.set_status_message('Search completed in {}'.format(util.format_time_ms(total_time)))
             self.main_window.lyrics_table_model.update_data(songs)
+
+        self.show_tray_notification(artist, title, songs)
 
     @pyqtSlot()
     def interrupt_search(self):
@@ -176,22 +198,36 @@ class MainController(object):
                 self.main_window.edit_player.setCurrentIndex(0)
 
     @pyqtSlot()
-    def start_mpris(self):
+    def start_mpris(self, selected_player=None):
+        if selected_player:
+            players = self.mpris_connect.get_players()
+            self.main_window.edit_player.setCurrentIndex(players.index(selected_player))
+
         player = self.get_current_player()
         if player:
             self.init_layout(State.listening)
             self.set_status_message('Listening to the player...')
 
+            self.mpris_player = player
             self.worker_mpris = MprisThread(self.mpris_connect, player)
 
             self.worker_mpris.meta_ready.connect(self.update_mpris_results)
             self.worker_mpris.connection_closed.connect(self.stop_mpris)
             self.worker_mpris.start()
 
+    @pyqtSlot(MprisPlayer)
+    def start_mpris_from_tray(self, selected_player):
+        if selected_player == self.mpris_player:
+            return
+        else:
+            self.stop_mpris()
+            self.start_mpris(selected_player)
+
     @pyqtSlot()
     def stop_mpris(self):
         self.init_layout(State.waiting)
         self.set_status_message('Player listener stopped')
+        self.mpris_player = None
         self.worker_mpris.active = False
 
     @pyqtSlot()
@@ -204,9 +240,49 @@ class MainController(object):
             self.main_window.edit_title.setText(meta[1])
             self.start_search(True)
 
+    @pyqtSlot(QSystemTrayIcon.ActivationReason)
+    def toggle_main_window(self, reason):
+        if reason == QSystemTrayIcon.Trigger:
+            if self.main_window.isHidden():
+                self.main_window.show()
+            else:
+                self.main_window.hide()
+
+    @pyqtSlot()
+    def update_tray_menu(self):
+        self.tray.right_menu.clear()
+
+        show_action = QAction('Show &Main Window', self.tray.right_menu)
+        show_action.triggered.connect(self.main_window.show)
+        self.tray.right_menu.addAction(show_action)
+
+        self.tray.right_menu.addSeparator()
+
+        players = self.main_window.edit_player_model.players
+        if players:
+            for player in players:
+                if player == self.mpris_player:
+                    player_action = QAction(player.identity + ' [connected]', self.tray.right_menu)
+                    font = player_action.font()
+                    font.setBold(True)
+                    player_action.setFont(font)
+                else:
+                    player_action = QAction(player.identity, self.tray.right_menu)
+
+                player_action.setIcon(QIcon(mpris.get_player_icon_path(player.name)))
+                player_action.triggered.connect(partial(self.start_mpris_from_tray, selected_player=player))
+
+                self.tray.right_menu.addAction(player_action)
+
+        self.tray.right_menu.addSeparator()
+
+        quit_action = QAction('&Quit', self.tray.right_menu)
+        quit_action.triggered.connect(QApplication.quit)
+        self.tray.right_menu.addAction(quit_action)
+
 
 class SearchThread(QThread):
-    resultReady = pyqtSignal(int, list, float, bool)
+    resultReady = pyqtSignal(int, str, str, list, float, bool)
 
     def __init__(self, artist, title, search_config, background):
         super().__init__()
@@ -223,7 +299,7 @@ class SearchThread(QThread):
         songs = main.search(self.artist, self.title, self.search_config)
         total_time = time.time() - start_time
 
-        self.resultReady.emit(self.worker_id, songs, total_time, self.background)
+        self.resultReady.emit(self.worker_id, self.artist, self.title, songs, total_time, self.background)
 
 
 class MprisThread(QThread):
@@ -249,7 +325,6 @@ class MprisThread(QThread):
 
 
 class State(object):
-    default = -1
     waiting = 1
     searching = 2
     listening = 3

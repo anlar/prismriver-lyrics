@@ -12,7 +12,7 @@ def run():
 
     search_config = util.init_search_config(params)
 
-    MainController(search_config, params.artist, params.title, params.mpris, params.connect)
+    MainController(search_config, params.artist, params.title, params.mpris, params.connect, params.tray)
 
 
 def create_args_parser():
@@ -20,5 +20,7 @@ def create_args_parser():
 
     parser.add_argument('-m', '--mpris', help='default MPRIS-player name')
     parser.add_argument('--connect', action='store_true', help='connect to player and listen for song details')
+
+    parser.add_argument('--tray', default='show', choices=('show', 'minimize', 'hide'), help='tray help')
 
     return parser
