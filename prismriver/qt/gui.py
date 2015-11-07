@@ -9,6 +9,7 @@ def run():
     params, unknown = parser.parse_known_args()
 
     util.init_logging(params.quiet, params.verbose, params.log)
+    util.log_debug_info()
 
     search_config = util.init_search_config(params)
 

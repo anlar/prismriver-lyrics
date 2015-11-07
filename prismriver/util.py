@@ -1,5 +1,6 @@
 import argparse
 import logging
+import platform
 
 from prismriver.struct import SearchConfig
 
@@ -20,6 +21,10 @@ def init_logging(quiet, verbose, log_file):
         log_handlers = [logging.StreamHandler()]
 
     logging.basicConfig(format=log_format, level=log_level, handlers=log_handlers)
+
+
+def log_debug_info():
+    logging.debug('Python version {}; {}'.format(platform.python_version(), platform.platform()))
 
 
 def init_args_parser():

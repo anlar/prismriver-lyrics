@@ -1,8 +1,8 @@
 import json
 import logging
 
-from prismriver.main import get_plugins, search
 from prismriver import util
+from prismriver.main import get_plugins, search
 
 
 class SongJsonEncoder(json.JSONEncoder):
@@ -83,6 +83,7 @@ def run():
     params = parser.parse_args()
 
     util.init_logging(params.quiet, params.verbose, params.log)
+    util.log_debug_info()
 
     if params.list:
         list_plugins()
