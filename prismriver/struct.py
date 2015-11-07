@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 
 
 class Song:
@@ -11,7 +11,7 @@ class Song:
 
 class SearchConfig:
     def __init__(self, enabled_plugins=None, result_limit=None, cache_web_dir=None, cache_web_ttl_sec=None,
-                 web_timeout_sec=None, sync=False, parser='lxml'):
+                 web_timeout_sec=None, sync=False, parser=None):
 
         if cache_web_dir is None:
             cache_web_dir = os.path.expanduser('~') + '/.cache/prismriver/'
@@ -21,6 +21,9 @@ class SearchConfig:
 
         if web_timeout_sec is None:
             web_timeout_sec = 10
+
+        if parser is None:
+            parser = 'lxml'
 
         self.enabled_plugins = enabled_plugins
         self.result_limit = result_limit
