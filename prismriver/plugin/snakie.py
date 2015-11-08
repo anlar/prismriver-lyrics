@@ -28,7 +28,8 @@ class SnakiePlugin(Plugin):
             song_artist = title_pane.a.text
             song_title = title_pane.a.next_sibling[3:]
 
-            lyrics_pane = main_pane.findAll('p')[-1]
-            lyrics = self.parse_verse_block(lyrics_pane)
-
-            return Song(song_artist, song_title, self.sanitize_lyrics([lyrics]))
+            # searching for first non-empty paragraph
+            for lyrics_pane in reversed(main_pane.findAll('p')):
+                if lyrics_pane.text.strip() != '':
+                    lyrics = self.parse_verse_block(lyrics_pane)
+                    return Song(song_artist, song_title, self.sanitize_lyrics([lyrics]))

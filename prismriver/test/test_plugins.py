@@ -432,9 +432,16 @@ class TestPlugins(unittest.TestCase):
                           ['4bfa677bc254640c6285483c7bb2f210'])
 
     def test_snakie_01(self):
+        # lyrics located in the last paragraph
         self.check_plugin('snakie',
                           'Aoi Eir', 'Addicted...',
                           ['5dfbff839820acafb8f63c32f3bcb70f'])
+
+    def test_snakie_02(self):
+        # lyrics located in next to the last paragraph
+        self.check_plugin('snakie',
+                          'Kalafina', 'believe',
+                          ['bc3acdffab7e4591df061b99366735ae'])
 
     def test_song5_01(self):
         # entry has only original lyrics
