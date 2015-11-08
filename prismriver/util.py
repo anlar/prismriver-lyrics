@@ -37,6 +37,10 @@ def init_args_parser():
     parser.add_argument('-p', '--plugins', help='comma separated listed of enabled plugins '
                                                 '(empty list means that everything is enabled - by default)')
 
+    parser.add_argument('--preprocessor', type=str,
+                        help='list of preprocessor options to adjust artist/title before performing search ' +
+                             '(available: trim; default: trim)')
+
     parser.add_argument("--web_timeout", type=int, help="timeout for web-page downloading in seconds (default: 10 sec)")
 
     parser.add_argument('--sync', action='store_true',
@@ -65,7 +69,8 @@ def init_search_config(params):
         params.cache_ttl,
         params.web_timeout,
         params.sync,
-        params.parser)
+        params.parser,
+        params.preprocessor)
 
     return config
 

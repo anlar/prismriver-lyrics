@@ -11,7 +11,7 @@ class Song:
 
 class SearchConfig:
     def __init__(self, enabled_plugins=None, result_limit=None, cache_web_dir=None, cache_web_ttl_sec=None,
-                 web_timeout_sec=None, sync=False, parser=None):
+                 web_timeout_sec=None, sync=False, parser=None, preprocessor=None):
 
         if cache_web_dir is None:
             cache_web_dir = os.path.expanduser('~') + '/.cache/prismriver/'
@@ -34,6 +34,13 @@ class SearchConfig:
         self.sync = sync
 
         self.parser = self.get_parser_name(parser)
+
+        self.preprocessor_opts = []
+        if preprocessor:
+            opts = preprocessor.split(',')
+            self.preprocessor_opts.extend(opts)
+        else:
+            self.preprocessor_opts.append('trim')
 
     def get_parser_name(self, selected_parser):
         if selected_parser == 'lxml':

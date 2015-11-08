@@ -1,8 +1,9 @@
 import logging
-from threading import Thread
 import time
 from multiprocessing import Queue
+from threading import Thread
 
+from prismriver import preprocessor
 from prismriver import util
 from prismriver.plugin.absolutelyrics import AbsoluteLyricsPlugin
 from prismriver.plugin.alivelyrics import AliveLyricsPlugin
@@ -137,6 +138,8 @@ def search(artist, title, config):
     if (not artist) or (not title):
         logging.warning('Skip search - song artist and title can\'t be empty string')
         return []
+
+    [artist, title] = preprocessor.apply(artist, title, config.preprocessor_opts)
 
     if config.sync:
         return search_sync(artist, title, config)
