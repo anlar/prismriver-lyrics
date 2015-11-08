@@ -37,7 +37,11 @@ class MainWindow(QMainWindow):
         self.lyrics_table_view.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.lyrics_table_view.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
 
+        # there are 2 cases when we need to update lyric text pane:
+        # 1) when lyric table has some values and selection were changed;
+        # 2) when lyric table get update with empty info list - here selectionChanged signal won't be emitted
         self.lyrics_table_view.selectionModel().selectionChanged.connect(self.update_lyric_pane)
+        self.lyrics_table_model.layoutChanged.connect(self.update_lyric_pane)
 
     @pyqtSlot(QItemSelection, QItemSelection)
     def update_lyric_pane(self, selected, deselected):
