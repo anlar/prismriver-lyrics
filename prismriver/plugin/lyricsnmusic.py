@@ -41,6 +41,10 @@ class LyricsNMusicPlugin(Plugin):
                     soup = self.prepare_soup(page)
 
                     lyric_block = soup.find('pre', {'itemprop': 'description'})
+                    if not lyric_block:
+                        # lyric not available: instrumental or removed because license issue
+                        return None
+
                     lyric = self.parse_verse_block(lyric_block)
 
                     return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
