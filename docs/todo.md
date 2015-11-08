@@ -38,7 +38,6 @@
 * http://www.stlyrics.com/
 * http://www.lyricsmansion.com/
 * http://animeasialyrics.free.fr/
-* http://lyrics.jetmute.com/
 * http://lyrics.astraweb.com/ (search engine is dead)
 * http://www.lyred.com/
 * http://metal-lyrics.narod.ru/

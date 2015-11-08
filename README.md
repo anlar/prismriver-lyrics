@@ -98,6 +98,7 @@ List all available plugins:
 * Genius               [id: genius]
 * J-Lyric              [id: jlyric]
 * J-Lyrics.ru          [id: jlyricsru]
+* JetLyrics            [id: jetlyrics]
 * Kasi-Time            [id: kasitime]
 * KGet                 [id: kget]
 * Leo's Lyrics         [id: leoslyrics]
