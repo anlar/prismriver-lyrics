@@ -47,7 +47,7 @@ def init_args_parser():
 
     parser.add_argument('--cache_dir', type=str,
                         help='cache directory for downloaded web pages (default: ~/.cache/prismriver)')
-    parser.add_argument('--cache_ttl', type=str,
+    parser.add_argument('--cache_ttl', type=int,
                         help='cache ttl for downloaded web pages in seconds (default: one week)')
 
     parser.add_argument("-q", "--quiet", help="disable logging info (show only errors)", action="store_true")
