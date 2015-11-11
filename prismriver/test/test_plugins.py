@@ -492,6 +492,11 @@ class TestPlugins(unittest.TestCase):
                            'a7de7b5e4460d573c87feded75709bce',
                            '3b5ae103d34b8a1e5d782f8439b400ad'])
 
+    def test_utaten_01(self):
+        self.check_plugin('utaten',
+                          'いとうかなこ', 'Brave the Sky',
+                          ['09273a9bc31ac68987a1da44757bfb36'])
+
     def test_vagalume_01(self):
         self.check_plugin('vagalume',
                           'Ito Kanako', 'Hacking To The Gate',

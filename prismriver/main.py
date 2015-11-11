@@ -54,6 +54,7 @@ from prismriver.plugin.song5 import SongFivePlugin
 from prismriver.plugin.songlyrics import SongLyricsPlugin
 from prismriver.plugin.sonichits import SonicHitsPlugin
 from prismriver.plugin.touhouwiki import TouhouWikiPlugin
+from prismriver.plugin.utaten import UtaTenPlugin
 from prismriver.plugin.vagalume import VagalumePlugin
 
 
@@ -110,7 +111,8 @@ def get_plugins(config=None):
         LyricsBayPlugin,
         SnakiePlugin,
         KasiTimePlugin,
-        JetLyricsPlugin
+        JetLyricsPlugin,
+        UtaTenPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

@@ -131,6 +131,7 @@ List all available plugins:
 * SongLyrics.com       [id: songlyrics]
 * SonicHits            [id: sonichits]
 * TouhouWiki           [id: touhouwiki]
+* UtaTen               [id: utaten]
 * Vagalume             [id: vagalume]
 
 
