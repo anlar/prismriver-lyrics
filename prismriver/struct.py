@@ -42,6 +42,9 @@ class SearchConfig:
         else:
             self.preprocessor_opts.append('trim')
 
+        # debug options
+        self.debug_log_page = False
+
     def get_parser_name(self, selected_parser):
         if selected_parser == 'lxml':
             if self.is_lxml_available():

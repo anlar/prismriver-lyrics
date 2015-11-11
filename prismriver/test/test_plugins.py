@@ -44,7 +44,9 @@ class TestPlugins(unittest.TestCase):
         return hashlib.md5(value.encode('utf-8')).hexdigest()
 
     def get_search_config(self, plugin_id):
-        return SearchConfig(enabled_plugins=[plugin_id], web_timeout_sec=60, sync=True)
+        config = SearchConfig(enabled_plugins=[plugin_id], web_timeout_sec=60, sync=True)
+        config.debug_log_page = bool(os.getenv('PRISMRIVER_TEST_LOG_PAGE', False))
+        return config
 
     def test_absolutelyrics_01(self):
         self.check_plugin('absolutelyrics',

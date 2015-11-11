@@ -104,7 +104,10 @@ class Plugin:
         page = self.download_webpage(url)
 
         if page:
-            return page.decode("utf-8", errors="ignore")
+            text = page.decode("utf-8", errors="ignore")
+            if self.config.debug_log_page:
+                logging.debug('Download page: \n' + text)
+            return text
 
     def download_webpage_json(self, url):
         page = self.download_webpage_text(url)
