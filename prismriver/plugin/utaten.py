@@ -22,8 +22,12 @@ class UtaTenPlugin(Plugin):
 
             main_pane = soup.find('main')
 
-            title_pane = main_pane.find('div', {'class': 'contentBox__title contentBox__title--lyricTitle'}).h1
-            title_pane_parts = title_pane.contents
+            title_pane = main_pane.find('div', {'class': 'contentBox__title contentBox__title--lyricTitle'})
+            if not title_pane:
+                # song not found, redirected to main page
+                return None
+
+            title_pane_parts = title_pane.h1.contents
 
             song_title = title_pane_parts[0].strip()[1:-1]
             song_artist = title_pane_parts[3].text.strip()
