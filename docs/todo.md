@@ -78,6 +78,8 @@
 * http://www.lyricsera.com/
 * http://www.musica.com/
 * http://findtexts.ru/
+* http://www.songcoleta.com/
+* http://klyrics.net/
 
 See also:
 
