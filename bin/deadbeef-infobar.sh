@@ -1,4 +1,4 @@
-#! /usr/bin/env sh
+#! /usr/bin/env bash
 
 # Encoded artist name.
 ARTIST="$1"
