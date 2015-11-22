@@ -23,8 +23,13 @@ def init_logging(quiet, verbose, log_file):
     logging.basicConfig(format=log_format, level=log_level, handlers=log_handlers)
 
 
-def log_debug_info():
+def log_debug_info(params: argparse.Namespace) -> None:
     logging.debug('Python version {}; {}'.format(platform.python_version(), platform.platform()))
+    logging.debug('Command-line args: {}'.format(params.__dict__))
+
+
+def log_config_info(config: SearchConfig) -> None:
+    logging.debug('Configuration: {}'.format(config.__dict__))
 
 
 def init_args_parser():
@@ -61,7 +66,7 @@ def init_args_parser():
     return parser
 
 
-def init_search_config(params):
+def init_search_config(params: argparse.Namespace) -> SearchConfig:
     config = SearchConfig(
         params.plugins.split(',') if params.plugins else None,
         params.limit,

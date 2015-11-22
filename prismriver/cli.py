@@ -1,5 +1,4 @@
 import json
-import logging
 
 from prismriver import util
 from prismriver.main import get_plugins, search
@@ -83,14 +82,15 @@ def run():
     params = parser.parse_args()
 
     util.init_logging(params.quiet, params.verbose, params.log)
-    util.log_debug_info()
+    util.log_debug_info(params)
+
+    config = util.init_search_config(params)
+    util.log_config_info(config)
 
     if params.list:
         list_plugins()
     else:
-        logging.debug('Search lyrics with following parameters: {}'.format(params.__dict__))
-        search_config = util.init_search_config(params)
-        result = search(params.artist, params.title, search_config)
+        result = search(params.artist, params.title, config)
 
         if result:
             print(format_output(result, params.format, params.output))

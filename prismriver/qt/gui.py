@@ -9,11 +9,12 @@ def run():
     params, unknown = parser.parse_known_args()
 
     util.init_logging(params.quiet, params.verbose, params.log)
-    util.log_debug_info()
+    util.log_debug_info(params)
 
-    search_config = util.init_search_config(params)
+    config = util.init_search_config(params)
+    util.log_config_info(config)
 
-    MainController(search_config, params.artist, params.title, params.mpris, params.connect, params.tray)
+    MainController(config, params.artist, params.title, params.mpris, params.connect, params.tray)
 
 
 def create_args_parser():

@@ -14,10 +14,10 @@ from prismriver.qt.window import MainWindow, PlayerListModel
 
 
 class MainController(object):
-    def __init__(self, search_config, default_artist, default_title, default_player, connect_to_player, tray_action):
+    def __init__(self, config, default_artist, default_title, default_player, connect_to_player, tray_action):
         super().__init__()
 
-        self.search_config = search_config
+        self.config = config
 
         self.mpris_connect = MprisConnector()
         self.worker_search = None
@@ -151,7 +151,7 @@ class MainController(object):
         self.set_status_message('Searching...')
 
         self.worker_search = SearchThread(self.main_window.edit_artist.text(), self.main_window.edit_title.text(),
-                                          self.search_config, background)
+                                          self.config, background)
         self.worker_search.resultReady.connect(self.finish_search)
         self.worker_search.start()
 
@@ -284,19 +284,19 @@ class MainController(object):
 class SearchThread(QThread):
     resultReady = pyqtSignal(int, str, str, list, float, bool)
 
-    def __init__(self, artist, title, search_config, background):
+    def __init__(self, artist, title, config, background):
         super().__init__()
 
         self.worker_id = random.randint(1, 999999999)
 
         self.artist = artist
         self.title = title
-        self.search_config = search_config
+        self.config = config
         self.background = background
 
     def run(self):
         start_time = time.time()
-        songs = main.search(self.artist, self.title, self.search_config)
+        songs = main.search(self.artist, self.title, self.config)
         total_time = time.time() - start_time
 
         self.resultReady.emit(self.worker_id, self.artist, self.title, songs, total_time, self.background)
