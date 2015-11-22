@@ -92,7 +92,10 @@ class Plugin:
 
                 return page
         except urllib.error.HTTPError as err:
-            logging.debug('Failed to download web-page from "{}", error: {}, {}'.format(url, err.code, err.reason))
+            logging.debug('Failed to download web-page from "{}", HTTP error: {}, {}'.format(url, err.code, err.reason))
+            return None
+        except urllib.error.URLError as err:
+            logging.debug('Failed to download web-page from "{}", error: {}'.format(url, err.reason))
             return None
         except ConnectionResetError as err:
             logging.debug('Failed to download web-page from "{}", error: {}, {}'.format(url, err.errno, err.strerror))
