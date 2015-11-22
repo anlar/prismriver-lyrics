@@ -1,7 +1,6 @@
 import json
 
-from prismriver import util
-from prismriver.main import get_plugins, search
+from prismriver import util, main
 
 
 class SongJsonEncoder(json.JSONEncoder):
@@ -53,7 +52,7 @@ def format_output(songs, output_format, txt_template=None):
 
 
 def list_plugins():
-    plugins = get_plugins()
+    plugins = main.get_plugins()
     plugins.sort(key=lambda x: x.plugin_name.lower())
     for plugin in plugins:
         print('{:<20} [id: {}]'.format(plugin.plugin_name, plugin.ID))
@@ -65,6 +64,7 @@ def run():
     parser.add_argument('--list', action='store_true', help='list available search plugins')
     parser.add_argument('--song', action='store_true',
                         help='search for song information by artist and title (default action)')
+    parser.add_argument('--cleanup', action='store_true', help='remove outdated files from cache')
 
     parser.add_argument("-f", "--format", type=str, default='txt',
                         help="lyrics output format (txt (default), json, json_ascii)")
@@ -89,8 +89,10 @@ def run():
 
     if params.list:
         list_plugins()
+    elif params.cleanup:
+        main.cleanup_cache(config)
     else:
-        result = search(params.artist, params.title, config)
+        result = main.search(params.artist, params.title, config)
 
         if result:
             print(format_output(result, params.format, params.output))

@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 from multiprocessing import Queue
 from threading import Thread
@@ -144,9 +145,14 @@ def search(artist, title, config):
     [artist, title] = preprocessor.apply(artist, title, config.preprocessor_opts)
 
     if config.sync:
-        return search_sync(artist, title, config)
+        results = search_sync(artist, title, config)
     else:
-        return search_async(artist, title, config)
+        results = search_async(artist, title, config)
+
+    if not config.skip_cleanup:
+        cleanup_cache(config)
+
+    return results
 
 
 def search_sync(artist, title, config):
@@ -212,3 +218,33 @@ def do_search(plugin, artist, title):
     except Exception:
         logging.exception('Failed to get info from "{}" [{}]'.format(plugin.plugin_name, plugin.ID))
         pass
+
+
+# cache cleanup
+
+def cleanup_cache(config: util.SearchConfig) -> None:
+    cache_dir = config.cache_web_dir
+
+    if os.path.isdir(cache_dir):
+        logging.debug('Cleanup cache at "{}"...'.format(cache_dir))
+
+        now = time.time()
+        deleted = 0
+
+        for (dirpath, dirnames, filenames) in os.walk(cache_dir):
+            for filename in filenames:
+                file = os.path.join(dirpath, filename)
+
+                mtime = os.path.getmtime(file)
+                if now - mtime > config.cache_web_ttl_sec:
+                    try:
+                        os.remove(file)
+                        deleted += 1
+                    except OSError as e:
+                        logging.debug('Failed to delete "{}" from cache: {}'.format(file, e.strerror))
+
+        total_time = time.time() - now
+        logging.debug('Cache cleanup completed, deleted {} files from {}, {}'.format(deleted, cache_dir,
+                                                                                     util.format_time_ms(total_time)))
+    else:
+        logging.debug('Cache cleanup aborted: "{}" doesn\'t exist'.format(cache_dir))

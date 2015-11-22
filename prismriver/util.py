@@ -58,6 +58,8 @@ def init_args_parser():
                         help='cache directory for downloaded web pages (default: ~/.cache/prismriver)')
     parser.add_argument('--cache_ttl', type=int,
                         help='cache ttl for downloaded web pages in seconds (default: one week)')
+    parser.add_argument('--skip_cleanup', action='store_true',
+                        help='do not remove outdated files from cache after search completion')
 
     parser.add_argument("-q", "--quiet", help="disable logging info (show only errors)", action="store_true")
     parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
@@ -72,6 +74,7 @@ def init_search_config(params: argparse.Namespace) -> SearchConfig:
         params.limit,
         params.cache_dir,
         params.cache_ttl,
+        params.skip_cleanup,
         params.web_timeout,
         params.sync,
         params.parser,

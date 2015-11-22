@@ -31,6 +31,7 @@ Package names from Ubuntu 14.04 mentioned within brackets.
     Where ACTION must be one of:
         --song                search for song information by artist and title (default action)
         --list                list available search plugins
+        --cleanup             remove outdated files from cache
         -h, --help            show help message and exit
 
     OPTIONS:
@@ -50,6 +51,7 @@ Package names from Ubuntu 14.04 mentioned within brackets.
                               cache directory for downloaded web pages (default: ~/.cache/prismriver)
         --cache_ttl CACHE_TTL
                               cache ttl for downloaded web pages in seconds (default: one week)
+        --skip_cleanup        do not remove outdated files from cache after search completion
         -f FORMAT, --format FORMAT
                               lyrics output format (txt (default), json, json_ascii)
         -o OUTPUT, --output OUTPUT
