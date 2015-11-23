@@ -39,6 +39,7 @@ from prismriver.plugin.lyricsnmusic import LyricsNMusicPlugin
 from prismriver.plugin.lyricsplace import LyricsPlacePlugin
 from prismriver.plugin.lyricsreg import LyricsRegPlugin
 from prismriver.plugin.lyricwiki import LyricWikiPlugin
+from prismriver.plugin.lyrsense import LyrsensePlugin
 from prismriver.plugin.lyrster import LyrsterPlugin
 from prismriver.plugin.megalyrics import MegalyricsPlugin
 from prismriver.plugin.metrolyrics import MetroLyricsPlugin
@@ -113,7 +114,8 @@ def get_plugins(config=None):
         SnakiePlugin,
         KasiTimePlugin,
         JetLyricsPlugin,
-        UtaTenPlugin
+        UtaTenPlugin,
+        LyrsensePlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

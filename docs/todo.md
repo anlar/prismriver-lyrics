@@ -60,7 +60,6 @@
 * https://www.song365.co/
 * http://lyrics.alsong.co.kr/alsongwebservice/service1.asmx (soap api)
 * http://www.viewlyrics.com/ (api)
-* http://lyrsense.com/
 * http://webkind.ru/
 * https://www.google.com/ (filetype:lrc)
 * http://mp3.sogou.com/

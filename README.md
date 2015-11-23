@@ -112,6 +112,7 @@ List all available plugins:
 * LyricsMode           [id: lyricsmode]
 * LyricsReg.com        [id: lyricsreg]
 * LyricWiki            [id: lyricwiki]
+* Lyrsense             [id: lyrsense]
 * Lyrster              [id: lyrster]
 * Megalyrics           [id: megalyrics]
 * MetroLyrics          [id: metrolyrics]

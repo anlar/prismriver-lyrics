@@ -348,6 +348,12 @@ class TestPlugins(unittest.TestCase):
                            '6fdc1b2c608a847f9f89c635eba09be9',
                            'd0ce0dd39f3bb0d645480093d84b254e'])
 
+    def test_lyrsense_01(self):
+        self.check_plugin('lyrsense',
+                          'AC/DC', 'Highway to hell',
+                          ['5f1788f19344768c7dd0cd5780198bb2',
+                           'c2261e9953876270bb00d85b5205790d'])
+
     def test_lyrster_01(self):
         self.check_plugin('lyrster',
                           'Groove Coverage', 'Damn!',
