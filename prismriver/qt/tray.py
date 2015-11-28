@@ -1,5 +1,4 @@
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QSystemTrayIcon, QMenu
+from prismriver.qt.compat import QSystemTrayIcon, QIcon, QMenu
 
 
 class TrayIcon(QSystemTrayIcon):

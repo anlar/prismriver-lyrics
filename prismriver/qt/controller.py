@@ -3,12 +3,10 @@ import sys
 import time
 from functools import partial
 
-from PyQt5.QtCore import pyqtSlot, QThread, pyqtSignal
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QStyle, QSystemTrayIcon, QAction
-
 from prismriver import main, util, mpris
 from prismriver.mpris import MprisConnector, MprisConnectionException, MprisPlayer
+from prismriver.qt.compat import pyqtSlot, QThread, pyqtSignal, QIcon, QApplication, QStyle, QSystemTrayIcon, QAction, \
+    use_pyqt5
 from prismriver.qt.tray import TrayIcon
 from prismriver.qt.window import MainWindow, PlayerListModel
 
@@ -132,7 +130,11 @@ class MainController(object):
             return
 
     def get_current_player(self):
-        return self.main_window.edit_player.currentData(PlayerListModel.DataRole)
+        if use_pyqt5:
+            return self.main_window.edit_player.currentData(PlayerListModel.DataRole)
+        else:
+            index = self.main_window.edit_player.currentIndex()
+            return self.main_window.edit_player.itemData(index, PlayerListModel.DataRole)
 
     def set_status_message(self, message):
         self.main_window.statusBar().showMessage(message)

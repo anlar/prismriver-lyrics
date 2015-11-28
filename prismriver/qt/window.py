@@ -1,9 +1,6 @@
-from PyQt5 import uic
-from PyQt5.QtCore import QAbstractTableModel, Qt, pyqtSlot, QItemSelection, QStringListModel
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QAbstractItemView, QHeaderView, QStyle
-
 from prismriver import mpris
+from prismriver.qt.compat import uic, QAbstractTableModel, Qt, pyqtSlot, QItemSelection, QStringListModel, QIcon, \
+    QMainWindow, QAbstractItemView, QHeaderView, QStyle, use_pyqt5
 
 
 class MainWindow(QMainWindow):
@@ -34,8 +31,13 @@ class MainWindow(QMainWindow):
         self.lyrics_table_view.setColumnWidth(3, 50)
         self.lyrics_table_view.verticalHeader().setVisible(False)
         self.lyrics_table_view.horizontalHeader().setHighlightSections(False)
-        self.lyrics_table_view.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.lyrics_table_view.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+
+        if use_pyqt5:
+            self.lyrics_table_view.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+            self.lyrics_table_view.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+        else:
+            self.lyrics_table_view.horizontalHeader().setResizeMode(1, QHeaderView.Stretch)
+            self.lyrics_table_view.horizontalHeader().setResizeMode(2, QHeaderView.Stretch)
 
         # there are 2 cases when we need to update lyric text pane:
         # 1) when lyric table has some values and selection were changed;
