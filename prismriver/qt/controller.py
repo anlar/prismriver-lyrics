@@ -77,7 +77,7 @@ class MainController(object):
 
         if state == State.waiting:
             self.main_window.btn_search.setIcon(
-                QIcon.fromTheme('edit-find', self.main_window.style().standardIcon(QStyle.SP_BrowserReload)))
+                QIcon.fromTheme('edit-find', self.main_window.style().standardIcon(QStyle.SP_DialogApplyButton)))
             self.main_window.btn_search.setText('Search...')
             self.main_window.btn_search.clicked.connect(self.start_search)
 
@@ -94,7 +94,7 @@ class MainController(object):
 
         elif state == State.searching:
             self.main_window.btn_search.setIcon(
-                QIcon.fromTheme('process-stop', self.main_window.style().standardIcon(QStyle.SP_BrowserStop)))
+                QIcon.fromTheme('process-stop', self.main_window.style().standardIcon(QStyle.SP_DialogDiscardButton)))
             self.main_window.btn_search.setText('Stop')
             self.main_window.btn_search.clicked.connect(self.interrupt_search)
 
@@ -111,7 +111,7 @@ class MainController(object):
 
         elif state == State.listening:
             self.main_window.btn_search.setIcon(
-                QIcon.fromTheme('edit-find', self.main_window.style().standardIcon(QStyle.SP_BrowserReload)))
+                QIcon.fromTheme('edit-find', self.main_window.style().standardIcon(QStyle.SP_DialogApplyButton)))
             self.main_window.btn_search.setText('Search...')
             self.main_window.btn_search.clicked.connect(self.start_search)
 

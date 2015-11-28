@@ -16,7 +16,7 @@ class MainWindow(QMainWindow):
             QIcon.fromTheme('view-refresh', self.style().standardIcon(QStyle.SP_BrowserReload)))
 
         self.btn_connect.setIcon(
-            QIcon.fromTheme('multimedia-player', self.style().standardIcon(QStyle.SP_BrowserReload)))
+            QIcon.fromTheme('multimedia-player', self.style().standardIcon(QStyle.SP_ComputerIcon)))
 
         self.edit_artist.returnPressed.connect(self.btn_search.click)
         self.edit_title.returnPressed.connect(self.btn_search.click)
