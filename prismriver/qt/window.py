@@ -1,5 +1,5 @@
 from PyQt5 import uic
-from PyQt5.QtCore import QAbstractTableModel, Qt, QVariant, pyqtSlot, QItemSelection, QStringListModel
+from PyQt5.QtCore import QAbstractTableModel, Qt, pyqtSlot, QItemSelection, QStringListModel
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QAbstractItemView, QHeaderView, QStyle
 
@@ -68,7 +68,7 @@ class PlayerListModel(QStringListModel):
 
         if role == Qt.DisplayRole:
             if self.players[row]:
-                return QVariant('{} [{}]'.format(self.players[row].identity, self.players[row].name))
+                return '{} [{}]'.format(self.players[row].identity, self.players[row].name)
 
         elif role == Qt.DecorationRole:
             if self.players[row]:
@@ -76,8 +76,6 @@ class PlayerListModel(QStringListModel):
 
         elif role == self.DataRole:
             return self.players[row]
-
-        return QVariant()
 
     def update_data(self, players):
         self.players = players
@@ -105,31 +103,27 @@ class LyricTableModel(QAbstractTableModel):
         if role == Qt.DisplayRole:
             if self.songs[row]:
                 if col == 0:
-                    return QVariant(self.songs[row].plugin_name)
+                    return self.songs[row].plugin_name
                 elif col == 1:
-                    return QVariant(self.songs[row].artist)
+                    return self.songs[row].artist
                 elif col == 2:
-                    return QVariant(self.songs[row].title)
+                    return self.songs[row].title
                 elif col == 3:
-                    return QVariant(len(self.songs[row].lyrics))
+                    return len(self.songs[row].lyrics)
         elif role == self.DataRole:
             return self.songs[row]
-
-        return QVariant()
 
     def headerData(self, section, orientation, role=None):
         if orientation == Qt.Horizontal:
             if role == Qt.DisplayRole:
                 if section == 0:
-                    return QVariant('Plugin')
+                    return 'Plugin'
                 elif section == 1:
-                    return QVariant('Artist')
+                    return 'Artist'
                 elif section == 2:
-                    return QVariant('Title')
+                    return 'Title'
                 elif section == 3:
-                    return QVariant('#')
-
-        return QVariant()
+                    return '#'
 
     @pyqtSlot(list)
     def update_data(self, songs):
