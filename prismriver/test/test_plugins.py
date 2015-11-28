@@ -151,8 +151,8 @@ class TestPlugins(unittest.TestCase):
     def test_jetlyrics_01(self):
         self.check_plugin('jetlyrics',
                           'Kalafina', 'to the beginning',
-                          ['8f6757f252792fc316e4367db91aae88',
-                           '505e2ace457caaacd3a0125478d14c60'])
+                          ['505e2ace457caaacd3a0125478d14c60',
+                           '8f6757f252792fc316e4367db91aae88'])
 
     def test_jlyric_01(self):
         self.check_plugin('jlyric',

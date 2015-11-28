@@ -61,7 +61,7 @@ class Plugin:
     # Page download helpers
     #
 
-    def download_webpage(self, url):
+    def download_webpage(self, url, headers=None):
         start = time.time()
 
         cache_file_name = self.get_cache_file_name(url)
@@ -73,11 +73,7 @@ class Plugin:
                                                                     util.format_time_ms(time.time() - start)))
             return cached_page
 
-        req = urllib.request.Request(url, headers={
-            'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5'
-        })
+        req = urllib.request.Request(url, headers=self.get_request_headers(headers))
 
         try:
             with urllib.request.urlopen(req, timeout=self.config.web_timeout_sec) as response:
@@ -123,6 +119,18 @@ class Plugin:
             xml_string = re.sub(' xmlns="[^"]+"', '', page, count=1)
             root = xml.etree.ElementTree.fromstring(xml_string)
             return root
+
+    def get_request_headers(self, headers):
+        default_headers = {
+            'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5'
+        }
+
+        if headers:
+            default_headers.update(headers)
+
+        return default_headers
 
     def get_page_from_cache(self, cache_file_name):
         try:

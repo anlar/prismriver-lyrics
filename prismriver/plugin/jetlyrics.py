@@ -15,7 +15,7 @@ class JetLyricsPlugin(Plugin):
             self.prepare_url_parameter(artist),
             self.prepare_url_parameter(title))
 
-        page = self.download_webpage_text(link)
+        page = self.download_webpage(link, headers={'Referer': 'http://lyrics.jetmute.com/index.php'})
         if page:
             results = self.get_search_results(page, artist, title)
 
