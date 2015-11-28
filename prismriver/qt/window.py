@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
         self.lyrics_table_model.layoutChanged.connect(self.update_lyric_pane)
 
     @pyqtSlot(QItemSelection, QItemSelection)
-    def update_lyric_pane(self, selected, deselected):
+    def update_lyric_pane(self):
         selected_songs = self.lyrics_table_view.selectionModel().selectedRows()
         songs = []
         for sel in selected_songs:
