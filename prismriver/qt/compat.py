@@ -1,8 +1,13 @@
-try:
-    __import__('PyQt5')
-    use_pyqt5 = True
-except ImportError:
+from prismriver.qt.gui import force_qt4
+
+if force_qt4:
     use_pyqt5 = False
+else:
+    try:
+        __import__('PyQt5')
+        use_pyqt5 = True
+    except ImportError:
+        use_pyqt5 = False
 
 if use_pyqt5:
     from PyQt5 import uic as uic
