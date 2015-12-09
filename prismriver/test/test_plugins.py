@@ -260,13 +260,14 @@ class TestPlugins(unittest.TestCase):
                           'supercell', 'ワールドイズマイン',
                           ['e8ec2964d298caa61aeddb2e353ec574',
                            '57e83798afde4fc3aa0fdd65adf0012f',
-                           '7baa703eab3a32e76cc2c86f0a8e1c04'])
+                           '71b30cbbc0ec6f9aa79189f015b6d8ba'])
 
     def test_lyricalnonsense_02(self):
         self.check_plugin('lyricalnonsense',
                           'CHiCO with HoneyWorks', 'Pride Kakumei',
                           ['efc6e4a2298cfeaa6e3c8f2cc0a1bc5e',
                            'd0b66bcfbd9137cf4432b536e605a39c',
+                           'f33aa1dfa9f77f1f499077dccbb1b62e',
                            'bc314595cd2dc89c6ce32e1cf566d0f7',
                            'e484ce4bbfbcefe56db7eb6e9a35c5d3'])
 
