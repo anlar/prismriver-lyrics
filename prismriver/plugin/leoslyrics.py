@@ -30,4 +30,9 @@ class LeosLyricsPlugin(Plugin):
             lyric_pane = main_pane.find("div")
             lyric = self.parse_verse_block(lyric_pane)
 
-            return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
+            if not lyric:
+                # lyrics page is empty
+                # todo: site looks dead, remove plugin later
+                return None
+            else:
+                return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
