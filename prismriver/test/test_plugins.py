@@ -291,6 +291,11 @@ class TestPlugins(unittest.TestCase):
                           'Daft Punk', 'Harder, Better, Faster, Stronger',
                           ['58032c5a972b3ea6b4ac7e597f75fb98'])
 
+    def test_lyricsfreak_01(self):
+        self.check_plugin('lyricsfreak',
+                          'Megumi Hayashibara', 'Give A Reason (From Slayers Next)',
+                          ['3197946854a8a14c188018f32764476c'])
+
     def test_lyricsmania_01(self):
         self.check_plugin('lyricsmania',
                           'Ayumi Hamasaki', '(Miss)understood',
