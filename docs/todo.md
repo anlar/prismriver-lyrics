@@ -77,6 +77,11 @@
 * http://findtexts.ru/
 * http://www.songcoleta.com/
 * http://klyrics.net/
+* http://skylyrics.net/
+* http://www.lyricshunt.com/
+* http://www.lyricsofsong.com/
+* http://www.kpoplyrics.net/
+* http://www.songs-lyrics.net/
 
 See also:
 

@@ -41,3 +41,7 @@ multiple sites
 * http://kde-apps.org/content/show.php/lrcShow-X?content=103055
 Python;
 multiple sites
+
+* https://github.com/clementine-player/Clementine/blob/master/tools/ultimate_lyrics_parser/sites.js
+JS
+multiple sites
