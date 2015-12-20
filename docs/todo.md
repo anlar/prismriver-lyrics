@@ -29,7 +29,6 @@
 * http://www.darklyrics.com/
 * http://www.lyricfind.com/ (available only via their mobile app)
 * https://bandcamp.com/
-* http://www.lyrics.net/
 * http://www.urbanlyrics.com/
 * http://www.plyrics.com/
 * http://www.metal-archives.com/

@@ -36,6 +36,7 @@ from prismriver.plugin.lyricsfreak import LyricsFreakPlugin
 from prismriver.plugin.lyricshuddle import LyricsHuddlePlugin
 from prismriver.plugin.lyricsmania import LyricsManiaPlugin
 from prismriver.plugin.lyricsmode import LyricsModePlugin
+from prismriver.plugin.lyricsnet import LyricsNetPlugin
 from prismriver.plugin.lyricsnmusic import LyricsNMusicPlugin
 from prismriver.plugin.lyricsplace import LyricsPlacePlugin
 from prismriver.plugin.lyricsreg import LyricsRegPlugin
@@ -117,7 +118,8 @@ def get_plugins(config=None):
         JetLyricsPlugin,
         UtaTenPlugin,
         LyrsensePlugin,
-        LyricsFreakPlugin
+        LyricsFreakPlugin,
+        LyricsNetPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

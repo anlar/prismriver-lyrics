@@ -311,6 +311,11 @@ class TestPlugins(unittest.TestCase):
                           'MandoPony', 'Just Gold',
                           ['98af949573e1cfdc8e5f5588e25e81b0'])
 
+    def test_lyricsnet_01(self):
+        self.check_plugin('lyricsnet',
+                          'Oingo Boingo', 'No One Lives Forever',
+                          ['83060a72896096b3ace676945d4b7317'])
+
     def test_lyricsnmusic_01(self):
         self.check_plugin('lyricsnmusic',
                           'Joe Dassin', 'Le Moustique',

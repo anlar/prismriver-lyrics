@@ -107,6 +107,7 @@ List all available plugins:
 * Lyrics N Music       [id: lyricsnmusic]
 * Lyrics Place         [id: lyricsplace]
 * Lyrics.com           [id: lyricscom]
+* Lyrics.net           [id: lyricsnet]
 * LyricsFreak          [id: lyricsfreak]
 * LyricsHuddle         [id: lyricshuddle]
 * LyricsMania          [id: lyricsmania]
