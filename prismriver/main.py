@@ -14,6 +14,7 @@ from prismriver.plugin.amalgama import AmalgamaPlugin
 from prismriver.plugin.animelyrics import AnimeLyricsPlugin
 from prismriver.plugin.azlyrics import AZLyricsPlugin
 from prismriver.plugin.chartlyrics import ChartlyricsPlugin
+from prismriver.plugin.darklyrics import DarkLyricsPlugin
 from prismriver.plugin.directlyrics import DirectLyricsPlugin
 from prismriver.plugin.elyrics import ELyricsPlugin
 from prismriver.plugin.evesta import EvestaPlugin
@@ -119,7 +120,8 @@ def get_plugins(config=None):
         UtaTenPlugin,
         LyrsensePlugin,
         LyricsFreakPlugin,
-        LyricsNetPlugin
+        LyricsNetPlugin,
+        DarkLyricsPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

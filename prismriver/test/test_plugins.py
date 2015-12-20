@@ -123,6 +123,11 @@ class TestPlugins(unittest.TestCase):
                           'James Brown', 'Prisoner of Love',
                           ['a4cc13ee79455148090068388b74b8cf'])
 
+    def test_darklyrics_01(self):
+        self.check_plugin('darklyrics',
+                          'DragonForce', 'Revolution Deathsquad',
+                          ['37aab959e8f7a4bb8a8edff75f4e039e'])
+
     def test_directlyrics_01(self):
         self.check_plugin('directlyrics',
                           'Daft Punk', "Doin' It Right",

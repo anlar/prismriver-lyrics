@@ -26,7 +26,6 @@
 
 ### Lyric databases
 
-* http://www.darklyrics.com/
 * http://www.lyricfind.com/ (available only via their mobile app)
 * https://bandcamp.com/
 * http://www.urbanlyrics.com/

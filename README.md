@@ -87,6 +87,7 @@ List all available plugins:
 * Anime Lyrics         [id: animelyrics]
 * AZLyrics             [id: azlyrics]
 * Chartlyrics          [id: chartlyrics]
+* Dark Lyrics          [id: darklyrics]
 * Directlyrics         [id: directlyrics]
 * eLyrics              [id: elyrics]
 * Evesta               [id: evesta]
