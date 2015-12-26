@@ -59,6 +59,7 @@ from prismriver.plugin.showmelyrics import ShowMeLyricsPlugin
 from prismriver.plugin.snakie import SnakiePlugin
 from prismriver.plugin.song5 import SongFivePlugin
 from prismriver.plugin.songlyrics import SongLyricsPlugin
+from prismriver.plugin.songslyrics import SongsLyricsPlugin
 from prismriver.plugin.sonichits import SonicHitsPlugin
 from prismriver.plugin.touhouwiki import TouhouWikiPlugin
 from prismriver.plugin.utaten import UtaTenPlugin
@@ -125,7 +126,8 @@ def get_plugins(config=None):
         LyricsNetPlugin,
         DarkLyricsPlugin,
         BandcampPlugin,
-        MetallumPlugin
+        MetallumPlugin,
+        SongsLyricsPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

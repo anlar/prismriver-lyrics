@@ -130,6 +130,7 @@ List all available plugins:
 * Snakie's Obsession   [id: snakie]
 * Song5                [id: song5]
 * SongLyrics.com       [id: songlyrics]
+* Songs Lyrics         [id: songslyrics]
 * SonicHits            [id: sonichits]
 * TouhouWiki           [id: touhouwiki]
 * UtaTen               [id: utaten]

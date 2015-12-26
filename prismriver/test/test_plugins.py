@@ -500,6 +500,11 @@ class TestPlugins(unittest.TestCase):
                           'Modern Talking', "Geronimo's Cadillac (New Version)",
                           ['5ce4ce7e3be27a0ba4c4fe86b55fb767'])
 
+    def test_songslyrics_01(self):
+        self.check_plugin('songslyrics',
+                          'Oingo Boingo', "Dead Man's Party",
+                          ['9afeef8198423784d8ac26dce178d139'])
+
     def test_sonichits_01(self):
         self.check_plugin('sonichits',
                           'Bee Gees', "Stayin' Alive",
