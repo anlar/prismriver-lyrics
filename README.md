@@ -86,6 +86,7 @@ List all available plugins:
 * Amalgama             [id: amalgama]
 * Anime Lyrics         [id: animelyrics]
 * AZLyrics             [id: azlyrics]
+* Bandcamp             [id: bandcamp]
 * Chartlyrics          [id: chartlyrics]
 * Dark Lyrics          [id: darklyrics]
 * Directlyrics         [id: directlyrics]

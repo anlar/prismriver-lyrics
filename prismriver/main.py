@@ -13,6 +13,7 @@ from prismriver.plugin.alphabetlyrics import AlphabetLyricsPlugin
 from prismriver.plugin.amalgama import AmalgamaPlugin
 from prismriver.plugin.animelyrics import AnimeLyricsPlugin
 from prismriver.plugin.azlyrics import AZLyricsPlugin
+from prismriver.plugin.bandcamp import BandcampPlugin
 from prismriver.plugin.chartlyrics import ChartlyricsPlugin
 from prismriver.plugin.darklyrics import DarkLyricsPlugin
 from prismriver.plugin.directlyrics import DirectLyricsPlugin
@@ -121,7 +122,8 @@ def get_plugins(config=None):
         LyrsensePlugin,
         LyricsFreakPlugin,
         LyricsNetPlugin,
-        DarkLyricsPlugin
+        DarkLyricsPlugin,
+        BandcampPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

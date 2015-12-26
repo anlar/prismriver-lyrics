@@ -118,6 +118,11 @@ class TestPlugins(unittest.TestCase):
                           'Modern Talking', "Atlantis Is Calling (S.O.S. For Love)",
                           ['4b826df521c5a9ca057796daa760b5b7'])
 
+    def test_bandcamp_01(self):
+        self.check_plugin('bandcamp',
+                          'Odyssey & the DNA Team', 'Chained Lady [Extended]',
+                          ['19c3f184d060a768d249faba9b91a53d'])
+
     def test_chartlyrics_01(self):
         self.check_plugin('chartlyrics',
                           'James Brown', 'Prisoner of Love',
