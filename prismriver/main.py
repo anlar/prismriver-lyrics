@@ -46,6 +46,7 @@ from prismriver.plugin.lyricwiki import LyricWikiPlugin
 from prismriver.plugin.lyrsense import LyrsensePlugin
 from prismriver.plugin.lyrster import LyrsterPlugin
 from prismriver.plugin.megalyrics import MegalyricsPlugin
+from prismriver.plugin.metallum import MetallumPlugin
 from prismriver.plugin.metrolyrics import MetroLyricsPlugin
 from prismriver.plugin.mp3lyrics import Mp3LyricsPlugin
 from prismriver.plugin.musixmatch import MusixmatchPlugin
@@ -123,7 +124,8 @@ def get_plugins(config=None):
         LyricsFreakPlugin,
         LyricsNetPlugin,
         DarkLyricsPlugin,
-        BandcampPlugin
+        BandcampPlugin,
+        MetallumPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

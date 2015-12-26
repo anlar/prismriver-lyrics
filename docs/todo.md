@@ -29,7 +29,6 @@
 * http://www.lyricfind.com/ (available only via their mobile app)
 * http://www.urbanlyrics.com/
 * http://www.plyrics.com/
-* http://www.metal-archives.com/
 * http://www.songs-lyrics.net/
 * http://www.stlyrics.com/
 * http://www.lyricsmansion.com/

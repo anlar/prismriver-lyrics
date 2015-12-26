@@ -91,6 +91,7 @@ List all available plugins:
 * Dark Lyrics          [id: darklyrics]
 * Directlyrics         [id: directlyrics]
 * eLyrics              [id: elyrics]
+* Encyclopaedia Metallum [id: metallum]
 * Evesta               [id: evesta]
 * Genius               [id: genius]
 * J-Lyric              [id: jlyric]

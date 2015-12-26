@@ -397,6 +397,11 @@ class TestPlugins(unittest.TestCase):
                           ['9776ed55e1c7ca636a2fb69721127dc5',
                            '91f572732889601128280fb06eac2a95'])
 
+    def test_metallum_01(self):
+        self.check_plugin('metallum',
+                          'DragonForce', 'Operation Ground and Pound',
+                          ['04a8019d2569aa8cdbe5d31160dbad61'])
+
     def test_metrolyrics_01(self):
         self.check_plugin('metrolyrics',
                           'Ace of Base', "Never Gonna Say I'm Sorry",
