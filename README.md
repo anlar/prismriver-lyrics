@@ -127,6 +127,7 @@ List all available plugins:
 * NitroLyrics          [id: nitrolyrics]
 * SeekaLyric           [id: seekalyric]
 * ShowMeLyrics         [id: showmelyrics]
+* Sing365              [id: sing365]
 * Snakie's Obsession   [id: snakie]
 * Song5                [id: song5]
 * SongLyrics.com       [id: songlyrics]

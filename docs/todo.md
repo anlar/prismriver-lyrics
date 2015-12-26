@@ -40,7 +40,6 @@
 * https://www.jamendo.com/
 * http://www.lyriki.com/
 * http://teksty.org/
-* http://www.sing365.com/
 * http://www.clickgratis.com.br/
 * http://www.allmusicals.com/
 * http://www.hitslyrics.com/

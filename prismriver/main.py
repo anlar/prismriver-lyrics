@@ -56,6 +56,7 @@ from prismriver.plugin.onemusiclyrics import OneMusicLyricsPlugin
 from prismriver.plugin.onesonglyrics import OneSongLyricsPlugin
 from prismriver.plugin.seekalyric import SeekaLyricPlugin
 from prismriver.plugin.showmelyrics import ShowMeLyricsPlugin
+from prismriver.plugin.sing365 import Sing365Plugin
 from prismriver.plugin.snakie import SnakiePlugin
 from prismriver.plugin.song5 import SongFivePlugin
 from prismriver.plugin.songlyrics import SongLyricsPlugin
@@ -127,7 +128,8 @@ def get_plugins(config=None):
         DarkLyricsPlugin,
         BandcampPlugin,
         MetallumPlugin,
-        SongsLyricsPlugin
+        SongsLyricsPlugin,
+        Sing365Plugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

@@ -465,6 +465,11 @@ class TestPlugins(unittest.TestCase):
                           'Joe Dassin', 'Don’t Sit Under the Apple Tree [Live]',
                           ['4bfa677bc254640c6285483c7bb2f210'])
 
+    def test_sing365_01(self):
+        self.check_plugin('sing365',
+                          'Utada Hikaru', "Keep Tryin'",
+                          ['5223d3d9ed3a8b65b270bd4cb90215f0'])
+
     def test_snakie_01(self):
         # lyrics located in the last paragraph
         self.check_plugin('snakie',
