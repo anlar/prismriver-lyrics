@@ -534,6 +534,11 @@ class TestPlugins(unittest.TestCase):
                            'a7de7b5e4460d573c87feded75709bce',
                            '3b5ae103d34b8a1e5d782f8439b400ad'])
 
+    def test_utanet_01(self):
+        self.check_plugin('utanet',
+                          'いとうかなこ', 'Brave the Sky',
+                          ['f13a38b1fca24935a949abdb4c3f4534'])
+
     def test_utaten_01(self):
         self.check_plugin('utaten',
                           'いとうかなこ', 'Brave the Sky',

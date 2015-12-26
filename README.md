@@ -134,6 +134,7 @@ List all available plugins:
 * Songs Lyrics         [id: songslyrics]
 * SonicHits            [id: sonichits]
 * TouhouWiki           [id: touhouwiki]
+* Uta-Net              [id: utanet]
 * UtaTen               [id: utaten]
 * Vagalume             [id: vagalume]
 
