@@ -33,7 +33,6 @@
 * http://www.lyricsmansion.com/
 * http://animeasialyrics.free.fr/
 * http://lyrics.astraweb.com/ (search engine is dead)
-* http://www.lyred.com/
 * http://metal-lyrics.narod.ru/
 * http://ostanimepluslyrics.blogspot.ru/search/label/Lyrics%20Music
 * http://www.lyricsplugin.com/
@@ -56,9 +55,8 @@
 * http://mp3.sogou.com/
 * http://www.allthelyrics.com/
 * http://www.lyricsangel.com/
-* https://petitlyrics.com/
+* https://petitlyrics.com/ (api: http://docs.petitlyrics.com/hackathon/api.html)
 * https://www.joysound.com/web/
-* http://utaten.com/
 * http://www.songtextemania.com/
 * http://www.anime-lyrics.ru/
 * http://www.jpopasia.com/
@@ -74,7 +72,6 @@
 * http://www.lyricshunt.com/
 * http://www.lyricsofsong.com/
 * http://www.kpoplyrics.net/
-* http://www.songs-lyrics.net/
 
 See also:
 
