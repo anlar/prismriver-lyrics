@@ -48,7 +48,6 @@
 * http://www.lyricsby.com/
 * http://www.thebroadwaymusicals.com/
 * http://songmeanings.com/
-* http://www.utamap.com/
 * https://www.song365.co/
 * http://lyrics.alsong.co.kr/alsongwebservice/service1.asmx (soap api)
 * http://www.viewlyrics.com/ (api)

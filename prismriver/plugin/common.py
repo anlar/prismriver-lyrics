@@ -99,11 +99,11 @@ class Plugin:
         except socket.timeout:
             logging.debug('Failed to download web-page from "{}", timed out'.format(url))
 
-    def download_webpage_text(self, url):
+    def download_webpage_text(self, url, encoding='utf-8'):
         page = self.download_webpage(url)
 
         if page:
-            text = page.decode("utf-8", errors="ignore")
+            text = page.decode(encoding, errors="ignore")
             if self.config.debug_log_page:
                 logging.debug('Download page: \n' + text)
             return text

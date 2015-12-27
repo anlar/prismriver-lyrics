@@ -534,6 +534,11 @@ class TestPlugins(unittest.TestCase):
                            'a7de7b5e4460d573c87feded75709bce',
                            '3b5ae103d34b8a1e5d782f8439b400ad'])
 
+    def test_utamap_01(self):
+        self.check_plugin('utamap',
+                          '宇多田ヒカル', "Keep Tryin'",
+                          ['8372d40e5149f86b40260052812572f7'])
+
     def test_utanet_01(self):
         self.check_plugin('utanet',
                           'いとうかなこ', 'Brave the Sky',

@@ -135,6 +135,7 @@ List all available plugins:
 * SonicHits            [id: sonichits]
 * TouhouWiki           [id: touhouwiki]
 * Uta-Net              [id: utanet]
+* UtaMap               [id: utamap]
 * UtaTen               [id: utaten]
 * Vagalume             [id: vagalume]
 

@@ -63,6 +63,7 @@ from prismriver.plugin.songlyrics import SongLyricsPlugin
 from prismriver.plugin.songslyrics import SongsLyricsPlugin
 from prismriver.plugin.sonichits import SonicHitsPlugin
 from prismriver.plugin.touhouwiki import TouhouWikiPlugin
+from prismriver.plugin.utamap import UtaMapPlugin
 from prismriver.plugin.utanet import UtaNetPlugin
 from prismriver.plugin.utaten import UtaTenPlugin
 from prismriver.plugin.vagalume import VagalumePlugin
@@ -131,7 +132,8 @@ def get_plugins(config=None):
         MetallumPlugin,
         SongsLyricsPlugin,
         Sing365Plugin,
-        UtaNetPlugin
+        UtaNetPlugin,
+        UtaMapPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []
