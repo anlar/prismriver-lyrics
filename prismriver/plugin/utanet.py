@@ -28,14 +28,15 @@ class UtaNetPlugin(Plugin):
 
                 if self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
                     song_link = 'http://www.uta-net.com/user/phplib/svg/showkasi.php?ID={}'.format(song_id)
-                    page = self.download_webpage_text(song_link)
-                    if page:
-                        soup = self.prepare_soup(page)
-
-                        lyric_pane = soup.find('g')
+                    song_xml = self.download_xml(song_link)
+                    if song_xml:
+                        lyric_pane = song_xml.find('g')
 
                         lyric = ''
-                        for line in lyric_pane.findAll('text', recursive=False):
-                            lyric += line.text.strip() + '\n'
+                        for tag in lyric_pane.iter('text'):
+                            if tag.text:
+                                lyric += (tag.text + '\n')
+                            else:
+                                lyric += '\n'
 
                         return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
