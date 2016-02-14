@@ -16,8 +16,19 @@ class TestPlugins(unittest.TestCase):
 
         self.is_skipped(plugin_id)
 
+        retry_delay = int(os.getenv('PRISMRIVER_TEST_RETRY_DELAY', '120'))
+        retry_count = int(os.getenv('PRISMRIVER_TEST_RETRY_COUNT', '2'))
+
         config = self.get_search_config(plugin_id)
+
+        step = 0
         result = search(artist, title, config)
+        while not result and step < retry_count:
+            delay = retry_delay * (step + 1)
+            logging.debug('Empty search result, wait for {} sec. before retry'.format(delay))
+            sleep(delay)
+            result = search(artist, title, config)
+            step += 1
 
         self.assertEqual(1, len(result), 'Wrong songs count')
         self.assertEqual(len(lyric_hashes), len(result[0].lyrics), 'Wrong lyrics count')
