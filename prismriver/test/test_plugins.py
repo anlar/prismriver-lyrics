@@ -436,7 +436,7 @@ class TestPlugins(unittest.TestCase):
         # only original lyrics
         self.check_plugin('nautiljon',
                           'Perfume', 'Pick Me Up',
-                          ['53629b1686eb111e715b85392c3d9ae1'])
+                          ['7867f09d5c27d2c46600f2cc8397924b'])
 
     def test_nautiljon_02(self):
         # original and translated lyrics
