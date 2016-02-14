@@ -24,6 +24,7 @@ class TestPlugins(unittest.TestCase):
         step = 0
         result = search(artist, title, config)
         while not result and step < retry_count:
+            config.cache_web_ttl_sec = 0  # force test to re-download pages instead of getting them from cache
             delay = retry_delay * (step + 1)
             logging.debug('Empty search result, wait for {} sec. before retry'.format(delay))
             sleep(delay)
