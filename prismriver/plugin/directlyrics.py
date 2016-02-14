@@ -19,13 +19,13 @@ class DirectLyricsPlugin(Plugin):
         if page:
             soup = self.prepare_soup(page)
 
-            main_pane = soup.find('div', {'class': 'column content'})
+            main_pane = soup.find('div', {'class': 'column content vcard'})
             if not main_pane:
                 return None
 
-            title_parts = main_pane.find('h2').findAll('span', {'itemprop': 'name'})
-            song_artist = title_parts[0].text
-            song_title = title_parts[1].text
+            title_header = main_pane.find('h2')
+            song_artist = title_header.find('span', {'itemid': True}).find('span', {'itemprop': 'name '}).text
+            song_title = title_header.find('span', {'class': 'fn'}).text
 
             lyrics_pane = main_pane.find('div', {'class': 'lyrics lyricsselect'}, recursive=False).p
             lyrics = self.parse_verse_block(lyrics_pane, tags_to_skip=['ins', 'script'])
