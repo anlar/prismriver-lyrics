@@ -15,8 +15,8 @@ class KasiTimePlugin(Plugin):
     def search_song(self, artist, title):
         link = 'https://www.googleapis.com/customsearch/v1element?key={}&rsz=filtered_cse&num=1&hl=ja&prettyPrint=true&source=gcsc&gss=.com&sig={}&cx={}&q={}%20{}'.format(
             'AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY',
-            '432dd570d1a386253361f581254f9ca1',
-            'partner-pub-4761826397918753:6745924343',
+            'af0b52154899cfe2ecd2e1ec788a43aa',
+            '005893883342704476181:qa28d4ywjdg',
             self.prepare_url_parameter(artist),
             self.prepare_url_parameter(title))
 
