@@ -26,6 +26,8 @@ class LyricsManiaPlugin(Plugin):
             if main_pane is None:
                 # song wasn't found on site and we're redirected on main page where we can't find lyric pane
                 return None
+            else:
+                main_pane = main_pane.find('div', {'class': 'fb-quotable'})
 
             # search for artist and title
             header_pane = soup.find('div', {'class': 'lyrics-nav'})
@@ -41,4 +43,4 @@ class LyricsManiaPlugin(Plugin):
             # second part of lyrics below of video block
             lyric2 = self.parse_verse_block(lyric_pane)
 
-            return Song(song_artist, song_title, self.sanitize_lyrics([lyric1 + '\n' + lyric2]))
+            return Song(song_artist, song_title, self.sanitize_lyrics([lyric1 + '\n\n' + lyric2]))

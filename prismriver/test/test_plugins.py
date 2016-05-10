@@ -326,7 +326,7 @@ class TestPlugins(unittest.TestCase):
     def test_lyricsmania_02(self):
         self.check_plugin('lyricsmania',
                           'Joe Esposito', 'You\'re The Best',
-                          ['ee9de08277a90ad90f0caae8bcb2ae23'])
+                          ['a9fc94979c4ec8e245ce80740cc63fc1'])
 
     def test_lyricsmode_01(self):
         self.check_plugin('lyricsmode',
