@@ -525,7 +525,7 @@ class TestPlugins(unittest.TestCase):
     def test_sonichits_01(self):
         self.check_plugin('sonichits',
                           'Bee Gees', "Stayin' Alive",
-                          ['2a92f61f97d4f61b3c47b98f43f379af'])
+                          ['42539cecba26bb367286b017b727ee52'])
 
     def test_touhouwiki_01(self):
         self.check_plugin('touhouwiki',
