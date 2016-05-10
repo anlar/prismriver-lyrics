@@ -1,3 +1,5 @@
+import re
+
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
 
@@ -34,7 +36,7 @@ class LetsSingItPlugin(Plugin):
                 return Song(search_result[0], search_result[1], self.sanitize_lyrics([lyric]))
 
     def parse_search_page(self, soup, artist, title):
-        search_table = soup.find('table', {'class': 'table_as_list haspicture'}).find('tbody', recursive=False)
+        search_table = soup.find('table', {'class': re.compile('table_as_list.?')}).find('tbody', recursive=False)
         if not search_table:
             return []
 
@@ -42,7 +44,7 @@ class LetsSingItPlugin(Plugin):
             info_pane = item.findAll('td')[1]
             info_items = info_pane.findAll('a', {'href': not None})
 
-            song_title = info_items[0].text
+            song_title = info_items[0].text[:-7]  # remove ' lyrics' from the end
             song_artist = info_items[1].text
 
             if self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
