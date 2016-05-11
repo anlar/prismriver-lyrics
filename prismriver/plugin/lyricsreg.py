@@ -26,7 +26,7 @@ class LyricsRegPlugin(Plugin):
             song_artist = artist_title[0]
             song_title = artist_title[1][1:-1]
 
-            lyric_pane = main_pane.find('div', recursive=False)
+            lyric_pane = main_pane.find('div', {'style': 'text-align:center'}, recursive=False)
             lyric = self.parse_verse_block(lyric_pane)
 
             return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
