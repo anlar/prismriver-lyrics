@@ -1,5 +1,7 @@
 import re
 
+from bs4 import NavigableString, Tag
+
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
 
@@ -33,7 +35,7 @@ class LyrsensePlugin(Plugin):
                 lyric_blocks = soup.findAll('p', id=re.compile('.{2}_text'))
 
                 for block in lyric_blocks:
-                    lyric = self.parse_verse_block(block, tags_to_skip=['sup', 'div'])  # excluding footnotes
+                    lyric = self.parse_verse_block(block)
                     lyrics.append(lyric)
 
                 return Song(song_info[1], song_info[2], self.sanitize_lyrics(lyrics))
@@ -49,3 +51,20 @@ class LyrsensePlugin(Plugin):
 
                 if self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
                     return [song_link, song_artist, song_title]
+
+    def parse_verse_block(self, verse_block, tags_to_skip=None):
+        lyric = ''
+
+        for elem in verse_block.childGenerator():
+            if isinstance(elem, Tag):
+                if elem.name == 'span':
+                    for word in elem.childGenerator():
+                        if isinstance(word, Tag) and word.name == 'span':
+                            lyric += word.text
+                        elif isinstance(word, NavigableString):
+                            lyric += word
+
+                elif elem.name == 'br':
+                    lyric += '\n'
+
+        return lyric.strip()

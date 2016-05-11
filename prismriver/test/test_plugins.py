@@ -391,8 +391,8 @@ class TestPlugins(unittest.TestCase):
     def test_lyrsense_01(self):
         self.check_plugin('lyrsense',
                           'AC/DC', 'Highway to hell',
-                          ['5f1788f19344768c7dd0cd5780198bb2',
-                           'c2261e9953876270bb00d85b5205790d'])
+                          ['02891effb5c7733b463cf74456cfafc5',
+                           '2ff5eddc4b37c5596d4178ac1403ece5'])
 
     def test_lyrster_01(self):
         self.check_plugin('lyrster',
