@@ -38,13 +38,13 @@ class LyricsModePlugin(Plugin):
             if isinstance(elem, Comment):
                 pass
             elif isinstance(elem, NavigableString):
-                lyric += elem.strip()
+                lyric += elem.strip('\n')
             elif isinstance(elem, Tag):
                 if elem.name == 'span':
                     if lyric.endswith('\n'):
                         lyric += super().parse_verse_block(elem)
                     else:
-                        lyric += (' ' + super().parse_verse_block(elem))
+                        lyric += super().parse_verse_block(elem)
                 else:
                     lyric += '\n'
 

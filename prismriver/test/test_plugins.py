@@ -329,9 +329,16 @@ class TestPlugins(unittest.TestCase):
                           ['a9fc94979c4ec8e245ce80740cc63fc1'])
 
     def test_lyricsmode_01(self):
+        # lyric with great quantity of comments
         self.check_plugin('lyricsmode',
                           'MandoPony', 'Just Gold',
-                          ['98af949573e1cfdc8e5f5588e25e81b0'])
+                          ['46e6b0d4b5928704503abb75ca9a45ea'])
+
+    def test_lyricsmode_02(self):
+        # lyric without comments
+        self.check_plugin('lyricsmode',
+                          'Megumi Hayashibara', 'Touch Yourself',
+                          ['c418607c95c0d341d90a373ae78a1723'])
 
     def test_lyricsnet_01(self):
         self.check_plugin('lyricsnet',
