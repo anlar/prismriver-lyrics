@@ -30,22 +30,7 @@ class SongFivePlugin(Plugin):
 
             lyrics_pane = soup.find('div', {'class': 'col-md-7'})
 
-            lyrics = []
-            if lyrics_pane.find('ul', {'class': 'nav nav-tabs'}, recursive=False):
-                original = ''
-                translation = ''
+            lyric = self.parse_verse_block(lyrics_pane, tags_to_skip=['ul', 'script', 'ins', 'a', 'div'])
+            lyric = re.sub('Исполнитель:$', '', lyric)
 
-                for elem in lyrics_pane.findAll('span', {'class': True}, recursive=False):
-                    if elem['class'][0] == 'orig_str':
-                        original += (elem.text.strip() + '\n')
-                    elif elem['class'][0] == 'translate_str':
-                        translation += (elem.text.strip() + '\n')
-
-                lyrics.append(original)
-                lyrics.append(translation)
-            else:
-                lyric = self.parse_verse_block(lyrics_pane, tags_to_skip=['ul', 'script', 'ins', 'a', 'div'])
-                lyric = re.sub('Исполнитель:$', '', lyric)
-                lyrics.append(lyric)
-
-            return Song(song_artist, song_title, self.sanitize_lyrics(lyrics))
+            return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))

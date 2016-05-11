@@ -507,13 +507,6 @@ class TestPlugins(unittest.TestCase):
                           'Megumi Hayashibara', 'Kujikenai Kara! (OST Рубаки)',
                           ['931f9fae6741a8b689ebf7dfc964c55d'])
 
-    def test_song5_02(self):
-        # entry has original and translated lyrics
-        self.check_plugin('song5',
-                          'Nagi Yanagi', 'Tokohana',
-                          ['9098f4c9865a7e1061d478c6f5e64bbf',
-                           'a31df113bf3066d541b529c2d7410483'])
-
     def test_songlyrics_01(self):
         self.check_plugin('songlyrics',
                           'Modern Talking', "You're My Heart, You're My Soul",
