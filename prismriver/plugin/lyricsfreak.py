@@ -31,14 +31,16 @@ class LyricsFreakPlugin(Plugin):
                     return Song(search_result[0], search_result[1], self.sanitize_lyrics([lyric]))
 
     def parse_search_page(self, soup, artist, title):
-        pane = soup.find('div', {'class': 'colortable green'}).table.tbody
+        pane = soup.find('div', {'class': 'colortable green'})
+        if pane:
+            pane = pane.table.tbody
 
-        for elem in pane.findAll('tr', recursive=False):
-            item_artist = elem.find('td', {'class': 'colfirst'}, recursive=False).a.text[1:].strip()
+            for elem in pane.findAll('tr', recursive=False):
+                item_artist = elem.find('td', {'class': 'colfirst'}, recursive=False).a.text[1:].strip()
 
-            title_pane = elem.find('a', {'class': 'song'})
-            item_title = title_pane.text[:-7]
-            item_link = title_pane['href']
+                title_pane = elem.find('a', {'class': 'song'})
+                item_title = title_pane.text[:-7]
+                item_link = title_pane['href']
 
-            if self.compare_strings(artist, item_artist) and self.compare_strings(title, item_title):
-                return [item_artist, item_title, 'http://www.lyricsfreak.com' + item_link]
+                if self.compare_strings(artist, item_artist) and self.compare_strings(title, item_title):
+                    return [item_artist, item_title, 'http://www.lyricsfreak.com' + item_link]
