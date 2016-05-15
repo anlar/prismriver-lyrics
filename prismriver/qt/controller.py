@@ -146,14 +146,19 @@ class MainController(object):
                                   QSystemTrayIcon.NoIcon, 7000)
 
     @pyqtSlot()
-    def start_search(self, background=False):
+    def start_search(self, background=False, meta=None):
         if not background:
             self.init_layout(State.searching)
 
         self.set_status_message('Searching...')
 
-        self.worker_search = SearchThread(self.main_window.edit_artist.text(), self.main_window.edit_title.text(),
-                                          self.config, background)
+        if meta:
+            self.worker_search = SearchThread(meta, self.config, background)
+        else:
+            self.worker_search = SearchThread(
+                [[self.main_window.edit_artist.text(), self.main_window.edit_title.text()]],
+                self.config, background)
+
         self.worker_search.resultReady.connect(self.finish_search)
         self.worker_search.start()
 
@@ -237,10 +242,14 @@ class MainController(object):
         current_artist = self.main_window.edit_artist.text()
         current_title = self.main_window.edit_title.text()
 
-        if (current_artist != meta[0] or current_title != meta[1]) and (meta[0] and meta[1]):
-            self.main_window.edit_artist.setText(meta[0])
-            self.main_window.edit_title.setText(meta[1])
-            self.start_search(True)
+        if meta:
+            new_artist = meta[0][0]
+            new_title = meta[0][1]
+
+            if (current_artist != new_artist or current_title != new_title) and (new_artist and new_title):
+                self.main_window.edit_artist.setText(new_artist)
+                self.main_window.edit_title.setText(new_title)
+                self.start_search(True, meta)
 
     @pyqtSlot(QSystemTrayIcon.ActivationReason)
     def toggle_main_window(self, reason):
@@ -286,22 +295,26 @@ class MainController(object):
 class SearchThread(QThread):
     resultReady = pyqtSignal(int, str, str, list, float, bool)
 
-    def __init__(self, artist, title, config, background):
+    def __init__(self, meta, config, background):
         super().__init__()
 
         self.worker_id = random.randint(1, 999999999)
 
-        self.artist = artist
-        self.title = title
+        self.meta = meta
         self.config = config
         self.background = background
 
     def run(self):
         start_time = time.time()
-        songs = main.search(self.artist, self.title, self.config)
+
+        songs = []
+        for item in self.meta:
+            item_songs = main.search(item[0], item[1], self.config)
+            songs.extend(item_songs)
+
         total_time = time.time() - start_time
 
-        self.resultReady.emit(self.worker_id, self.artist, self.title, songs, total_time, self.background)
+        self.resultReady.emit(self.worker_id, self.meta[0][0], self.meta[0][1], songs, total_time, self.background)
 
 
 class MprisThread(QThread):

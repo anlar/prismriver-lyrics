@@ -46,15 +46,21 @@ class MprisConnector(object):
         except dbus.exceptions.DBusException:
             raise MprisConnectionException()
 
-        artist = meta.get('xesam:albumArtist')
-        if not artist:
-            artist = meta.get('xesam:artist')
-        if isinstance(artist, list):
-            artist = artist[0]
+        artists = set()
+        for artist in [meta.get('xesam:artist'), meta.get('xesam:albumArtist')]:
+            if artist:
+                if isinstance(artist, list):
+                    artists.add(artist[0])
+                else:
+                    artists.add(artist)
 
         title = meta.get('xesam:title')
 
-        return [str(artist) if artist else None, str(title) if title else None]
+        result = []
+        for artist in artists:
+            result.append([str(artist) if artist else None, str(title) if title else None])
+
+        return result
 
 
 def get_player_icon_path(player_name):
