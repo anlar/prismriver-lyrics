@@ -373,6 +373,7 @@ class TestPlugins(unittest.TestCase):
                           ['ea12362512264723fee26192a3ea53b5'])
 
     def test_lyricwiki_02(self):
+        # original lyric on main page, one translation on separate page
         self.check_plugin('lyricwiki',
                           'Kalafina', 'Red Moon',
                           ['a2cf1a1d1b54145d262418d22cac9381',

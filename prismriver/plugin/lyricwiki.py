@@ -1,4 +1,5 @@
 import json
+import re
 
 from bs4 import Tag, NavigableString, Comment
 
@@ -33,16 +34,28 @@ class LyricWikiPlugin(Plugin):
 
             soup = self.prepare_soup(lyric_page)
 
-            lyrics = []
-            for lyric_pane in soup.findAll("div", {"class": "lyricbox"}):
-                lyric = self.parse_verse_block(lyric_pane)
-                # skip empty invisible block with licensing warning
-                if lyric.strip():
-                    lyrics.append(lyric)
+            lyrics = self.get_page_lyrics(soup)
+
+            # load lyric translations from separate pages
+            # eg: This song has been translated into these languages: Romanized, English.
+            page_name = re.split('(?<!/)/(?!/)', lyric_url, 2)[1]
+            for link in soup.findAll('a', {'title': True}, href=re.compile('/wiki/' + page_name + '/.*')):
+                page = self.download_webpage_text('http://lyrics.wikia.com' + link['href'])
+                lyrics.extend(self.get_page_lyrics(self.prepare_soup(page)))
 
             return Song(song_artist, song_title, self.sanitize_lyrics(lyrics))
 
-    def parse_verse_block(self, verse_block):
+    def get_page_lyrics(self, page_soup):
+        lyrics = []
+        for lyric_pane in page_soup.findAll("div", {"class": "lyricbox"}):
+            lyric = self.parse_verse_block(lyric_pane)
+            # skip empty invisible block with licensing warning
+            if lyric.strip():
+                lyrics.append(lyric)
+
+        return lyrics
+
+    def parse_verse_block(self, verse_block, tags_to_skip=None):
         lyric = ''
 
         for elem in verse_block.childGenerator():
