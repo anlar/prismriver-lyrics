@@ -15,7 +15,7 @@ class UtaMapPlugin(Plugin):
         link = 'http://www.utamap.com/searchkasi.php?searchname=title&word={}'.format(
                 self.prepare_url_parameter(title, delimiter='+'))
 
-        page = self.download_webpage_text(link, encoding='euc-jp')
+        page = self.download_webpage_text(link, encoding='shift_jis')
 
         if page:
             soup = self.prepare_soup(page)
