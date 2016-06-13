@@ -99,7 +99,6 @@ List all available plugins:
 * JetLyrics            [id: jetlyrics]
 * Kasi-Time            [id: kasitime]
 * KGet                 [id: kget]
-* Leo's Lyrics         [id: leoslyrics]
 * Letras               [id: letras]
 * LetsSingIt           [id: letssingit]
 * Lololyrics           [id: lololyrics]

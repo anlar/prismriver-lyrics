@@ -230,16 +230,6 @@ class TestPlugins(unittest.TestCase):
                           '浜崎あゆみ', 'A Song for ××',
                           ['e06cfe45fa4e261ff92c30fd444ce39e'])
 
-    def test_leoslyrics_01(self):
-        self.check_plugin('leoslyrics',
-                          'Groove Coverage', 'Moonlight Shadow [Extended Version]',
-                          ['4d865496dfa31f0e5994d7c646af17d1'])
-
-    def test_leoslyrics_02(self):
-        self.check_plugin('leoslyrics',
-                          'Ace of Base', "Never Gonna Say I'm Sorry [Long]",
-                          ['f3e7fbdfd3c1bc85a21dad24188b75b4'])
-
     def test_letras_01(self):
         # simple case - lyrics: div.p.text
         self.check_plugin('letras',

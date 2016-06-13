@@ -25,7 +25,6 @@ from prismriver.plugin.jlyric import JLyricPlugin
 from prismriver.plugin.jlyricsru import JLyricsRuPlugin
 from prismriver.plugin.kasitime import KasiTimePlugin
 from prismriver.plugin.kget import KGetPlugin
-from prismriver.plugin.leoslyrics import LeosLyricsPlugin
 from prismriver.plugin.letras import LetrasPlugin
 from prismriver.plugin.letssingit import LetsSingItPlugin
 from prismriver.plugin.lololyrics import LololyricsPlugin
