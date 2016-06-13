@@ -79,7 +79,6 @@ def get_plugins(config=None):
         LyricsManiaPlugin,
         ChartlyricsPlugin,
         MetroLyricsPlugin,
-        LeosLyricsPlugin,
         LyrsterPlugin,
         LyricsHuddlePlugin,
         ELyricsPlugin,
