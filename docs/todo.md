@@ -1,6 +1,6 @@
 ### General features
 
-#### Lyrica
+#### Core
 
 * Options for pre-processing artist and title: trim, remove redundant details (feat, remix, version etc), romanize...
 
@@ -13,7 +13,7 @@
 
 * Ability to save lyrics to music file.
 
-#### Lunasa
+#### GUI
 
 * Create application icon.
 

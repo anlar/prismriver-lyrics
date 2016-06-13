@@ -17,4 +17,4 @@ unquote () {
 UNQ_ARTIST=$(unquote "$ARTIST")
 UNQ_TITLE=$(unquote "$TITLE")
 
-prismriver-lyrica.py -t "$UNQ_TITLE" -a "$UNQ_ARTIST" --output $'%LYRICS%\n\nSource: %PLUGIN_NAME%'
+prismriver-cli.py -t "$UNQ_TITLE" -a "$UNQ_ARTIST" --output $'%LYRICS%\n\nSource: %PLUGIN_NAME%'

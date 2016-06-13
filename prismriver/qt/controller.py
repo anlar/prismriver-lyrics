@@ -29,8 +29,8 @@ class MainController(object):
 
     def start_app(self, default_artist, default_title, default_player, connect_to_player, tray_action):
         app = QApplication(sys.argv)
-        app.setWindowIcon(QIcon('prismriver/pixmaps/prismriver-lunasa.png'))
-        app.setApplicationName('Lunasa Prismriver')
+        app.setWindowIcon(QIcon('prismriver/pixmaps/prismriver.png'))
+        app.setApplicationName('Prismriver Lyrics')
 
         self.main_window = MainWindow()
 

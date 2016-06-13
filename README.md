@@ -1,32 +1,33 @@
-# Prismriver Project [![Build Status](https://travis-ci.org/anlar/prismriver.svg?branch=master)](https://travis-ci.org/anlar/prismriver)
+# Prismriver Lyrics
 
-Prismriver Project is a plugin-based search engine for song lyrics. It consists of the following modules:
+[![Build Status](https://travis-ci.org/anlar/prismriver.svg?branch=master)](https://travis-ci.org/anlar/prismriver)
+[![Release](https://img.shields.io/github/release/anlar/prismriver.svg)](https://github.com/anlar/prismriver/releases/latest)
+[![License](https://img.shields.io/github/license/anlar/prismriver.svg)](https://github.com/anlar/prismriver/blob/master/LICENSE)
 
-* Lyrica: core module, contains site search plugins and command line interface for lyrics searching.
+Prismriver Lyrics is a plugin-based search engine for song lyrics with command-line and Qt graphic interfaces.
 
-* Lunasa: Qt5-based graphical interface, can search lyrics, which author/title details were entered manually or received via MPRIS protocol from audio-player.
-
+![screenshot-linux](https://github.com/anlar/prismriver/raw/master/docs/images/screenshot-linux.png)
 
 ## Requirements
 
 Package names from Ubuntu 14.04 mentioned within brackets.
 
-### Lyrica
+### Core
 
 * Python 3.3+ (python3)
 * Beautiful Soup 4 (python-beautifulsoup)
 * lxml (python3-lxml)
 
-### Lunasa
+### GUI
 
-* *everything from Lyrica*
+* *everything from Core*
 * PyQt5 (python3-pyqt5)
 * D-Bus Python 3 bindings (python3-dbus)
 
 
 ## Usage
 
-    prismriver-lyrics.py [ACTION] [OPTIONS]
+    prismriver-cli.py [ACTION] [OPTIONS]
 
     Where ACTION must be one of:
         --song                search for song information by artist and title (default action)
@@ -68,11 +69,11 @@ Package names from Ubuntu 14.04 mentioned within brackets.
 
 Search for song information using all plugins:
 
-    prismriver-lyrica.py -a ARTIST_NAME -t SONG_TITLE
+    prismriver-cli.py -a ARTIST_NAME -t SONG_TITLE
 
 List all available plugins:
 
-    prismriver-lyrica.py --list
+    prismriver-cli.py --list
 
 
 ## Supported lyric databases

@@ -1,14 +1,14 @@
 [Desktop Entry]
 Type=Application
 # Version=TODO
-Name=Lunasa Prismriver
+Name=Prismriver Lyrics
 GenericName=Song Lyrics Search Engine
 Comment=Simple song lyrics search engine
-Icon=prismriver-lunasa
-TryExec=prismriver-lunasa
-Exec=prismriver-lunasa
+Icon=prismriver
+TryExec=prismriver-gui
+Exec=prismriver-gui
 Terminal=false
 Categories=Qt;Utility;AudioVideo;Audio;Music;
 Keywords=Lyric;Lyrics;Music;
 StartupNotify=true
-StartupWMClass=Lunasa Prismriver
+StartupWMClass=Prismriver Lyrics
