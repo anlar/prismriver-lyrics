@@ -1,12 +1,12 @@
 # Prismriver Lyrics
 
-[![Build Status](https://travis-ci.org/anlar/prismriver.svg?branch=master)](https://travis-ci.org/anlar/prismriver)
-[![Release](https://img.shields.io/github/release/anlar/prismriver.svg)](https://github.com/anlar/prismriver/releases/latest)
-[![License](https://img.shields.io/github/license/anlar/prismriver.svg)](https://github.com/anlar/prismriver/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/anlar/prismriver-lyrics.svg?branch=master)](https://travis-ci.org/anlar/prismriver-lyrics)
+[![Release](https://img.shields.io/github/release/anlar/prismriver-lyrics.svg)](https://github.com/anlar/prismriver-lyrics/releases/latest)
+[![License](https://img.shields.io/github/license/anlar/prismriver-lyrics.svg)](https://github.com/anlar/prismriver-lyrics/blob/master/LICENSE)
 
 Prismriver Lyrics is a plugin-based search engine for song lyrics with command-line and Qt graphic interfaces.
 
-![screenshot-linux](https://github.com/anlar/prismriver/raw/master/docs/images/screenshot-linux.png)
+![screenshot-linux](https://github.com/anlar/prismriver-lyrics/raw/master/docs/images/screenshot-linux.png)
 
 ## Requirements
 
