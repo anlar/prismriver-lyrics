@@ -132,7 +132,7 @@ class AnimeLyricsPlugin(Plugin):
                 if text:
                     values.append(text)
 
-        names = ['Performed by', 'Performer', 'by', 'Sung by', 'Singers', 'Vocals']
+        names = ['Performed by', 'Performer', 'by', 'Sung by', 'Singers', 'Vocals', 'Vocal by']
 
         for name in names:
             for value in values:
