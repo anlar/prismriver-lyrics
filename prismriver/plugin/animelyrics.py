@@ -57,7 +57,7 @@ class AnimeLyricsPlugin(Plugin):
     def limit_search_results(self, results, artist, title):
         hits = []
         for result in results:
-            if self.compare_strings(result[2], title):
+            if self.compare_strings(title, result[2]):
                 hits.append(result)
 
         return hits
@@ -65,7 +65,7 @@ class AnimeLyricsPlugin(Plugin):
     def get_song(self, result, artist, title):
         # check song title
         song_title = result[2]
-        if not self.compare_strings(song_title, title):
+        if not self.compare_strings(title, song_title):
             return None
 
         # download song page
@@ -75,7 +75,7 @@ class AnimeLyricsPlugin(Plugin):
 
         # check song artist
         song_artist = self.get_artist(soup)
-        if not self.compare_strings(song_artist, artist):
+        if not self.compare_strings(artist, song_artist):
             return None
 
         lyrics = []

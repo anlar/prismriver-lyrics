@@ -28,7 +28,7 @@ class DarkLyricsPlugin(Plugin):
 
             for item in main_pane.findAll('a', {'target': '_blank'}, href=re.compile('lyrics/.*/.*html#[0-9]+')):
 
-                if self.compare_strings(item.text, full_title):
+                if self.compare_strings('{} - {}'.format(artist, title), item.text):
                     mobj = re.match('lyrics/.*/.*html#(?P<id>.*)', item['href'])
                     song_id = mobj.group('id')
 
