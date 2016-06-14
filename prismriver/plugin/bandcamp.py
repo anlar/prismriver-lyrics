@@ -35,7 +35,7 @@ class BandcampPlugin(Plugin):
                 mobj = re.match('.*by (?P<id>.*)', subhead, re.DOTALL)
                 song_artist = mobj.group('id')
 
-                if self.compare_strings(song_artist, artist) and self.compare_strings(song_title, title):
+                if self.compare_strings(artist, song_artist, True) and self.compare_strings(title, song_title):
                     page = self.download_webpage_text(song_link)
                     if page:
                         soup = self.prepare_soup(page)

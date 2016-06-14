@@ -26,7 +26,7 @@ class UtaNetPlugin(Plugin):
                 song_title = tds[0].a.text
                 song_id = tds[0].a['href'].split('/')[2]
 
-                if self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
+                if self.compare_strings(artist, song_artist, True) and self.compare_strings(title, song_title):
                     song_link = 'http://www.uta-net.com/user/phplib/svg/showkasi.php?ID={}'.format(song_id)
                     song_xml = self.download_xml(song_link)
                     if song_xml:

@@ -1,4 +1,5 @@
 import hashlib
+import fnmatch
 import json
 import logging
 import re
@@ -199,5 +200,18 @@ class Plugin:
     # Other
     #
 
-    def compare_strings(self, s1, s2):
-        return s1 and s2 and s1.lower() == s2.lower()
+    def compare_strings(self, s1, s2, wildcard=False):
+        '''
+       This method does comparison of two strings, char-by-char or,
+       depends on what value third argument have, using UNIX-like wildcards (see https://docs.python.org/3/library/fnmatch.html)
+
+        Parameters:
+            s1 - usually comes from command line arguments received from user (like artist or song name)
+                 If wildcard argument is True, then it's a wildcard, not a simple string
+            s2 - a string to compare to
+        '''
+        if(wildcard):
+            # fnmatch.fnmatch(filename, pattern)
+            return fnmatch.fnmatch(s2, s1)
+        else:
+            return s1 and s2 and s1.lower() == s2.lower()

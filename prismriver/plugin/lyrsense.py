@@ -49,7 +49,7 @@ class LyrsensePlugin(Plugin):
                 song_artist = elem.contents[1][3:]
                 song_link = elem.a['href']
 
-                if self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
+                if self.compare_strings(artist, song_artist, True) and self.compare_strings(title, song_title):
                     return [song_link, song_artist, song_title]
 
     def parse_verse_block(self, verse_block, tags_to_skip=None):

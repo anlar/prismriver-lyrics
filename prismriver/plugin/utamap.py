@@ -26,7 +26,7 @@ class UtaMapPlugin(Plugin):
                 song_title = link.text
                 song_link = link['href']
 
-                if self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
+                if self.compare_strings(artist, song_artist, True) and self.compare_strings(title, song_title):
                     song_id = song_link.split('=', 2)[1]
                     lyric_link = 'http://www.utamap.com/phpflash/flashfalsephp.php?unum={}'.format(song_id)
 

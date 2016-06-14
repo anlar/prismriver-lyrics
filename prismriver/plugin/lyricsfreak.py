@@ -42,5 +42,5 @@ class LyricsFreakPlugin(Plugin):
                 item_title = title_pane.text[:-7]
                 item_link = title_pane['href']
 
-                if self.compare_strings(artist, item_artist) and self.compare_strings(title, item_title):
+                if self.compare_strings(artist, item_artist, True) and self.compare_strings(title, item_title):
                     return [item_artist, item_title, 'http://www.lyricsfreak.com' + item_link]

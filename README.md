@@ -38,6 +38,9 @@ Package names from Ubuntu 14.04 mentioned within brackets.
     OPTIONS:
         -a ARTIST, --artist ARTIST
                               song artist
+                              wildcards can be used here:
+                                *	matches everything
+                                ?	matches any single character
         -t TITLE, --title TITLE
                               song title
         -l LIMIT, --limit LIMIT
@@ -70,6 +73,10 @@ Package names from Ubuntu 14.04 mentioned within brackets.
 Search for song information using all plugins:
 
     prismriver-cli.py -a ARTIST_NAME -t SONG_TITLE
+    
+Search for song "X-encounter" performed by any artist on Kasi-time:
+
+    prismriver-cli.py  -a '*' -t 'X-encounter' -p kasitime
 
 List all available plugins:
 
