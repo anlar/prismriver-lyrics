@@ -75,7 +75,7 @@ class AnimeLyricsPlugin(Plugin):
 
         # check song artist
         song_artist = self.get_artist(soup)
-        if not self.compare_strings(artist, song_artist):
+        if not self.compare_strings(artist, song_artist, True):
             return None
 
         lyrics = []
