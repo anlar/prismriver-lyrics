@@ -13,7 +13,7 @@ class AnimeLyricsPlugin(Plugin):
         super(AnimeLyricsPlugin, self).__init__('Anime Lyrics', config)
 
     def search_song(self, artist, title):
-        link = 'http://www.animelyrics.com/search.php?q={}&t=title&searchcat=anime'.format(
+        link = 'http://www.animelyrics.com/search.php?q={}&t=title&searchcat='.format(
             self.prepare_url_parameter(title)
         )
 
