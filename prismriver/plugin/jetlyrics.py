@@ -39,7 +39,7 @@ class JetLyricsPlugin(Plugin):
 
         results = []
         for link in links:
-            if self.compare_strings('{} - {} Lyrics'.format(title, artist), link.text):
+            if self.compare_strings('{} - {} Lyrics'.format(title, artist), link.text, True):
                 [song_title, song_artist] = link.text[:-7].split(' - ', 2)
                 results.append([song_artist, song_title, link['href']])
 

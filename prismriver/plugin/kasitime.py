@@ -26,7 +26,7 @@ class KasiTimePlugin(Plugin):
 
             if not results or len(results) < 0:
                 return None
-            elif not self.compare_strings('{} {} - 歌詞タイム'.format(title, artist), results[0]['titleNoFormatting']):
+            elif not self.compare_strings('{} {} - 歌詞タイム'.format(title, artist), results[0]['titleNoFormatting'], True):
                 return None
 
             lyric_link = results[0]['unescapedUrl']

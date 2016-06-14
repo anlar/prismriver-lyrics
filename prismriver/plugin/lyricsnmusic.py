@@ -31,7 +31,7 @@ class LyricsNMusicPlugin(Plugin):
                 song_title = elem['title']
                 viewable = elem['viewable']  # may be unavailable due to licensing issue
 
-                if viewable and self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
+                if viewable and self.compare_strings(artist, song_artist, True) and self.compare_strings(title, song_title):
                     song_link = elem['url']
                     break
 

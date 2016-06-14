@@ -28,7 +28,7 @@ class LyricsNetPlugin(Plugin):
 
             song_artist = artist_pane.a.text
 
-            if not self.compare_strings(artist, song_artist):
+            if not self.compare_strings(artist, song_artist, True):
                 return None
 
             for lyr_item in soup.findAll('a', href=re.compile('/lyric/[0-9]+')):

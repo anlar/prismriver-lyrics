@@ -35,7 +35,7 @@ def log_config_info(config: SearchConfig) -> None:
 def init_args_parser():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-a", "--artist", help="song artist")
+    parser.add_argument("-a", "--artist", help="song artist (wildcards can be used here)")
     parser.add_argument("-t", "--title", help="song title")
 
     parser.add_argument("-l", "--limit", type=int, help="maximum results count")

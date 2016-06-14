@@ -48,7 +48,5 @@ class JLyricsRuPlugin(Plugin):
 
     def is_correct_artist(self, artist, song_artists):
         for song_artist in song_artists:
-            if self.compare_strings(artist, song_artist):
-                return True
+            return self.compare_strings(artist, song_artist, True)
 
-        return False

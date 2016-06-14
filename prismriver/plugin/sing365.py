@@ -23,7 +23,7 @@ class Sing365Plugin(Plugin):
 
             if not results or len(results) < 0:
                 return None
-            elif not self.compare_strings('{} LYRICS - {}'.format(title, artist), results[0]['titleNoFormatting']):
+            elif not self.compare_strings('{} LYRICS - {}'.format(title, artist), results[0]['titleNoFormatting'], True):
                 return None
 
             [song_title, song_artist] = results[0]['titleNoFormatting'].split(' LYRICS - ', 2)

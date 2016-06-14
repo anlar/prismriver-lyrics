@@ -47,5 +47,5 @@ class LetsSingItPlugin(Plugin):
             song_title = info_items[0].text[:-7]  # remove ' lyrics' from the end
             song_artist = info_items[1].text
 
-            if self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
+            if self.compare_strings(artist, song_artist, True) and self.compare_strings(title, song_title):
                 return [song_artist, song_title, info_items[0]['href']]

@@ -28,7 +28,7 @@ class SongsLyricsPlugin(Plugin):
                 song_title = tags[2].text[:-7]
                 song_link = 'http://www.songs-lyrics.net' + tags[2]['href']
 
-                if self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
+                if self.compare_strings(artist, song_artist, True) and self.compare_strings(title, song_title):
                     # can't send 2 consecutive requests - it will throw too many requests from your ip error
                     time.sleep(2)
                     page = self.download_webpage_text(song_link)
