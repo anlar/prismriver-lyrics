@@ -23,6 +23,7 @@ from prismriver.plugin.genius import GeniusPlugin
 from prismriver.plugin.jetlyrics import JetLyricsPlugin
 from prismriver.plugin.jlyric import JLyricPlugin
 from prismriver.plugin.jlyricsru import JLyricsRuPlugin
+from prismriver.plugin.kashinavi import KashiNaviPlugin
 from prismriver.plugin.kasitime import KasiTimePlugin
 from prismriver.plugin.kget import KGetPlugin
 from prismriver.plugin.letras import LetrasPlugin
@@ -131,7 +132,8 @@ def get_plugins(config=None):
         SongsLyricsPlugin,
         Sing365Plugin,
         UtaNetPlugin,
-        UtaMapPlugin
+        UtaMapPlugin,
+        KashiNaviPlugin
     ], key=lambda x: x.RANK, reverse=True)
 
     plugins = []

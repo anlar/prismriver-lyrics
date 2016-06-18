@@ -210,6 +210,11 @@ class TestPlugins(unittest.TestCase):
                            '889aae7c3e241e26c8e57dc0753be969',
                            'adbd8436ceecba9ed48eb78f93a2fb0b'])
 
+    def test_kashinavi_01(self):
+        self.check_plugin('kashinavi',
+                          'Kalafina', 'moonfesta〜ムーンフェスタ〜',
+                          ['38e459cefc05b564f762846cb1b9c221'])
+
     def test_kasitime_01(self):
         self.check_plugin('kasitime',
                           'いとうかなこ', 'Hacking to the Gate',

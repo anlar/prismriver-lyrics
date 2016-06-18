@@ -98,6 +98,7 @@ List all available plugins:
 * J-Lyric              [id: jlyric]
 * J-Lyrics.ru          [id: jlyricsru]
 * JetLyrics            [id: jetlyrics]
+* KashiNavi            [id: kashinavi]
 * Kasi-Time            [id: kasitime]
 * KGet                 [id: kget]
 * Letras               [id: letras]

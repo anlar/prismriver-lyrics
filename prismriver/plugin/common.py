@@ -31,14 +31,14 @@ class Plugin:
     # URI quote helpers
     #
 
-    def quote_uri(self, value, safe_chars=None):
+    def quote_uri(self, value, safe_chars=None, encoding=None):
         if safe_chars:
-            return urllib.parse.quote(value, safe=(safe_chars + '/'))
+            return urllib.parse.quote(value, safe=(safe_chars + '/'), encoding=encoding)
         else:
-            return urllib.parse.quote(value)
+            return urllib.parse.quote(value, encoding=encoding)
 
     def prepare_url_parameter(self, value, to_delete=None, to_replace=None, delimiter='-',
-                              quote_uri=True, safe_chars=None):
+                              quote_uri=True, safe_chars=None, quote_encoding=None):
         if not to_delete:
             to_delete = []
         if not to_replace:
@@ -53,7 +53,7 @@ class Plugin:
             new_value = new_value.replace(elem, delimiter)
 
         if quote_uri:
-            return self.quote_uri(new_value, safe_chars)
+            return self.quote_uri(new_value, safe_chars, quote_encoding)
         else:
             return new_value
 
