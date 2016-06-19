@@ -13,22 +13,37 @@ class AnimeLyricsPlugin(Plugin):
         super(AnimeLyricsPlugin, self).__init__('Anime Lyrics', config)
 
     def search_song(self, artist, title):
-        link = 'http://www.animelyrics.com/search.php?q={}&t=title'.format(
-            self.prepare_url_parameter(title)
-        )
+        next_page = True
+        page_no = 1
 
-        # todo: support multiple result pages
-        page = self.download_webpage(link)
-        if page:
-            soup = self.prepare_soup(page)
+        while next_page:
+            link = 'http://www.animelyrics.com/search.php?q={}&t=title'.format(
+                self.prepare_url_parameter(title)
+            )
 
-            search_results = self.parse_search_page(soup)
-            search_results = self.limit_search_results(search_results, artist, title)
+            if page_no > 1:
+                link += '&p={}'.format(page_no)
 
-            for result in search_results:
-                song = self.get_song(result, artist, title)
-                if song:
-                    return song
+            page = self.download_webpage(link)
+            if page:
+                soup = self.prepare_soup(page)
+
+                search_results = self.parse_search_page(soup)
+
+                # each search result page may contain only 20 hits, if there is less than 20 => last page
+                if len(search_results) != 20:
+                    next_page = False
+
+                search_results = self.limit_search_results(search_results, artist, title)
+
+                for result in search_results:
+                    song = self.get_song(result, artist, title)
+                    if song:
+                        return song
+
+                page_no += 1
+            else:
+                next_page = False
 
     def parse_search_page(self, soup):
         search_head = soup.find('div', {'class': 'searchhead'})

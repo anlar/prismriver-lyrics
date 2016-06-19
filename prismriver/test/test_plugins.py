@@ -120,6 +120,13 @@ class TestPlugins(unittest.TestCase):
                            '68a292d2337da33f80bf80c8e01bc81f',
                            '680a12a7055ca78f51e9a3e80a9af8fd'])
 
+    def test_animelyrics_05(self):
+        # song on the second search result page
+        self.check_plugin('animelyrics',
+                          'Kalafina', 'Door',
+                          ['2ff25479cf3f32794a757b803dd87827',
+                           '3f9c95a21fc726c5836af0dc8673360e'])
+
     def test_azlyrics_01(self):
         self.check_plugin('azlyrics',
                           'Modern Talking', "You're My Heart, You're My Soul",
