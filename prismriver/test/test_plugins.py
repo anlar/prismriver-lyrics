@@ -300,6 +300,7 @@ class TestPlugins(unittest.TestCase):
                            'd0b66bcfbd9137cf4432b536e605a39c',
                            'f33aa1dfa9f77f1f499077dccbb1b62e',
                            'bc314595cd2dc89c6ce32e1cf566d0f7',
+                           '96833195e76df0e73d37bcb999bf6edc',
                            'e484ce4bbfbcefe56db7eb6e9a35c5d3'])
 
     def test_lyricscom_01(self):
