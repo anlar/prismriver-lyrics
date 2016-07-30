@@ -1,5 +1,9 @@
 import re
 
+from bs4 import Comment
+from bs4 import NavigableString
+from bs4 import Tag
+
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
 
@@ -44,3 +48,16 @@ class LyricsNetPlugin(Plugin):
                         if lyric_pane:
                             lyric = self.parse_verse_block(lyric_pane)
                             return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
+
+    def parse_verse_block(self, verse_block, tags_to_skip=None):
+        lyric = ''
+
+        for elem in verse_block.childGenerator():
+            if isinstance(elem, Comment):
+                pass
+            elif isinstance(elem, NavigableString):
+                lyric += elem
+            elif isinstance(elem, Tag) and elem.name == 'a':
+                lyric += elem.text
+
+        return lyric.strip()
