@@ -435,12 +435,12 @@ class TestPlugins(unittest.TestCase):
     def test_metrolyrics_01(self):
         self.check_plugin('metrolyrics',
                           'Ace of Base', "Never Gonna Say I'm Sorry",
-                          ['69bc545282aabd9f4e0135c82eb9a803'])
+                          ['f3e7fbdfd3c1bc85a21dad24188b75b4'])
 
     def test_metrolyrics_02(self):
         self.check_plugin('metrolyrics',
                           'Joe Dassin', "Et Si Tu N'existais Pas",
-                          ['fd488f806589f80ee18db6a78c051035'])
+                          ['788563902df68de8c27b2f04f20a7568'])
 
     def test_mp3lyrics_01(self):
         self.check_plugin('mp3lyrics',
@@ -473,7 +473,7 @@ class TestPlugins(unittest.TestCase):
         self.check_plugin('nautiljon',
                           'Perfume', 'Cling Cling',
                           ['85e912b195d6aaa816842f64828efaa2',
-                           '0503a47e1046b7f52128a652e81a1b06'])
+                           '9c408a6d0e3a14bef769dda792bcdac4'])
 
     def test_nitrolyrics_02(self):
         self.check_plugin('nitrolyrics',
