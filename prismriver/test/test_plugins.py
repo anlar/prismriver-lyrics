@@ -17,7 +17,7 @@ class TestPlugins(unittest.TestCase):
         self.is_skipped(plugin_id)
 
         retry_delay = int(os.getenv('PRISMRIVER_TEST_RETRY_DELAY', '120'))
-        retry_count = int(os.getenv('PRISMRIVER_TEST_RETRY_COUNT', '2'))
+        retry_count = int(os.getenv('PRISMRIVER_TEST_RETRY_COUNT', '0'))
 
         config = self.get_search_config(plugin_id)
 
