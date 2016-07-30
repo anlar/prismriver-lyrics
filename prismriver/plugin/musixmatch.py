@@ -29,7 +29,10 @@ class MusixmatchPlugin(Plugin):
             song_artist = title_pane.find('a').text
             song_title = title_pane.find('h1', recursive=False).text
 
-            lyrics_pane = soup.find('p', {'class': 'mxm-lyrics__content'})
-            lyrics = self.parse_verse_block(lyrics_pane)
+            base_lyrics_pane = soup.find('div', {'class': 'mxm-lyrics'})
+
+            lyrics = ''
+            for lyrics_pane in base_lyrics_pane.findAll('p', {'class': 'mxm-lyrics__content'}):
+                lyrics += (lyrics_pane.text + '\n')
 
             return Song(song_artist, song_title, self.sanitize_lyrics([lyrics]))

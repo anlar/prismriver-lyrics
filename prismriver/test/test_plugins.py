@@ -462,6 +462,11 @@ class TestPlugins(unittest.TestCase):
                           '林原めぐみ', 'Over Soul',
                           ['feb98569635577eeb9c4d16e63eed9dd'])
 
+    def test_musixmatch_02(self):
+        self.check_plugin('musixmatch',
+                          'Кино', 'Невесёлая песня',
+                          ['b9ed3e78498f564e37d708306ac08dc3'])
+
     def test_nautiljon_01(self):
         # only original lyrics
         self.check_plugin('nautiljon',
