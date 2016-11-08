@@ -16,7 +16,6 @@ if use_pyqt5:
     from PyQt5.QtCore import pyqtSignal as pyqtSignal
     from PyQt5.QtCore import QAbstractTableModel as QAbstractTableModel
     from PyQt5.QtCore import Qt as Qt
-    from PyQt5.QtCore import QItemSelection as QItemSelection
     from PyQt5.QtCore import QStringListModel as QStringListModel
     from PyQt5.QtGui import QIcon as QIcon
     from PyQt5.QtWidgets import QSystemTrayIcon as QSystemTrayIcon
@@ -34,7 +33,6 @@ else:
     from PyQt4.QtCore import pyqtSignal as pyqtSignal
     from PyQt4.QtCore import QAbstractTableModel as QAbstractTableModel
     from PyQt4.QtCore import Qt as Qt
-    from PyQt4.QtGui import QItemSelection as QItemSelection
     from PyQt4.QtGui import QStringListModel as QStringListModel
     from PyQt4.QtGui import QIcon as QIcon
     from PyQt4.QtGui import QSystemTrayIcon as QSystemTrayIcon

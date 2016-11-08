@@ -145,7 +145,6 @@ class MainController(object):
                                   'Found {} results'.format(len(songs)),
                                   QSystemTrayIcon.NoIcon, 7000)
 
-    @pyqtSlot()
     def start_search(self, background=False, meta=None):
         if not background:
             self.init_layout(State.searching)
@@ -162,7 +161,6 @@ class MainController(object):
         self.worker_search.resultReady.connect(self.finish_search)
         self.worker_search.start()
 
-    @pyqtSlot()
     def finish_search(self, worker_id, artist, title, songs, total_time, background):
         if background:
             self.set_status_message('Listening to the player...')
@@ -187,8 +185,8 @@ class MainController(object):
             self.worker_search.quit()
             self.worker_search = None
 
-    @pyqtSlot()
     def refresh_players(self, default_player):
+        print(default_player)
         players = self.mpris_connect.get_players()
         self.main_window.edit_player.clear()
         self.main_window.edit_player_model.update_data(players)
@@ -204,7 +202,6 @@ class MainController(object):
             else:
                 self.main_window.edit_player.setCurrentIndex(0)
 
-    @pyqtSlot()
     def start_mpris(self, selected_player=None):
         if selected_player:
             players = self.mpris_connect.get_players()
@@ -222,7 +219,6 @@ class MainController(object):
             self.worker_mpris.connection_closed.connect(self.stop_mpris)
             self.worker_mpris.start()
 
-    @pyqtSlot(MprisPlayer)
     def start_mpris_from_tray(self, selected_player):
         if selected_player == self.mpris_player:
             return
@@ -237,7 +233,7 @@ class MainController(object):
         self.mpris_player = None
         self.worker_mpris.active = False
 
-    @pyqtSlot()
+    @pyqtSlot(list)
     def update_mpris_results(self, meta):
         current_artist = self.main_window.edit_artist.text()
         current_title = self.main_window.edit_title.text()
