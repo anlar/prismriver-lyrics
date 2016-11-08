@@ -4,8 +4,8 @@ import time
 from functools import partial
 
 from prismriver import main, util, mpris
-from prismriver.mpris import MprisConnector, MprisConnectionException, MprisPlayer
-from prismriver.qt.compat import pyqtSlot, QThread, pyqtSignal, QIcon, QApplication, QStyle, QSystemTrayIcon, QAction, \
+from prismriver.mpris import MprisConnector, MprisConnectionException
+from prismriver.qt.compat import QThread, pyqtSignal, QIcon, QApplication, QStyle, QSystemTrayIcon, QAction, \
     use_pyqt5
 from prismriver.qt.tray import TrayIcon
 from prismriver.qt.window import MainWindow, PlayerListModel
@@ -175,7 +175,6 @@ class MainController(object):
 
         self.show_tray_notification(artist, title, songs)
 
-    @pyqtSlot()
     def interrupt_search(self):
         self.init_layout(State.waiting)
 
@@ -186,7 +185,6 @@ class MainController(object):
             self.worker_search = None
 
     def refresh_players(self, default_player):
-        print(default_player)
         players = self.mpris_connect.get_players()
         self.main_window.edit_player.clear()
         self.main_window.edit_player_model.update_data(players)
@@ -226,14 +224,12 @@ class MainController(object):
             self.stop_mpris()
             self.start_mpris(selected_player)
 
-    @pyqtSlot()
     def stop_mpris(self):
         self.init_layout(State.waiting)
         self.set_status_message('Player listener stopped')
         self.mpris_player = None
         self.worker_mpris.active = False
 
-    @pyqtSlot(list)
     def update_mpris_results(self, meta):
         current_artist = self.main_window.edit_artist.text()
         current_title = self.main_window.edit_title.text()
@@ -247,7 +243,6 @@ class MainController(object):
                 self.main_window.edit_title.setText(new_title)
                 self.start_search(True, meta)
 
-    @pyqtSlot(QSystemTrayIcon.ActivationReason)
     def toggle_main_window(self, reason):
         if reason == QSystemTrayIcon.Trigger:
             if self.main_window.isHidden():
@@ -255,7 +250,6 @@ class MainController(object):
             else:
                 self.main_window.hide()
 
-    @pyqtSlot()
     def update_tray_menu(self):
         self.tray.right_menu.clear()
 

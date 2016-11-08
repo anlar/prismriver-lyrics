@@ -1,5 +1,5 @@
 from prismriver import mpris
-from prismriver.qt.compat import uic, QAbstractTableModel, Qt, pyqtSlot, QStringListModel, QIcon, \
+from prismriver.qt.compat import uic, QAbstractTableModel, Qt, QStringListModel, QIcon, \
     QMainWindow, QAbstractItemView, QHeaderView, QStyle, use_pyqt5
 
 
@@ -45,7 +45,6 @@ class MainWindow(QMainWindow):
         self.lyrics_table_view.selectionModel().selectionChanged.connect(self.update_lyric_pane)
         self.lyrics_table_model.layoutChanged.connect(self.update_lyric_pane)
 
-    @pyqtSlot()
     def update_lyric_pane(self):
         selected_songs = self.lyrics_table_view.selectionModel().selectedRows()
         songs = []
@@ -127,7 +126,6 @@ class LyricTableModel(QAbstractTableModel):
                 elif section == 3:
                     return '#'
 
-    @pyqtSlot(list)
     def update_data(self, songs):
         self.songs = songs
         self.layoutChanged.emit()
