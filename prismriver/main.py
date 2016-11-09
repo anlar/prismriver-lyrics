@@ -200,7 +200,7 @@ def search_async(artist, title, config):
         thread.join()
 
     result = []
-    for items in range(0, queue.qsize()):
+    while not queue.empty():
         result.append(queue.get())
 
     result.sort(key=lambda x: x.plugin_rank, reverse=True)
