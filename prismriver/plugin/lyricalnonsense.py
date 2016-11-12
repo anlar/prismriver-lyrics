@@ -1,3 +1,5 @@
+import re
+
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
 
@@ -22,9 +24,10 @@ class LyricalNonsensePlugin(Plugin):
 
             artist_infos = []
 
-            artist_block = soup.find('div', {'id': 'content'})
-            for elem in artist_block.findAll('a', href=True):
-                artist_infos.append([elem['href'], elem.text.split(' | ')])
+            artists_pane = soup.find('div', {'class': 'lyricinfoblock'})
+
+            for elem in artists_pane.findAll('a', href=re.compile('http://www.lyrical-nonsense.com/lyrics/.*/')):
+                artist_infos.append([elem['href'], elem.text.split(' | )')])
 
             artist_link = None
             for info in artist_infos:
@@ -46,7 +49,7 @@ class LyricalNonsensePlugin(Plugin):
             translated_title_block = elem.find('div', {'class': 'subtitletextartist'})
             if translated_title_block:
                 for translated_title in translated_title_block.strings:
-                    song_titles.append(translated_title.strip())
+                    song_titles.extend(translated_title.strip().split('\r\n'))
 
             if title.lower() in map(lambda x: x.lower(), song_titles):
                 return self.download_webpage(song_link)
@@ -55,25 +58,32 @@ class LyricalNonsensePlugin(Plugin):
         soup = self.prepare_soup(page)
 
         artist_block = soup.find('table', {'class': 'imagetabletitle'})
-        artist_block = artist_block.find('div', {'class': 'titletextpage'})
-        song_artist = artist_block.get_text()
+        if artist_block:
+            artist_block = artist_block.find('div', {'class': 'titletextpage'})
+            song_artist = artist_block.get_text()
+        else:
+            artist_block = soup.find('div', {'class': 'artistlyricblocknew'})
+            artist_block = artist_block.find('div', {'class': 'artisttext1new'})
+            song_artist = artist_block.get_text().strip()
 
         title_block = soup.find('table', {'class': 'songtitle'})
-        title_block = title_block.find('div', {'class': 'titletextpage'})
-        song_title = title_block.get_text()
+        if title_block:
+            title_block = title_block.find('div', {'class': 'titletextpage'})
+            song_title = title_block.get_text()
+        else:
+            title_block = soup.find('div', {'class': 'titlelyricblocknew'})
+            title_block = title_block.find('div', {'class': 'titletext1new'})
+            song_title = title_block.get_text().strip()
 
         lyrics = []
 
-        main_lyric_block = soup.find('div', {'class': 'draggable'})
+        main_lyric_block = soup.find('div', {'id': 'langtabs'})
         # we should reverse list order to move original japanese lyric to the top
         for lyric_block in main_lyric_block.findAll('div', id=True)[::-1]:
             block_id = lyric_block['id']
             # skip 'Details' (song info) and all '*-tv' (tv-size versions) blocks
             if (not block_id.startswith('Details')) and (not block_id.endswith('-tv')):
-                lyric = ''
-                for verse_block in lyric_block.findAll('p', recursive=False):
-                    lyric += (self.parse_verse_block(verse_block) + '\n\n')
-
+                lyric = self.parse_verse_block(lyric_block)
                 lyrics.append(lyric)
 
         return Song(song_artist, song_title, self.sanitize_lyrics(lyrics))

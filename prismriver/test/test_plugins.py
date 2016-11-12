@@ -289,19 +289,19 @@ class TestPlugins(unittest.TestCase):
     def test_lyricalnonsense_01(self):
         self.check_plugin('lyricalnonsense',
                           'supercell', 'ワールドイズマイン',
-                          ['e8ec2964d298caa61aeddb2e353ec574',
-                           '57e83798afde4fc3aa0fdd65adf0012f',
-                           '71b30cbbc0ec6f9aa79189f015b6d8ba'])
+                          ['5ade846c09fb4ce827482fbc179b0c34',
+                           '3b4b84e5bda3df6443e3b6cfc309c5dc',
+                           'd04c60b41653cf8dfef9fc76af9d8e8a'])
 
     def test_lyricalnonsense_02(self):
         self.check_plugin('lyricalnonsense',
                           'CHiCO with HoneyWorks', 'Pride Kakumei',
-                          ['efc6e4a2298cfeaa6e3c8f2cc0a1bc5e',
-                           'd0b66bcfbd9137cf4432b536e605a39c',
-                           'f33aa1dfa9f77f1f499077dccbb1b62e',
-                           'bc314595cd2dc89c6ce32e1cf566d0f7',
-                           '96833195e76df0e73d37bcb999bf6edc',
-                           'e484ce4bbfbcefe56db7eb6e9a35c5d3'])
+                          ['8012b45bb22c66fc29ae1e9b187a007a',
+                           '4e4e4d50316b66c3d777bc1fc835fedd',
+                           '74173c292dbe4e186a1fc19833ce69e0',
+                           'd3bba39ec6acaea1d331102ad95bacc9',
+                           '9036ad7dd21e63b6f8e7349a590bdf49',
+                           'e5fdf7fd58d25afb98acfeecf31adcb7'])
 
     def test_lyricscom_01(self):
         self.check_plugin('lyricscom',
