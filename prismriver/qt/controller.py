@@ -1,3 +1,4 @@
+import os
 import random
 import sys
 import time
@@ -9,6 +10,9 @@ from prismriver.qt.compat import QThread, pyqtSignal, QIcon, QApplication, QStyl
     use_pyqt5
 from prismriver.qt.tray import TrayIcon
 from prismriver.qt.window import MainWindow, PlayerListModel
+
+
+path = os.path.dirname(os.path.abspath(__file__))
 
 
 class MainController(object):
@@ -29,7 +33,7 @@ class MainController(object):
 
     def start_app(self, default_artist, default_title, default_player, connect_to_player, tray_action):
         app = QApplication(sys.argv)
-        app.setWindowIcon(QIcon('prismriver/pixmaps/prismriver.png'))
+        app.setWindowIcon(QIcon(os.path.join(path, 'pixmaps', 'prismriver.png')))
         app.setApplicationName('Prismriver Lyrics')
 
         self.main_window = MainWindow()

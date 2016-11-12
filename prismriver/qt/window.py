@@ -1,12 +1,17 @@
+import os
+
 from prismriver import mpris
 from prismriver.qt.compat import uic, QAbstractTableModel, Qt, QStringListModel, QIcon, \
     QMainWindow, QAbstractItemView, QHeaderView, QStyle, use_pyqt5
 
 
+path = os.path.dirname(os.path.abspath(__file__))
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
-        uic.loadUi('prismriver/qt/window.ui', self)
+        uic.loadUi(os.path.join(path, 'window.ui'), self)
 
         self.init_search_pane()
         self.init_table()
@@ -73,7 +78,7 @@ class PlayerListModel(QStringListModel):
 
         elif role == Qt.DecorationRole:
             if self.players[row]:
-                return QIcon(mpris.get_player_icon_path(self.players[row].name))
+                return QIcon(os.path.join(path, 'pixmaps', 'player', mpris.get_player_icon_name(self.players[row].name)))
 
         elif role == self.DataRole:
             return self.players[row]
