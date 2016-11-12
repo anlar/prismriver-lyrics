@@ -1,4 +1,4 @@
-import re
+from bs4 import NavigableString, Comment, Tag
 
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
@@ -28,9 +28,24 @@ class SongFivePlugin(Plugin):
             song_artist = breadcrumbs[1].a.text
             song_title = breadcrumbs[2].text
 
-            lyrics_pane = soup.find('div', {'class': 'col-md-7'})
-
+            lyrics_pane = soup.find('div', {'class': 'songtext'})
             lyric = self.parse_verse_block(lyrics_pane, tags_to_skip=['ul', 'script', 'ins', 'a', 'div'])
-            lyric = re.sub('Исполнитель:$', '', lyric)
 
             return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
+
+    def parse_verse_block(self, verse_block, tags_to_skip=None):
+        lyric = ''
+
+        for elem in verse_block.childGenerator():
+            if isinstance(elem, Comment):
+                pass
+            elif isinstance(elem, NavigableString):
+                if elem.strip() == 'Исполнитель:':
+                    break
+                else:
+                    lyric += elem.strip()
+            elif isinstance(elem, Tag):
+                if not (tags_to_skip and elem.name in tags_to_skip):
+                    lyric += '\n'
+
+        return lyric.strip()
