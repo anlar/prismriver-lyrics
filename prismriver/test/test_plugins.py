@@ -252,7 +252,7 @@ class TestPlugins(unittest.TestCase):
         # lyrics with additional paragraph level - lyrics: div.p.p.text
         self.check_plugin('letras',
                           'Mirai Nikki', 'Dead End',
-                          ['401b0af66d73d450cee0a7d134bf1c45'])
+                          ['a7358c18d3b45f7de86e368dcc2e4755'])
 
     def test_letssingit_01(self):
         self.check_plugin('letssingit',
