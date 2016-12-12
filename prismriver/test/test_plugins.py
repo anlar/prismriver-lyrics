@@ -526,7 +526,7 @@ class TestPlugins(unittest.TestCase):
     def test_songlyrics_01(self):
         self.check_plugin('songlyrics',
                           'Modern Talking', "You're My Heart, You're My Soul",
-                          ['9001e873f6125b5677491fb2012cc947'])
+                          ['cf59e45d8ce8070a0db077ddfb88343c'])
 
     def test_songlyrics_02(self):
         self.check_plugin('songlyrics',
