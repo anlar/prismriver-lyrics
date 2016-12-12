@@ -478,7 +478,7 @@ class TestPlugins(unittest.TestCase):
         self.check_plugin('nautiljon',
                           'Perfume', 'Cling Cling',
                           ['85e912b195d6aaa816842f64828efaa2',
-                           '9c408a6d0e3a14bef769dda792bcdac4'])
+                           '0503a47e1046b7f52128a652e81a1b06'])
 
     def test_nitrolyrics_02(self):
         self.check_plugin('nitrolyrics',
