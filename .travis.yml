@@ -10,6 +10,6 @@ python:
 notifications:
   email: false
 
-install: "pip install beautifulsoup4 lxml"
+install: "pip install beautifulsoup4 lxml nose-timer"
 
-script: nosetests -v
+script: nosetests -v --with-timer
