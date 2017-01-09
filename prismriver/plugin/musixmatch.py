@@ -27,7 +27,10 @@ class MusixmatchPlugin(Plugin):
             title_pane = soup.find('div', {'class': 'mxm-track-title'})
 
             song_artist = title_pane.find('a').text
-            song_title = title_pane.find('h1', recursive=False).text
+
+            song_title_tag = title_pane.find('h1', recursive=False)
+            song_title_tag.find('span').replace_with('')
+            song_title = song_title_tag.text
 
             base_lyrics_pane = soup.find('div', {'class': 'mxm-lyrics'})
 
