@@ -23,8 +23,9 @@ class DirectLyricsPlugin(Plugin):
             if not main_pane:
                 return None
 
+            song_artist = soup.find('div', {'class': 'column siderail'}).find('div', {'class': 'fixed'}).h2.text
+
             title_header = main_pane.find('h2')
-            song_artist = title_header.find('span', {'itemid': True}).find('span', {'itemprop': 'name '}).text
             song_title = title_header.find('span', {'class': 'fn'}).text
 
             lyrics_pane = main_pane.find('div', {'class': 'lyrics lyricsselect'}, recursive=False).p
