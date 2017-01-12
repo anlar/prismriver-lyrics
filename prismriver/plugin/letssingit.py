@@ -31,7 +31,7 @@ class LetsSingItPlugin(Plugin):
                     # song without lyric, contains "request these lyrics" button
                     return None
 
-                lyric = self.parse_verse_block(lyric_pane)
+                lyric = self.parse_verse_block(lyric_pane, tags_to_skip=['div'])
 
                 return Song(search_result[0], search_result[1], self.sanitize_lyrics([lyric]))
 
