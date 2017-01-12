@@ -502,8 +502,8 @@ class TestPlugins(unittest.TestCase):
 
     def test_sing365_01(self):
         self.check_plugin('sing365',
-                          'Utada Hikaru', "Keep Tryin'",
-                          ['5223d3d9ed3a8b65b270bd4cb90215f0'])
+                          'Utada Hikaru', "Easy Breezy",
+                          ['a2d01052c8e1c508eab40d54303eab1b'])
 
     def test_snakie_01(self):
         # lyrics located in the last paragraph
