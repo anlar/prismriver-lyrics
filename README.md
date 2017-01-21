@@ -106,7 +106,6 @@ List all available plugins:
 * Lololyrics           [id: lololyrics]
 * Lyrical Nonsense     [id: lyricalnonsense]
 * Lyrics Action        [id: lyricsaction]
-* Lyrics Bay           [id: lyricsbay]
 * Lyrics Depot         [id: lyricsdepot]
 * Lyrics N Music       [id: lyricsnmusic]
 * Lyrics Place         [id: lyricsplace]

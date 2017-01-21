@@ -273,18 +273,6 @@ class TestPlugins(unittest.TestCase):
                           'Megumi Hayashibara', 'Northern Lights (Midnight Wedding Mix)',
                           ['022039d57cc9138b0aa4827fd9d81f43'])
 
-    def test_lyricsbay_01(self):
-        # lyric with many footnotes
-        self.check_plugin('lyricsbay',
-                          'Sabaton', 'Resist and Bite',
-                          ['c11351488890d07fdf28648176025ab0'])
-
-    def test_lyricsbay_02(self):
-        # lyric without footnotes
-        self.check_plugin('lyricsbay',
-                          'Tech N9ne', 'Beautiful People (Remix)',
-                          ['f00b119ff8ee7e26af8c5ba8aeb37f17'])
-
     def test_lyricalnonsense_01(self):
         self.check_plugin('lyricalnonsense',
                           'supercell', 'ワールドイズマイン',

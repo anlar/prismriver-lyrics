@@ -31,7 +31,6 @@ from prismriver.plugin.letssingit import LetsSingItPlugin
 from prismriver.plugin.lololyrics import LololyricsPlugin
 from prismriver.plugin.lyricalnonsense import LyricalNonsensePlugin
 from prismriver.plugin.lyricsaction import LyricsActionPlugin
-from prismriver.plugin.lyricsbay import LyricsBayPlugin
 from prismriver.plugin.lyricscom import LyricsComPlugin
 from prismriver.plugin.lyricsdepot import LyricsDepotPlugin
 from prismriver.plugin.lyricsfreak import LyricsFreakPlugin
@@ -118,7 +117,6 @@ def get_plugins(config=None):
         MusixmatchPlugin,
         LyricsPlacePlugin,
         OneMusicLyricsPlugin,
-        LyricsBayPlugin,
         SnakiePlugin,
         KasiTimePlugin,
         JetLyricsPlugin,
