@@ -13,83 +13,56 @@ class AnimeLyricsPlugin(Plugin):
         super(AnimeLyricsPlugin, self).__init__('Anime Lyrics', config)
 
     def search_song(self, artist, title):
-        next_page = True
-        page_no = 1
+        link = 'https://www.googleapis.com/customsearch/v1element?key={}&rsz=filtered_cse&num=10&prettyPrint=true&cx={}&q={}%20{}'.format(
+            'AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY',
+            'partner-pub-9427451883938449:gd93bg-c1sx',
+            self.prepare_url_parameter(artist),
+            self.prepare_url_parameter(title))
 
-        while next_page:
-            link = 'http://www.animelyrics.com/search.php?q={}&t=title'.format(
-                self.prepare_url_parameter(title)
-            )
+        page = self.download_webpage_json(link)
+        if page:
+            search_results = self.parse_search_page(page['results'], artist, title)
 
-            if page_no > 1:
-                link += '&p={}'.format(page_no)
+            for result in search_results:
+                song = self.get_song(result, artist, title)
+                if song:
+                    return song
 
-            page = self.download_webpage(link)
-            if page:
-                soup = self.prepare_soup(page)
-
-                search_results = self.parse_search_page(soup)
-
-                # each search result page may contain only 20 hits, if there is less than 20 => last page
-                if len(search_results) != 20:
-                    next_page = False
-
-                search_results = self.limit_search_results(search_results, artist, title)
-
-                for result in search_results:
-                    song = self.get_song(result, artist, title)
-                    if song:
-                        return song
-
-                page_no += 1
-            else:
-                next_page = False
-
-    def parse_search_page(self, soup):
-        search_head = soup.find('div', {'class': 'searchhead'})
-        if not search_head:
-            return []
-
+    def parse_search_page(self, json_results, artist, title):
         results = []
         current = []
 
-        elem = search_head.nextSibling
+        for res in json_results:
+            page_title = res['titleNoFormatting']
+            url = res['url']
 
-        while elem is not None:
-            if isinstance(elem, Tag):
-                if elem.name == 'a':
-                    current.append(elem.get_text())
-                    if len(current) == 3:
-                        song_link = 'http://www.animelyrics.com' + elem['href']
-                        current.append(song_link)
-                        results.append(current)
+            if self.string_in(artist, page_title) or self.string_in(title, page_title):
+                current.append(page_title)
 
-                        current = []
+                if url.endswith('.txt'):
+                    url = url.replace('.txt', '.htm')
 
-            elem = elem.nextSibling
+                current.append(url)
+
+                results.append(current)
+                current = []
 
         return results
 
-    def limit_search_results(self, results, artist, title):
-        hits = []
-        for result in results:
-            if self.compare_strings(result[2], title):
-                hits.append(result)
-
-        return hits
-
     def get_song(self, result, artist, title):
-        # check song title
-        song_title = result[2]
-        if not self.compare_strings(song_title, title):
-            return None
-
         # download song page
-        song_link = result[3]
+        song_link = result[1]
         page = self.download_webpage(song_link)
         soup = self.prepare_soup(page)
 
+        # check song title
+        crumbs = soup.find('body').find('ul', {'id': 'crumbs'}).find_all('li')
+        song_title = crumbs[-1].text
+        if not self.string_in(title, song_title):
+            return None
+
         # check song artist
+        # todo: compare with all available artists on page
         song_artist = self.get_artist(soup)
         if not self.compare_strings(song_artist, artist):
             return None

@@ -121,7 +121,6 @@ class TestPlugins(unittest.TestCase):
                            '680a12a7055ca78f51e9a3e80a9af8fd'])
 
     def test_animelyrics_05(self):
-        # song on the second search result page
         self.check_plugin('animelyrics',
                           'Kalafina', 'Door',
                           ['2ff25479cf3f32794a757b803dd87827',
