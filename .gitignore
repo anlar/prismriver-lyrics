@@ -14,3 +14,6 @@ run-dev-prismriver.sh
 
 # web-page cache
 *.cache
+
+# various
+*.json
