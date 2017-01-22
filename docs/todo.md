@@ -72,6 +72,7 @@
 * http://www.lyricshunt.com/
 * http://www.lyricsofsong.com/
 * http://www.kpoplyrics.net/
+* http://www.lyricsbox.com/
 
 See also:
 
