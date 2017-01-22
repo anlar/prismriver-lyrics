@@ -1,5 +1,7 @@
-from bs4 import Tag, Comment
+import re
+
 from bs4 import NavigableString
+from bs4 import Tag, Comment
 
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
@@ -12,45 +14,45 @@ class LyricsComPlugin(Plugin):
         super(LyricsComPlugin, self).__init__('Lyrics.com', config)
 
     def search_song(self, artist, title):
-        to_replace = [' ', ' & ']
-        to_delete = ['?', '(', ')', '[', ']', '.', ',', "'", '/', ':']
-        link = 'http://www.lyrics.com/{}-lyrics-{}.html'.format(
-            self.prepare_url_parameter(title, to_replace=to_replace, to_delete=to_delete),
-            self.prepare_url_parameter(artist, to_replace=to_replace, to_delete=to_delete))
+        artist_link = 'http://www.lyrics.com/artist/{}/'.format(self.prepare_url_parameter(artist))
 
-        page = self.download_webpage(link)
+        artist_page = self.download_webpage(artist_link)
 
-        if page:
-            soup = self.prepare_soup(page)
+        if artist_page:
+            soup = self.prepare_soup(artist_page)
 
-            lyrics_pane = soup.find('div', {'id': 'lyrics'})
-            if not lyrics_pane:
-                # song not found or lyrics is empty
-                return
-            lyrics = self.parse_verse_block(lyrics_pane)
+            artist_pane = soup.find('p', {'class': 'artist'})
+            if not artist_pane:
+                # artist page not found, redirect to search page
+                return None
 
-            profile_pane = soup.find('h1', {'id': 'profile_name'})
-            song_title = profile_pane.contents[0].strip()
+            song_artist = artist_pane.a.text
 
-            artist_pane = profile_pane.find('a', {'href': True})
-            song_artist = artist_pane.text
+            for item in soup.findAll('a', href=re.compile('lyric/[0-9]+')):
+                song_title = item.text
 
-            return Song(song_artist, song_title, self.sanitize_lyrics([lyrics]))
+                if self.compare_strings(title, song_title):
+                    song_link = 'http://www.lyrics.com' + item['href']
 
-    def parse_verse_block(self, verse_block):
+                    song_page = self.download_webpage(song_link)
+
+                    if song_page:
+                        soup = self.prepare_soup(song_page)
+
+                        lyrics_pane = soup.find('pre', {'id': 'lyric-body-text'})
+                        lyrics = self.parse_verse_block_custom(lyrics_pane)
+
+                        return Song(song_artist, song_title, self.sanitize_lyrics([lyrics]))
+
+    def parse_verse_block_custom(self, verse_block):
         lyric = ''
 
         for elem in verse_block.childGenerator():
             if isinstance(elem, Comment):
                 pass
             elif isinstance(elem, NavigableString):
-                line = elem.strip()
-                # after that line goes lyrics submitter name
-                if line == '---':
-                    break
-                else:
-                    lyric += elem.strip()
+                lyric += elem
             elif isinstance(elem, Tag):
-                lyric += '\n'
+                lyric += elem.text
 
         return lyric.strip()

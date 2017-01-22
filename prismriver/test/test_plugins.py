@@ -292,8 +292,8 @@ class TestPlugins(unittest.TestCase):
 
     def test_lyricscom_01(self):
         self.check_plugin('lyricscom',
-                          'Metallica', 'That Was Just Your Life',
-                          ['e501f7b53fb4fda7ba638be5170b248d'])
+                          'Yuki Kajiura', 'Open Your Heart',
+                          ['ea318b768fa5a169a0b28362f1c1635f'])
 
     def test_lyricshuddle_01(self):
         self.check_plugin('lyricshuddle',
