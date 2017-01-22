@@ -313,7 +313,7 @@ class TestPlugins(unittest.TestCase):
     def test_lyricsfreak_01(self):
         self.check_plugin('lyricsfreak',
                           'Megumi Hayashibara', 'Give A Reason (From Slayers Next)',
-                          ['3197946854a8a14c188018f32764476c'])
+                          ['4adfbc3482fc3e8fc340d98855a122ac'])
 
     def test_lyricsmania_01(self):
         self.check_plugin('lyricsmania',

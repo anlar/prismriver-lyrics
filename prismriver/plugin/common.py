@@ -163,12 +163,15 @@ class Plugin:
     # Page parsing helpers
     #
 
-    def sanitize_lyrics(self, lyrics):
+    def sanitize_lyrics(self, lyrics, remove_duplicate_spaces=False):
         if lyrics:
             sanitized = []
             for lyric in lyrics:
                 if lyric:
-                    sanitized.append(lyric.strip())
+                    if remove_duplicate_spaces:
+                        sanitized.append(re.sub(r' {2,}', ' ', lyric.strip()))
+                    else:
+                        sanitized.append(lyric.strip())
 
             return sanitized
         else:

@@ -28,7 +28,8 @@ class LyricsFreakPlugin(Plugin):
                     lyric_pane = soup.find('div', {'id': 'content_h'})
                     lyric = self.parse_verse_block(lyric_pane)
 
-                    return Song(search_result[0], search_result[1], self.sanitize_lyrics([lyric]))
+                    return Song(search_result[0], search_result[1],
+                                self.sanitize_lyrics([lyric], remove_duplicate_spaces=True))
 
     def parse_search_page(self, soup, artist, title):
         pane = soup.find('div', {'class': 'colortable green'})
