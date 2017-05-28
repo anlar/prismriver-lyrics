@@ -18,21 +18,21 @@ class JLyricPlugin(Plugin):
         if page:
             soup = self.prepare_soup(page)
 
-            lyric_list_pane = soup.find('div', {'id': 'lyricList'})
+            lyric_list_pane = soup.find('div', {'class': 'bdy'})
             if lyric_list_pane is None:
                 return None
 
-            artist_pane = lyric_list_pane.find('div', {'class': 'status'}).find('a')
+            artist_pane = lyric_list_pane.find('p', {'class': 'sml'}).find('a')
             song_artist = artist_pane.text
 
-            title_pane = lyric_list_pane.find('div', {'class': 'title'}).find('a')
+            title_pane = lyric_list_pane.find('p', {'class': 'mid'}).find('a')
             song_title = title_pane.text
             song_link = title_pane['href']
 
             lyric_page = self.download_webpage(song_link)
             soup = self.prepare_soup(lyric_page)
 
-            lyric_pane = soup.find('p', {'id': 'lyricBody'})
+            lyric_pane = soup.find('p', {'id': 'Lyric'})
             lyric = self.parse_verse_block(lyric_pane)
 
             return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
