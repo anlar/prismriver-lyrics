@@ -15,7 +15,7 @@ class LyrsensePlugin(Plugin):
         super(LyrsensePlugin, self).__init__('Lyrsense', config)
 
     def search_song(self, artist, title):
-        link = 'http://lyrsense.com/search?s={}'.format(
+        link = 'https://lyrsense.com/search?s={}'.format(
             self.prepare_url_parameter(title))
 
         page = self.download_webpage(link)
