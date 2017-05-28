@@ -22,7 +22,6 @@ from prismriver.plugin.evesta import EvestaPlugin
 from prismriver.plugin.genius import GeniusPlugin
 from prismriver.plugin.jetlyrics import JetLyricsPlugin
 from prismriver.plugin.jlyric import JLyricPlugin
-from prismriver.plugin.jlyricsru import JLyricsRuPlugin
 from prismriver.plugin.kashinavi import KashiNaviPlugin
 from prismriver.plugin.kasitime import KasiTimePlugin
 from prismriver.plugin.kget import KGetPlugin
@@ -110,7 +109,6 @@ def get_plugins(config=None):
         ShowMeLyricsPlugin,
         AlphabetLyricsPlugin,
         DirectLyricsPlugin,
-        JLyricsRuPlugin,
         LyricsDepotPlugin,
         OneSongLyricsPlugin,
         NautiljonPlugin,
