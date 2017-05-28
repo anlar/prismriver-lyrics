@@ -466,7 +466,14 @@ class TestPlugins(unittest.TestCase):
     def test_sing365_01(self):
         self.check_plugin('sing365',
                           'Utada Hikaru', "Easy Breezy",
-                          ['a2d01052c8e1c508eab40d54303eab1b'])
+                          ['9d8a9c903553733c0adde2a3eb06a226'])
+
+    def test_sing365_02(self):
+        # different artist-title pattern
+        # contains album info in lyrics page
+        self.check_plugin('sing365',
+                          'Ace of Base', 'Beautiful Life',
+                          ['32ebc30d71e7312a9c23ea452968d2fd'])
 
     def test_snakie_01(self):
         # lyrics located in the last paragraph
