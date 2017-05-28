@@ -31,8 +31,7 @@ class EvestaPlugin(Plugin):
             lyric_page = self.download_webpage(song_link)
             soup = self.prepare_soup(lyric_page)
 
-            main_lyric_pane = soup.find('div', {'id': 'lyricview'})
-            inner_lyric_pane = main_lyric_pane.find('div', {'class': 'body'}).p
-            lyric = self.parse_verse_block(inner_lyric_pane)
+            lyric_pane = soup.find('div', {'id': 'lyricbody'})
+            lyric = self.parse_verse_block(lyric_pane)
 
             return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
