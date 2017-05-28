@@ -11,11 +11,11 @@ class LetsSingItPlugin(Plugin):
         super(LetsSingItPlugin, self).__init__('LetsSingIt', config)
 
     def search_song(self, artist, title):
-        link = 'http://search.letssingit.com/cgi-exe/am.cgi?a=search&l=song&s={}+{}'.format(
+        link = 'https://search.letssingit.com/?s={}+{}&a=search&l=archive'.format(
             self.prepare_url_parameter(artist),
             self.prepare_url_parameter(title))
 
-        page = self.download_webpage(link)
+        page = self.download_webpage(link, headers={'Referer': 'https://www.letssingit.com/'})
 
         if page:
             soup = self.prepare_soup(page)
