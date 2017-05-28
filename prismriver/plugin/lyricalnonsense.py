@@ -1,5 +1,7 @@
 import re
 
+from bs4 import Comment, NavigableString, Tag
+
 from prismriver.plugin.common import Plugin
 from prismriver.struct import Song
 
@@ -40,19 +42,27 @@ class LyricalNonsensePlugin(Plugin):
     def get_song_page(self, page, title):
         soup = self.prepare_soup(page)
 
-        for elem in soup.findAll('table', {'class': 'imagetablelyrics'}):
-            original_title_block = elem.find('div', {'class': 'titletextartist'})
-            song_link = original_title_block.a['href']
+        song_panes = soup.findAll('table', {'class': 'imagetablelyrics'})
 
-            song_titles = [original_title_block.text]
+        if song_panes:
+            for elem in song_panes:
+                original_title_block = elem.find('div', {'class': 'titletextartist'})
+                song_link = original_title_block.a['href']
 
-            translated_title_block = elem.find('div', {'class': 'subtitletextartist'})
-            if translated_title_block:
-                for translated_title in translated_title_block.strings:
-                    song_titles.extend(translated_title.strip().split('\r\n'))
+                song_titles = [original_title_block.text]
 
-            if title.lower() in map(lambda x: x.lower(), song_titles):
-                return self.download_webpage(song_link)
+                translated_title_block = elem.find('div', {'class': 'subtitletextartist'})
+                if translated_title_block:
+                    for translated_title in translated_title_block.strings:
+                        song_titles.extend(translated_title.strip().split('\r\n'))
+
+                if title.lower() in map(lambda x: x.lower(), song_titles):
+                    return self.download_webpage(song_link)
+        else:
+            for elem in soup.findAll('div', {'class': 'apmenublock'}):
+                for song_name in elem.findAll('div', recursive=False):
+                    if self.compare_strings(song_name.text, title):
+                        return self.download_webpage(elem.parent['href'])
 
     def get_song(self, page):
         soup = self.prepare_soup(page)
@@ -87,3 +97,19 @@ class LyricalNonsensePlugin(Plugin):
                 lyrics.append(lyric)
 
         return Song(song_artist, song_title, self.sanitize_lyrics(lyrics))
+
+    def parse_verse_block(self, verse_block, tags_to_skip=None):
+        lyric = ''
+
+        for elem in verse_block.childGenerator():
+            if isinstance(elem, Comment):
+                pass
+            elif isinstance(elem, NavigableString):
+                lyric += elem.strip()
+            elif isinstance(elem, Tag):
+                if elem.name == 'p':
+                    lyric += ('\n\n' + super().parse_verse_block(elem))
+                else:
+                    lyric += '\n'
+
+        return lyric.strip()

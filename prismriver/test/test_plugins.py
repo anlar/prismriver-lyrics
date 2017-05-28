@@ -257,9 +257,9 @@ class TestPlugins(unittest.TestCase):
     def test_lyricalnonsense_01(self):
         self.check_plugin('lyricalnonsense',
                           'supercell', 'ワールドイズマイン',
-                          ['5ade846c09fb4ce827482fbc179b0c34',
-                           '3b4b84e5bda3df6443e3b6cfc309c5dc',
-                           'd04c60b41653cf8dfef9fc76af9d8e8a'])
+                          ['e8ec2964d298caa61aeddb2e353ec574',
+                           '57e83798afde4fc3aa0fdd65adf0012f',
+                           '71b30cbbc0ec6f9aa79189f015b6d8ba'])
 
     def test_lyricalnonsense_02(self):
         self.check_plugin('lyricalnonsense',
