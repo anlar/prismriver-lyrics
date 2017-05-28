@@ -18,7 +18,7 @@ class GeniusPlugin(Plugin):
         to_delete = ["'", '(', ')', '.', '?']
         to_replace = [' ']
 
-        link = 'http://genius.com/{}-{}-lyrics'.format(
+        link = 'https://genius.com/{}-{}-lyrics'.format(
             self.prepare_url_parameter(artist.lower(), to_delete=to_delete, to_replace=to_replace),
             self.prepare_url_parameter(title.lower(), to_delete=to_delete, to_replace=to_replace))
 
@@ -26,13 +26,13 @@ class GeniusPlugin(Plugin):
         if page:
             soup = self.prepare_soup(page)
 
-            artist_pane = soup.find('a', {'class': 'song_header-primary_info-primary_artist'})
+            artist_pane = soup.find('a', {'class': 'header_with_cover_art-primary_info-primary_artist'})
             song_artist = artist_pane.text.strip()
 
-            title_pane = soup.find('h1', {'class': 'song_header-primary_info-title'})
+            title_pane = soup.find('h1', {'class': 'header_with_cover_art-primary_info-title'})
             song_title = title_pane.text.strip()
 
-            lyric_pane = soup.find('lyrics', {'class': 'lyrics'}).p
+            lyric_pane = soup.find('div', {'class': 'lyrics'}).find('p')
             lyric = self.parse_verse_block(lyric_pane)
 
             return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))

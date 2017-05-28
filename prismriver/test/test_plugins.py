@@ -176,6 +176,11 @@ class TestPlugins(unittest.TestCase):
                           'The Bee Gees', "I Can't Help It (with Olivia Newton-John)",
                           ['98cf0624d48892db275b16b865d8cc97'])
 
+    def test_genius_02(self):
+        self.check_plugin('genius',
+                          'Megumi Hayashibara', 'Shining Girl',
+                          ['626913b221174af584c67bf0b3846999'])
+
     def test_jetlyrics_01(self):
         self.check_plugin('jetlyrics',
                           'Kalafina', 'to the beginning',
