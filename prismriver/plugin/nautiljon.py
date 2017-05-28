@@ -24,23 +24,14 @@ class NautiljonPlugin(Plugin):
             song_artist = title_parts[1]
             song_title = title_parts[2]
 
-            lyrics_panes = soup.findAll('td', {'class': 'a50 vtop'})
+            orig_pane = soup.find('span', {'itemprop': 'text'})
+            tran_panes = soup.findAll('td', {'class': 'a50 vtop'})
 
-            lyrics = []
+            lyrics = [self.parse_verse_block(orig_pane)]
 
-            if len(lyrics_panes) > 0:
-                # 2 lyrics: original and translated
-                for pane in lyrics_panes:
+            if len(tran_panes) > 1:
+                # skip first block as it's wrapping original lyrics pane
+                for pane in tran_panes[1:]:
                     lyrics.append(self.parse_verse_block(pane))
-            else:
-                # only original lyrics
-                lyrics_pane = soup.find('div', {'id': 'onglets_2_histoire'})
-                lyric = self.parse_verse_block(lyrics_pane, tags_to_skip=['div', 'p'])
-
-                if lyric.endswith('Aucune parole disponible.'):
-                    # there are no lyrics for that song - instrumental
-                    return None
-                else:
-                    lyrics.append(lyric)
 
             return Song(song_artist, song_title, self.sanitize_lyrics(lyrics))
