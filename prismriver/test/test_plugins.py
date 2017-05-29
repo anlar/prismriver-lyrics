@@ -105,13 +105,15 @@ class TestPlugins(unittest.TestCase):
         self.check_plugin('animelyrics',
                           'supercell', 'Kokuhaku',
                           ['12933b6f2b339d01b9b1bbb7228525c4',
-                           'fa2bdfc06457002b0640ac4f6d782ced'])
+                           '9f08693eac038a9770c53222fe88f3f0',
+                           '40945f396ea96920edb231fd891709fd'])
 
     def test_animelyrics_03(self):
         self.check_plugin('animelyrics',
                           'Konomi Suzuki', 'Yume no Tsuzuki',
                           ['ddc2639d5ce46acfba260d38cc21a74a',
-                           'c05345db62f58cff9ca2c9facf038d1e'])
+                           'c05345db62f58cff9ca2c9facf038d1e',
+                           '3b61028d47c6f3740e919afa17196b34'])
 
     def test_animelyrics_04(self):
         self.check_plugin('animelyrics',
