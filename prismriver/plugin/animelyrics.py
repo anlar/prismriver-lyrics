@@ -39,8 +39,8 @@ class AnimeLyricsPlugin(Plugin):
             if self.string_in(artist, page_title) or self.string_in(title, page_title):
                 current.append(page_title)
 
-                if url.endswith('.txt'):
-                    url = url.replace('.txt', '.htm')
+                if url.endswith('.txt') or url.endswith('.jis'):
+                    url = url[:-4] + '.htm'
 
                 current.append(url)
 
