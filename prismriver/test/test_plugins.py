@@ -123,10 +123,17 @@ class TestPlugins(unittest.TestCase):
                            '680a12a7055ca78f51e9a3e80a9af8fd'])
 
     def test_animelyrics_05(self):
+        # romaji + kanji
         self.check_plugin('animelyrics',
                           'Kalafina', 'Door',
                           ['2ff25479cf3f32794a757b803dd87827',
                            '3f9c95a21fc726c5836af0dc8673360e'])
+
+    def test_animelyrics_06(self):
+        # single lyric - romaji only
+        self.check_plugin('animelyrics',
+                          'Shimazu Saeko', 'Smiling Scientist',
+                          ['68f4e1cff39cae3747af8439bf08ba88'])
 
     def test_azlyrics_01(self):
         self.check_plugin('azlyrics',
