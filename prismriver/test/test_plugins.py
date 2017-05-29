@@ -332,11 +332,6 @@ class TestPlugins(unittest.TestCase):
                           'Oingo Boingo', 'No One Lives Forever',
                           ['83060a72896096b3ace676945d4b7317'])
 
-    def test_lyricsnmusic_01(self):
-        self.check_plugin('lyricsnmusic',
-                          'Joe Dassin', 'Le Moustique',
-                          ['492a37b433c45767a589eefbec8060a3'])
-
     def test_lyricsplace_01(self):
         self.check_plugin('lyricsplace',
                           'Ace of Base', 'Never Gonna Say I\'m Sorry',
