@@ -1,3 +1,38 @@
+### v0.4.0
+
+* Changed project title and launcher names
+
+* Added cache cleanup options
+
+* Added support for PyQt5.6+
+
+* Fixed compatibility issue on OS X
+
+* Qt: fallback to Qt4
+
+* Qt: option to select Qt version
+
+* Various fixes for existing plugins
+
+* Added new plugins:
+  * Lyrsense
+  * LyricsFreak
+  * Lyrics.net
+  * Dark Lyrics
+  * Bandcamp
+  * Encyclopaedia Metallum
+  * Songs Lyrics
+  * Sing365
+  * Uta-Net
+  * UtaMap
+  * KashiNavi
+
+* Removed plugins:
+  * Leo's Lyrics
+  * Lyrics Bay
+  * J-Lyrics.ru
+  * Lyrics N Music
+
 ### v0.3.0
 
 * Qt: rewrite client to use designer ui
