@@ -10,8 +10,8 @@ class UtaNetPlugin(Plugin):
         super(UtaNetPlugin, self).__init__('Uta-Net', config)
 
     def search_song(self, artist, title):
-        link = 'http://www.uta-net.com/search/?Aselect=2&Keyword={}'.format(
-                self.prepare_url_parameter(title, delimiter='+'))
+        link = 'https://www.uta-net.com/search/?Aselect=2&Keyword={}'.format(
+            self.prepare_url_parameter(title, delimiter='+'))
 
         page = self.download_webpage(link)
 
@@ -27,16 +27,12 @@ class UtaNetPlugin(Plugin):
                 song_id = tds[0].a['href'].split('/')[2]
 
                 if self.compare_strings(artist, song_artist) and self.compare_strings(title, song_title):
-                    song_link = 'http://www.uta-net.com/user/phplib/svg/showkasi.php?ID={}'.format(song_id)
-                    song_xml = self.download_xml(song_link)
-                    if song_xml:
-                        lyric_pane = song_xml.find('g')
+                    song_link = 'https://www.uta-net.com/song/{}/'.format(song_id)
+                    song_page = self.download_webpage_text(song_link)
+                    if song_page:
+                        soup = self.prepare_soup(song_page)
+                        lyric_pane = soup.find('div', {'id': 'kashi_area'})
 
-                        lyric = ''
-                        for tag in lyric_pane.iter('text'):
-                            if tag.text:
-                                lyric += (tag.text + '\n')
-                            else:
-                                lyric += '\n'
-
-                        return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
+                        if lyric_pane:
+                            lyric = self.parse_verse_block(lyric_pane)
+                            return Song(song_artist, song_title, self.sanitize_lyrics([lyric]))
