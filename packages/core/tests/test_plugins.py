@@ -6,12 +6,15 @@ import httpx
 from prismriver_lyrics.plugins.absolutelyrics import AbsoluteLyricsPlugin
 from prismriver_lyrics.plugins.alphabetlyrics import AlphabetLyricsPlugin
 from prismriver_lyrics.plugins.base import LyricsPlugin
+from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
 from prismriver_lyrics.plugins.letras import LetrasPlugin
 from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
 from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
+from prismriver_lyrics.plugins.netease import NeteasePlugin
 from prismriver_lyrics.plugins.one_music_lyrics import OneMusicLyricsPlugin
 from prismriver_lyrics.plugins.paroles import ParolesPlugin
+from prismriver_lyrics.plugins.petitlyrics import PetitLyricsPlugin
 from prismriver_lyrics.plugins.seekalyric import SeekALyricPlugin
 from prismriver_lyrics.plugins.snakeroot import SnakerootPlugin
 from prismriver_lyrics.plugins.vagalume import VagalumePlugin
@@ -69,6 +72,14 @@ class TestPlugins(PluginTestCase):
             "cd4bca18b2565ac47d9f188e5033a1a3",
         )
 
+    def test_deezer_01(self):
+        self.check_plugin(
+            DeezerPlugin(),
+            "Metallica",
+            "Sad But True",
+            "76eca4e5d8c2d454435783df08fdb2fc",
+        )
+
     def test_elyrics_01(self):
         self.check_plugin(
             ElyricsPlugin(),
@@ -101,6 +112,14 @@ class TestPlugins(PluginTestCase):
             "a1a484a129f48294fb08985c7d85de58",
         )
 
+    def test_netease_01(self):
+        self.check_plugin(
+            NeteasePlugin(),
+            "Metallica",
+            "Sad But True",
+            "c1947bf1d3dd2154c4020d9b7a7e4e5c",
+        )
+
     def test_one_music_lyrics_01(self):
         self.check_plugin(
             OneMusicLyricsPlugin(),
@@ -115,6 +134,14 @@ class TestPlugins(PluginTestCase):
             "Stromae",
             "Alors on danse",
             "5989a684b9f9fd414bcdefd8580aa65e",
+        )
+
+    def test_petitlyrics_01(self):
+        self.check_plugin(
+            PetitLyricsPlugin(),
+            "Metallica",
+            "Sad But True",
+            "d2514da2afbd7ba49d2c78b0cc5abf86",
         )
 
     def test_seekalyric_01(self):
