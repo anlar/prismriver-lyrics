@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(UV_CACHE_DIR=* make test)"
+    ]
+  }
+}
