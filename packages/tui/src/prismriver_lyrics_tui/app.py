@@ -157,6 +157,9 @@ class PrismriverTuiApp(App[None]):
     def _refresh_lyrics(self, lyrics: str) -> None:
         widget = self.query_one("#lyrics", Static)
         widget.update(lyrics or "(no lyrics)")
+        self.query_one("#lyrics-container", VerticalScroll).scroll_home(
+            animate=False
+        )
 
 
 def run() -> None:

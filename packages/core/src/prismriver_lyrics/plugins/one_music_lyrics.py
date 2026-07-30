@@ -50,14 +50,27 @@ class OneMusicLyricsPlugin(LyricsPlugin):
     def _find_lyrics_container(soup: BeautifulSoup):
         # The lyrics <p> carries no class/id (unlike the surrounding
         # disclaimer/notice paragraphs), but there's more than one bare
-        # <p> in the box, so pick whichever has the most <br> line breaks.
+        # <p> in the box. Some songs also have "related songs" widgets in
+        # the same shape (bare <p>, many <br> line breaks between
+        # "<a>Song</a> by <a>Artist</a>" entries), so a plain <br>-count
+        # heuristic alone can pick a navigation list instead of the real
+        # lyrics. Reject candidates whose text is mostly hyperlinks.
         container = None
-        best_br_count = -1
+        best_br_count = 0
         for p in soup.select("#welcomeBox p"):
             if p.get("class") or p.get("id"):
                 continue
             br_count = len(p.find_all("br"))
-            if br_count > best_br_count:
-                best_br_count = br_count
-                container = p
+            if br_count <= best_br_count:
+                continue
+            text = p.get_text(strip=True)
+            if not text:
+                continue
+            link_text_len = sum(
+                len(a.get_text(strip=True)) for a in p.find_all("a")
+            )
+            if link_text_len / len(text) > 0.3:
+                continue
+            best_br_count = br_count
+            container = p
         return container
