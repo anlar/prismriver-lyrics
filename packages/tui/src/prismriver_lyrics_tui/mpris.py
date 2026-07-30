@@ -115,17 +115,21 @@ def _player_property_fields(changed: dict[str, Any]) -> dict[str, Any]:
 class MprisWatcher:
     """Watches MPRIS-compliant media players over the D-Bus session bus.
 
-    `watch()` is an async generator that yields a TrackInfo every time a
-    known player's metadata or playback state changes, a new player appears,
-    or one goes away (reported as an empty-track update).
+    `watch()` is an async generator that yields a (bus_name, TrackInfo) pair
+    every time a known player's metadata or playback state changes, a new
+    player appears, or one goes away (reported as an empty-track update).
     """
 
     def __init__(self) -> None:
         self._bus: MessageBus | None = None
-        self._queue: asyncio.Queue[TrackInfo] = asyncio.Queue()
+        self._queue: asyncio.Queue[tuple[str, TrackInfo]] = asyncio.Queue()
         self._known: set[str] = set()
         self._identities: dict[str, str] = {}
         self._states: dict[str, TrackInfo] = {}
+
+    def known_players(self) -> dict[str, TrackInfo]:
+        """Snapshot of every currently known player's latest TrackInfo."""
+        return dict(self._states)
 
     def _display_name(self, bus_name: str) -> str:
         return self._identities.get(bus_name, player_short_name(bus_name))
@@ -135,9 +139,9 @@ class MprisWatcher:
         current = self._states.get(bus_name, TrackInfo(player=display_name))
         updated = replace(current, player=display_name, **fields)
         self._states[bus_name] = updated
-        self._queue.put_nowait(updated)
+        self._queue.put_nowait((bus_name, updated))
 
-    async def watch(self) -> AsyncIterator[TrackInfo]:
+    async def watch(self) -> AsyncIterator[tuple[str, TrackInfo]]:
         self._bus = await MessageBus(bus_type=BusType.SESSION).connect()
 
         dbus_iface = await self._interface(
@@ -165,7 +169,7 @@ class MprisWatcher:
             player = self._display_name(name)
             self._identities.pop(name, None)
             self._states.pop(name, None)
-            self._queue.put_nowait(TrackInfo(player=player))
+            self._queue.put_nowait((name, TrackInfo(player=player)))
 
     async def _interface(
         self, bus_name: str, path: str, iface_name: str

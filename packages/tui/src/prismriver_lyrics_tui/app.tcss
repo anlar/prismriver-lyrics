@@ -13,6 +13,11 @@
     padding: 1 2;
 }
 
+#player-list {
+    border: round $accent;
+    height: 3;
+}
+
 #results-list {
     border: round $accent;
     height: 1fr;

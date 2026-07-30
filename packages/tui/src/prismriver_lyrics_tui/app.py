@@ -26,6 +26,8 @@ class PrismriverTuiApp(App[None]):
         self._search_task: asyncio.Task[None] | None = None
         self._last_track_key: tuple[str, str] | None = None
         self._results: list[LyricsResult] = []
+        self._players: dict[str, TrackInfo] = {}
+        self._selected_bus_name: str | None = None
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -33,6 +35,7 @@ class PrismriverTuiApp(App[None]):
             with Vertical(id="left-column"):
                 with VerticalScroll(id="metadata-container"):
                     yield Static(id="now-playing")
+                yield OptionList(id="player-list")
                 yield OptionList(id="results-list")
             with VerticalScroll(id="lyrics-container"):
                 yield Static(id="lyrics")
@@ -46,12 +49,52 @@ class PrismriverTuiApp(App[None]):
 
     async def _watch_mpris(self) -> None:
         try:
-            async for track in self._watcher.watch():
-                self._handle_track(track)
+            async for bus_name, track in self._watcher.watch():
+                self._handle_track_event(bus_name, track)
         except asyncio.CancelledError:
             raise
         except Exception as exc:
             self.status = f"D-Bus error: {exc}"
+
+    def _handle_track_event(self, bus_name: str, track: TrackInfo) -> None:
+        self._refresh_player_list()
+
+        if self._selected_bus_name is None:
+            self._select_player(bus_name)
+        elif bus_name == self._selected_bus_name:
+            self._handle_track(track)
+
+    def _refresh_player_list(self) -> None:
+        self._players = self._watcher.known_players()
+        bus_names = list(self._players)
+
+        player_list = self.query_one("#player-list", OptionList)
+        player_list.set_options(
+            Option(self._players[bus_name].player or bus_name, id=bus_name)
+            for bus_name in bus_names
+        )
+        # OptionList's own "auto" height ignores CSS min-height when empty,
+        # so the box height is set explicitly here instead: shrink to fit
+        # the player count (plus 2 rows for the border), never below 1
+        # visible content line.
+        player_list.styles.height = max(1, len(bus_names)) + 2
+
+        if self._selected_bus_name in self._players:
+            player_list.highlighted = bus_names.index(self._selected_bus_name)
+        elif bus_names:
+            self._select_player(bus_names[0])
+        else:
+            self._selected_bus_name = None
+            self._handle_track(TrackInfo())
+
+    def _select_player(self, bus_name: str) -> None:
+        self._selected_bus_name = bus_name
+        player_list = self.query_one("#player-list", OptionList)
+        try:
+            player_list.highlighted = list(self._players).index(bus_name)
+        except ValueError:
+            pass
+        self._handle_track(self._players.get(bus_name, TrackInfo()))
 
     def _handle_track(self, track: TrackInfo) -> None:
         self.track = track
@@ -108,10 +151,12 @@ class PrismriverTuiApp(App[None]):
     def on_option_list_option_highlighted(
         self, event: OptionList.OptionHighlighted
     ) -> None:
-        if event.option_list.id != "results-list":
-            return
-        if 0 <= event.option_index < len(self._results):
-            self._refresh_lyrics(self._results[event.option_index].lyrics)
+        if event.option_list.id == "results-list":
+            if 0 <= event.option_index < len(self._results):
+                self._refresh_lyrics(self._results[event.option_index].lyrics)
+        elif event.option_list.id == "player-list":
+            if event.option_id and event.option_id != self._selected_bus_name:
+                self._select_player(event.option_id)
 
     def watch_track(self) -> None:
         self._refresh_now_playing()
