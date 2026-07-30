@@ -7,6 +7,8 @@ from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
 from prismriver_lyrics.plugins.letras import LetrasPlugin
 from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
+from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
+from prismriver_lyrics.plugins.paroles import ParolesPlugin
 from prismriver_lyrics.search import USER_AGENT
 
 
@@ -67,4 +69,20 @@ class TestPlugins(PluginTestCase):
             "Metallica",
             "Sad But True",
             "a1a484a129f48294fb08985c7d85de58",
+        )
+
+    def test_lyricsmania_01(self):
+        self.check_plugin(
+            LyricsManiaPlugin(),
+            "Metallica",
+            "Sad But True",
+            "a1a484a129f48294fb08985c7d85de58",
+        )
+
+    def test_paroles_01(self):
+        self.check_plugin(
+            ParolesPlugin(),
+            "Stromae",
+            "Alors on danse",
+            "5989a684b9f9fd414bcdefd8580aa65e",
         )
