@@ -1,10 +1,12 @@
 import asyncio
 
+from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.search import search_lyrics
 from textual.app import App, ComposeResult
-from textual.containers import Horizontal, VerticalScroll
+from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.reactive import reactive
-from textual.widgets import Footer, Header, Static
+from textual.widgets import Footer, Header, OptionList, Static
+from textual.widgets.option_list import Option
 
 from prismriver_lyrics_tui.mpris import MprisWatcher, TrackInfo, format_duration
 
@@ -23,12 +25,15 @@ class PrismriverTuiApp(App[None]):
         self._watcher = MprisWatcher()
         self._search_task: asyncio.Task[None] | None = None
         self._last_track_key: tuple[str, str] | None = None
+        self._results: list[LyricsResult] = []
 
     def compose(self) -> ComposeResult:
         yield Header()
         with Horizontal(id="body"):
-            with VerticalScroll(id="metadata-container"):
-                yield Static(id="now-playing")
+            with Vertical(id="left-column"):
+                with VerticalScroll(id="metadata-container"):
+                    yield Static(id="now-playing")
+                yield OptionList(id="results-list")
             with VerticalScroll(id="lyrics-container"):
                 yield Static(id="lyrics")
         yield Footer()
@@ -73,22 +78,40 @@ class PrismriverTuiApp(App[None]):
 
     async def _search_lyrics(self, artist: str, title: str) -> None:
         self.status = "Searching..."
-        self._refresh_lyrics("")
+        self._set_results([])
 
         try:
-            result = await search_lyrics(artist, title)
+            results = await search_lyrics(artist, title)
         except asyncio.CancelledError:
             raise
         except Exception as exc:
             self.status = f"Error: {exc}"
             return
 
-        if result is None:
+        self._set_results(results)
+        if not results:
             self.status = "No lyrics found."
-            self._refresh_lyrics("")
         else:
-            self.status = f"Source: {result.source}"
-            self._refresh_lyrics(result.lyrics)
+            sources = "source" if len(results) == 1 else "sources"
+            self.status = f"Found {len(results)} {sources}"
+            self._refresh_lyrics(results[0].lyrics)
+
+    def _set_results(self, results: list[LyricsResult]) -> None:
+        self._results = results
+        option_list = self.query_one("#results-list", OptionList)
+        option_list.set_options(Option(result.source) for result in results)
+        if results:
+            option_list.highlighted = 0
+        else:
+            self._refresh_lyrics("")
+
+    def on_option_list_option_highlighted(
+        self, event: OptionList.OptionHighlighted
+    ) -> None:
+        if event.option_list.id != "results-list":
+            return
+        if 0 <= event.option_index < len(self._results):
+            self._refresh_lyrics(self._results[event.option_index].lyrics)
 
     def watch_track(self) -> None:
         self._refresh_now_playing()

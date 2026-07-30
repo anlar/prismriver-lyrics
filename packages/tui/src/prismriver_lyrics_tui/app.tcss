@@ -2,11 +2,20 @@
     height: 1fr;
 }
 
-#metadata-container {
+#left-column {
     width: 1fr;
-    border: round $accent;
     margin: 0 0 0 1;
+}
+
+#metadata-container {
+    border: round $accent;
+    height: auto;
     padding: 1 2;
+}
+
+#results-list {
+    border: round $accent;
+    height: 1fr;
 }
 
 #lyrics-container {

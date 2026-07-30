@@ -17,12 +17,13 @@ async def search_lyrics(
     title: str,
     plugins: list[LyricsPlugin] | None = None,
     timeout: float = 10.0,
-) -> LyricsResult | None:
-    """Query every plugin concurrently and return the first successful hit.
+) -> list[LyricsResult]:
+    """Query every plugin concurrently and return every successful hit.
 
-    Plugins that error out or find nothing are ignored in favor of whichever
-    other plugin answers next; remaining in-flight requests are cancelled as
-    soon as a result is available.
+    Waits for all plugins to finish rather than racing them. Plugins that
+    error out or find nothing are silently excluded. Results are returned
+    in the same order as `plugins` (or `default_plugins()`), not
+    completion order, so the ranking is stable across runs.
     """
     if plugins is None:
         plugins = default_plugins()
@@ -36,15 +37,6 @@ async def search_lyrics(
             asyncio.create_task(plugin.search(client, artist, title))
             for plugin in plugins
         ]
-        try:
-            for coro in asyncio.as_completed(tasks):
-                try:
-                    result = await coro
-                except Exception:
-                    continue
-                if result is not None:
-                    return result
-            return None
-        finally:
-            for task in tasks:
-                task.cancel()
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+    return [result for result in results if isinstance(result, LyricsResult)]
