@@ -1,5 +1,7 @@
 from types import SimpleNamespace
+from unittest.mock import AsyncMock
 
+import pytest
 from prismriver_lyrics_tui.mpris import (
     MprisWatcher,
     _metadata_fields,
@@ -125,3 +127,31 @@ def test_emit_merges_partial_updates_onto_existing_state():
     assert track.artist == "Artist Name"
     assert track.title == "Song Title"
     assert track.playback_status == "Paused"
+
+
+@pytest.mark.asyncio
+async def test_get_position_returns_none_for_unknown_player():
+    watcher = MprisWatcher()
+    assert await watcher.get_position("org.mpris.MediaPlayer2.mpv") is None
+
+
+@pytest.mark.asyncio
+async def test_get_position_queries_cached_player_interface():
+    watcher = MprisWatcher()
+    bus_name = "org.mpris.MediaPlayer2.mpv"
+    iface = AsyncMock()
+    iface.get_position.return_value = 42_000
+    watcher._player_ifaces[bus_name] = iface
+
+    assert await watcher.get_position(bus_name) == 42_000
+
+
+@pytest.mark.asyncio
+async def test_get_position_returns_none_when_interface_call_fails():
+    watcher = MprisWatcher()
+    bus_name = "org.mpris.MediaPlayer2.mpv"
+    iface = AsyncMock()
+    iface.get_position.side_effect = Exception("boom")
+    watcher._player_ifaces[bus_name] = iface
+
+    assert await watcher.get_position(bus_name) is None

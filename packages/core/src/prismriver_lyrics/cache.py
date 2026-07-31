@@ -6,10 +6,26 @@ import time
 from dataclasses import asdict
 from pathlib import Path
 
-from prismriver_lyrics.models import LyricsResult
+from prismriver_lyrics.models import LyricsResult, SyncedLine, SyncedLyrics
 
 # Week-long TTL
 DEFAULT_TTL = 7 * 24 * 60 * 60.0
+
+
+def _decode_result(item: dict) -> LyricsResult:
+    # asdict() flattens a SyncedLyrics `lyrics` value to a plain dict;
+    # dataclasses aren't reconstructed from that automatically, so it's
+    # rebuilt by hand here.
+    lyrics = item["lyrics"]
+    if isinstance(lyrics, dict):
+        item = {
+            **item,
+            "lyrics": SyncedLyrics(
+                lines=tuple(SyncedLine(**line) for line in lyrics["lines"])
+            ),
+        }
+    return LyricsResult(**item)
+
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS search_cache (
@@ -73,7 +89,7 @@ class SearchCache:
 
         if row is None:
             return None
-        return [LyricsResult(**item) for item in json.loads(row[0])]
+        return [_decode_result(item) for item in json.loads(row[0])]
 
     def set(self, artist: str, title: str, results: list[LyricsResult]) -> None:
         """Cache results for (artist, title), and prune expired entries."""

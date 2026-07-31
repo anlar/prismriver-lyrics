@@ -3,6 +3,7 @@ import asyncio
 import importlib.metadata
 import sys
 
+from prismriver_lyrics.models import SyncedLyrics
 from prismriver_lyrics.search import search_lyrics
 
 _VERSION_MESSAGE = (
@@ -48,7 +49,10 @@ def main() -> None:
     print(f"# {args.artist} - {args.title}")
     print(f"# source: {result.source} ({result.url})")
     print()
-    print(result.lyrics)
+    if isinstance(result.lyrics, SyncedLyrics):
+        print("\n".join(line.text for line in result.lyrics.lines))
+    else:
+        print(result.lyrics)
 
 
 if __name__ == "__main__":

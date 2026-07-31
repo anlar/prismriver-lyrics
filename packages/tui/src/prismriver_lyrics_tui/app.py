@@ -3,7 +3,7 @@ import asyncio
 import importlib.metadata
 import sys
 
-from prismriver_lyrics.models import LyricsResult
+from prismriver_lyrics.models import LyricsResult, SyncedLyrics
 from prismriver_lyrics.search import search_lyrics
 from rich.markup import escape
 from textual import work
@@ -11,7 +11,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.reactive import reactive
-from textual.widgets import Markdown, OptionList, Static
+from textual.widgets import Markdown, OptionList, Static, TabbedContent, TabPane
 from textual.widgets.option_list import Option, OptionDoesNotExist
 
 from prismriver_lyrics_tui.mpris import (
@@ -21,8 +21,16 @@ from prismriver_lyrics_tui.mpris import (
     playback_status_emoji,
 )
 from prismriver_lyrics_tui.search_dialog import SearchDialog
+from prismriver_lyrics_tui.synced_lyrics import SyncedLyricsView
+from prismriver_lyrics_tui.widgets import VimOptionList, VimVerticalScroll
 
 _MARKDOWN_ESCAPE_CHARS = "\\`*_{}[]()#+-.!>|"
+
+# How often the currently-selected player's position is polled to advance
+# the synced-lyrics highlight. MPRIS doesn't push position updates on its
+# own (see the note by mpris._PLAYER_PROPERTY_GETTERS), so this trades a
+# little precision for not hammering D-Bus.
+_POSITION_POLL_INTERVAL = 0.5
 
 
 def _md_escape(text: str) -> str:
@@ -33,30 +41,6 @@ def _md_escape(text: str) -> str:
     for char in _MARKDOWN_ESCAPE_CHARS:
         escaped = escaped.replace(char, f"\\{char}")
     return escaped
-
-
-class VimOptionList(OptionList):
-    """An OptionList with vim-style j/k/g/G navigation, in addition to the
-    default arrow/home/end keys."""
-
-    BINDINGS = [
-        Binding("j", "cursor_down", "Down", show=False),
-        Binding("k", "cursor_up", "Up", show=False),
-        Binding("g", "first", "First", show=False),
-        Binding("G", "last", "Last", show=False),
-    ]
-
-
-class VimVerticalScroll(VerticalScroll):
-    """A VerticalScroll with vim-style j/k/g/G scrolling, in addition to the
-    default arrow/home/end keys."""
-
-    BINDINGS = [
-        Binding("j", "scroll_down", "Scroll Down", show=False),
-        Binding("k", "scroll_up", "Scroll Up", show=False),
-        Binding("g", "scroll_home", "Scroll Home", show=False),
-        Binding("G", "scroll_end", "Scroll End", show=False),
-    ]
 
 
 class PrismriverTuiApp(App[None]):
@@ -102,13 +86,19 @@ class PrismriverTuiApp(App[None]):
                 results_list = VimOptionList(id="results-list")
                 results_list.border_title = "Plugins"
                 yield results_list
-            with VimVerticalScroll(id="lyrics-container") as lyrics_container:
+            with Vertical(id="lyrics-container") as lyrics_container:
                 lyrics_container.border_title = "Lyrics"
-                yield Static(id="lyrics", markup=False)
+                with TabbedContent(id="lyrics-tabs", initial="lyrics-plain"):
+                    with TabPane("Plain", id="lyrics-plain"):
+                        with VimVerticalScroll(id="lyrics-plain-scroll"):
+                            yield Static(id="lyrics", markup=False)
+                    with TabPane("Synced", id="lyrics-synced"):
+                        yield SyncedLyricsView(id="lyrics-sync-view")
         with Horizontal(id="status-bar"):
             tui_version = importlib.metadata.version("prismriver-lyrics-tui")
             yield Static(
-                f"(≧ᴗ≦)ﾉ♬  Prismriver Lyrics v{tui_version}", id="status-bar-app"
+                f"(≧ᴗ≦)ﾉ♬  Prismriver Lyrics v{tui_version}",
+                id="status-bar-app",
             )
             yield Static(
                 "<↑↓/j/k> scroll "
@@ -124,9 +114,10 @@ class PrismriverTuiApp(App[None]):
     async def on_mount(self) -> None:
         self._refresh_player_list()
         await self._refresh_now_playing()
-        self._refresh_lyrics("")
-        self.query_one("#lyrics-container", VerticalScroll).focus()
+        self._refresh_lyrics(None)
+        self.query_one("#lyrics-plain-scroll", VerticalScroll).focus()
         self.run_worker(self._watch_mpris(), exclusive=True, group="mpris")
+        self.set_interval(_POSITION_POLL_INTERVAL, self._tick_position)
 
     async def _watch_mpris(self) -> None:
         try:
@@ -155,14 +146,17 @@ class PrismriverTuiApp(App[None]):
         return Option(f"{icon} {label}", id=bus_name)
 
     def _result_label(self, result: LyricsResult) -> str:
+        label = result.source
+        if isinstance(result.lyrics, SyncedLyrics):
+            label += "[palegreen bold dim] \\[synced] [/]"
         if result.translation:
             suffix = (
                 f"translation: {result.lang.upper()}"
                 if result.lang
                 else "translation"
             )
-            return f"{result.source}[dim] ({suffix})[/dim]"
-        return result.source
+            label += f"[dim] ({suffix})[/dim]"
+        return label
 
     def _clear_player_list(self, message: str) -> None:
         self._selected_bus_name = None
@@ -280,7 +274,7 @@ class PrismriverTuiApp(App[None]):
         else:
             sources = "source" if len(results) == 1 else "sources"
             self.status = f"Found {len(results)} {sources}"
-            self._refresh_lyrics(results[0].lyrics)
+            self._refresh_lyrics(results[0])
 
     def action_no_op(self) -> None:
         """Placeholder used to disable an inherited default keybinding."""
@@ -322,16 +316,27 @@ class PrismriverTuiApp(App[None]):
             Option(self._result_label(result)) for result in self._results
         )
         if self._results:
-            option_list.highlighted = 0
+            # Prefer a synced-lyrics result over the alphabetically-first
+            # one, since a highlighted current line is a nicer default view
+            # than plain text when both are available.
+            sync_index = next(
+                (
+                    i
+                    for i, result in enumerate(self._results)
+                    if isinstance(result.lyrics, SyncedLyrics)
+                ),
+                0,
+            )
+            option_list.highlighted = sync_index
         else:
-            self._refresh_lyrics("")
+            self._refresh_lyrics(None)
 
     def on_option_list_option_highlighted(
         self, event: OptionList.OptionHighlighted
     ) -> None:
         if event.option_list.id == "results-list":
             if 0 <= event.option_index < len(self._results):
-                self._refresh_lyrics(self._results[event.option_index].lyrics)
+                self._refresh_lyrics(self._results[event.option_index])
         elif event.option_list.id == "player-list":
             if event.option_id and event.option_id != self._selected_bus_name:
                 self._select_player(event.option_id)
@@ -342,7 +347,7 @@ class PrismriverTuiApp(App[None]):
         if event.option_list.id == "player-list":
             self.query_one("#results-list", OptionList).focus()
         elif event.option_list.id == "results-list":
-            self.query_one("#lyrics-container", VerticalScroll).focus()
+            self._focus_lyrics()
 
     async def watch_track(self) -> None:
         await self._refresh_now_playing()
@@ -391,12 +396,50 @@ class PrismriverTuiApp(App[None]):
         widget = self.query_one("#now-playing", Markdown)
         await widget.update(self._now_playing_markdown())
 
-    def _refresh_lyrics(self, lyrics: str) -> None:
-        widget = self.query_one("#lyrics", Static)
-        widget.set_class(not lyrics, "placeholder")
-        widget.update(lyrics or "(no lyrics)")
-        self.query_one("#lyrics-container", VerticalScroll).scroll_home(
+    def _refresh_lyrics(self, result: LyricsResult | None) -> None:
+        synced = (
+            result.lyrics
+            if result and isinstance(result.lyrics, SyncedLyrics)
+            else None
+        )
+        lyrics = (
+            result.lyrics if result and isinstance(result.lyrics, str) else ""
+        )
+
+        plain_widget = self.query_one("#lyrics", Static)
+        plain_widget.set_class(not lyrics, "placeholder")
+        plain_widget.update(lyrics or "(no lyrics)")
+        self.query_one("#lyrics-plain-scroll", VerticalScroll).scroll_home(
             animate=False
+        )
+
+        self.query_one("#lyrics-sync-view", SyncedLyricsView).set_lines(
+            synced.lines if synced else ()
+        )
+
+        tabs = self.query_one("#lyrics-tabs", TabbedContent)
+        tabs.active = "lyrics-synced" if synced else "lyrics-plain"
+
+    def _focus_lyrics(self) -> None:
+        tabs = self.query_one("#lyrics-tabs", TabbedContent)
+        if tabs.active == "lyrics-synced":
+            self.query_one("#lyrics-sync-view", SyncedLyricsView).focus()
+        else:
+            self.query_one("#lyrics-plain-scroll", VerticalScroll).focus()
+
+    async def _tick_position(self) -> None:
+        if self._selected_bus_name is None:
+            return
+        tabs = self.query_one("#lyrics-tabs", TabbedContent)
+        if tabs.active != "lyrics-synced":
+            return
+
+        position_us = await self._watcher.get_position(self._selected_bus_name)
+        if position_us is None:
+            return
+
+        self.query_one("#lyrics-sync-view", SyncedLyricsView).highlight(
+            position_us // 1000
         )
 
 

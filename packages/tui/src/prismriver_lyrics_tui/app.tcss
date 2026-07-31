@@ -73,17 +73,34 @@
     width: 2fr;
     border: round $accent;
     margin: 0 1 0 0;
-    padding: 1 2;
     background: $background;
+}
+
+#lyrics-tabs {
+    background: $background;
+}
+
+#lyrics-tabs Tabs {
+    display: none;
+}
+
+#lyrics-plain-scroll,
+#lyrics-sync-view {
+    padding: 1 2;
 }
 
 #lyrics.placeholder {
     text-style: dim;
 }
 
+#lyrics-sync-view .current-line {
+    text-style: bold;
+    color: $text-primary;
+}
+
 #player-list:focus,
 #results-list:focus,
-#lyrics-container:focus {
+#lyrics-container:focus-within {
     border: round $primary;
     background-tint: $background 0%;
 }

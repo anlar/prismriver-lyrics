@@ -140,10 +140,29 @@ class MprisWatcher:
         self._identities: dict[str, str] = {}
         self._desktop_entries: dict[str, str] = {}
         self._states: dict[str, TrackInfo] = {}
+        self._player_ifaces: dict[str, ProxyInterface] = {}
 
     def known_players(self) -> dict[str, TrackInfo]:
         """Snapshot of every currently known player's latest TrackInfo."""
         return dict(self._states)
+
+    async def get_position(self, bus_name: str) -> int | None:
+        """Current playback position (microseconds) for a known player, or
+        None if it can't be read (player gone, or doesn't support the
+        Position property).
+
+        Queried on demand rather than cached like the rest of TrackInfo:
+        position changes continuously during playback, so a cached value
+        goes stale immediately and MPRIS players don't push updates for it
+        (see the module-level note by _PLAYER_PROPERTY_GETTERS).
+        """
+        iface = self._player_ifaces.get(bus_name)
+        if iface is None:
+            return None
+        try:
+            return await iface.get_position()
+        except Exception:
+            return None
 
     def _display_name(self, bus_name: str) -> str:
         return self._identities.get(bus_name, player_short_name(bus_name))
@@ -193,6 +212,7 @@ class MprisWatcher:
             self._identities.pop(name, None)
             self._desktop_entries.pop(name, None)
             self._states.pop(name, None)
+            self._player_ifaces.pop(name, None)
             self._queue.put_nowait(
                 (name, TrackInfo(player=player, player_short=player_short))
             )
@@ -258,6 +278,8 @@ class MprisWatcher:
             )
         except Exception:
             return
+
+        self._player_ifaces[bus_name] = player_iface
 
         fields: dict[str, Any] = {}
 

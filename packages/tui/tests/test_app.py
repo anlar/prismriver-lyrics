@@ -1,8 +1,8 @@
 import pytest
-from prismriver_lyrics.models import LyricsResult
+from prismriver_lyrics.models import LyricsResult, SyncedLine, SyncedLyrics
 from prismriver_lyrics_tui.app import PrismriverTuiApp
 from prismriver_lyrics_tui.mpris import MprisWatcher, TrackInfo
-from textual.widgets import OptionList
+from textual.widgets import OptionList, TabbedContent
 
 
 async def _empty_watch(self):
@@ -93,3 +93,124 @@ async def test_resync_forces_refresh_even_with_matching_key(monkeypatch):
         assert app.track == mpris_track
         assert len(fake.calls) == 2
         assert "org.mpris.MediaPlayer2.test" in app._players
+
+
+def _synced_result(source: str = "lrclib.net") -> LyricsResult:
+    return LyricsResult(
+        source=source,
+        url="u",
+        lyrics=SyncedLyrics(
+            lines=(
+                SyncedLine(time_ms=0, text="Line one"),
+                SyncedLine(time_ms=1_000, text="Line two"),
+            )
+        ),
+    )
+
+
+def test_result_label_plain():
+    app = PrismriverTuiApp()
+    result = LyricsResult(source="Test", url="u", lyrics="text")
+    assert app._result_label(result) == "Test"
+
+
+def test_result_label_translation_only():
+    app = PrismriverTuiApp()
+    result = LyricsResult(
+        source="Test", url="u", lyrics="text", translation=True, lang="en"
+    )
+    assert app._result_label(result) == "Test[dim] (translation: EN)[/dim]"
+
+
+def test_result_label_synced_only():
+    app = PrismriverTuiApp()
+    assert app._result_label(_synced_result()) == "lrclib.net[dim] ♫[/dim]"
+
+
+def test_result_label_synced_and_translation():
+    app = PrismriverTuiApp()
+    result = LyricsResult(
+        source="lrclib.net",
+        url="u",
+        lyrics=SyncedLyrics(lines=(SyncedLine(time_ms=0, text="A"),)),
+        translation=True,
+        lang="en",
+    )
+    assert (
+        app._result_label(result)
+        == "lrclib.net[dim] ♫[/dim][dim] (translation: EN)[/dim]"
+    )
+
+
+@pytest.mark.asyncio
+async def test_sync_result_shows_symbol_in_results_list(monkeypatch):
+    plain = LyricsResult(source="Plain Source", url="u", lyrics="plain text")
+    fake = _FakeSearch([_synced_result(), plain])
+    monkeypatch.setattr("prismriver_lyrics_tui.app.search_lyrics", fake)
+
+    app = PrismriverTuiApp()
+    async with app.run_test() as pilot:
+        await _open_dialog_and_submit(pilot, "Song Title", "Some Artist")
+
+        results_list = app.query_one("#results-list", OptionList)
+        labels = [
+            results_list.get_option_at_index(i).prompt
+            for i in range(results_list.option_count)
+        ]
+        assert any("♫" in label for label in labels)
+        assert not any("♫" in label for label in labels if "Plain" in label)
+
+
+@pytest.mark.asyncio
+async def test_synced_result_selected_by_default_over_alphabetical_order(
+    monkeypatch,
+):
+    # "Aaa Plain" sorts before "lrclib.net", so this only passes if the
+    # synced result is preferred over the alphabetically-first one.
+    plain = LyricsResult(source="Aaa Plain", url="u", lyrics="plain text")
+    fake = _FakeSearch([plain, _synced_result()])
+    monkeypatch.setattr("prismriver_lyrics_tui.app.search_lyrics", fake)
+
+    app = PrismriverTuiApp()
+    async with app.run_test() as pilot:
+        await _open_dialog_and_submit(pilot, "Song Title", "Some Artist")
+
+        assert app._results[0].source == "Aaa Plain"
+        results_list = app.query_one("#results-list", OptionList)
+        selected = app._results[results_list.highlighted]
+        assert isinstance(selected.lyrics, SyncedLyrics)
+
+        tabs = app.query_one("#lyrics-tabs", TabbedContent)
+        assert tabs.active == "lyrics-synced"
+
+
+@pytest.mark.asyncio
+async def test_selecting_sync_result_switches_to_synced_tab(monkeypatch):
+    plain = LyricsResult(source="Plain Source", url="u", lyrics="plain text")
+    fake = _FakeSearch([_synced_result(), plain])
+    monkeypatch.setattr("prismriver_lyrics_tui.app.search_lyrics", fake)
+
+    app = PrismriverTuiApp()
+    async with app.run_test() as pilot:
+        await _open_dialog_and_submit(pilot, "Song Title", "Some Artist")
+
+        results_list = app.query_one("#results-list", OptionList)
+        tabs = app.query_one("#lyrics-tabs", TabbedContent)
+
+        sync_index = next(
+            i
+            for i, r in enumerate(app._results)
+            if isinstance(r.lyrics, SyncedLyrics)
+        )
+        results_list.highlighted = sync_index
+        await pilot.pause()
+        assert tabs.active == "lyrics-synced"
+
+        plain_index = next(
+            i
+            for i, r in enumerate(app._results)
+            if not isinstance(r.lyrics, SyncedLyrics)
+        )
+        results_list.highlighted = plain_index
+        await pilot.pause()
+        assert tabs.active == "lyrics-plain"
