@@ -2,6 +2,28 @@
     height: 1fr;
 }
 
+#status-bar {
+    dock: bottom;
+    height: 1;
+    background: $footer-background;
+    color: $footer-foreground;
+}
+
+#status-bar-app {
+    width: auto;
+    height: 1;
+    padding: 0 1;
+    text-wrap: nowrap;
+}
+
+#status-bar-hotkeys {
+    width: 1fr;
+    height: 1;
+    padding: 0 1;
+    text-align: right;
+    text-wrap: nowrap;
+}
+
 #left-column {
     width: 1fr;
     margin: 0 0 0 1;

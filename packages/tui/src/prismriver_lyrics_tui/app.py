@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import importlib.metadata
+import sys
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.search import search_lyrics
@@ -72,6 +73,7 @@ class PrismriverTuiApp(App[None]):
         Binding("ctrl+q", "no_op", "", show=False),
         Binding("s", "search", "Search lyrics", show=False),
         Binding("a", "resync", "Resume auto-sync", show=False),
+        Binding("t", "change_theme", "Change theme", show=False),
     ]
 
     track: reactive[TrackInfo] = reactive(TrackInfo())
@@ -99,24 +101,25 @@ class PrismriverTuiApp(App[None]):
                 yield player_list
                 results_list = VimOptionList(id="results-list")
                 results_list.border_title = "Plugins"
-                tui_version = importlib.metadata.version(
-                    "prismriver-lyrics-tui"
-                )
-                results_list.border_subtitle = (
-                    f"Prismriver Lyrics v{tui_version}"
-                )
                 yield results_list
             with VimVerticalScroll(id="lyrics-container") as lyrics_container:
                 lyrics_container.border_title = "Lyrics"
-                lyrics_container.border_subtitle = (
-                    "<↑↓/j/k> scroll "
-                    "· <g/G> top/bottom "
-                    "· <PgUp/PgDn> move "
-                    "· <Tab> switch panels "
-                    "· <s> search "
-                    "· <q> exit"
-                )
                 yield Static(id="lyrics", markup=False)
+        with Horizontal(id="status-bar"):
+            tui_version = importlib.metadata.version("prismriver-lyrics-tui")
+            yield Static(
+                f"Prismriver Lyrics v{tui_version}", id="status-bar-app"
+            )
+            yield Static(
+                "<↑↓/j/k> scroll "
+                "· <g/G> top/bottom "
+                "· <PgUp/PgDn> move "
+                "· <Tab> switch panels "
+                "· <s> search "
+                "· <t> theme "
+                "· <q> exit",
+                id="status-bar-hotkeys",
+            )
 
     async def on_mount(self) -> None:
         self._refresh_player_list()
@@ -419,9 +422,32 @@ def run() -> None:
         action="version",
         version=_VERSION_MESSAGE.format(version=version),
     )
-    parser.parse_args()
+    parser.add_argument(
+        "--theme",
+        metavar="NAME",
+        help="Color theme to use (see --themes for the available names).",
+    )
+    parser.add_argument(
+        "--themes",
+        action="store_true",
+        help="Print the available color themes and exit.",
+    )
+    args = parser.parse_args()
 
-    PrismriverTuiApp().run()
+    app = PrismriverTuiApp()
+
+    if args.themes:
+        for name in sorted(app.available_themes):
+            print(name)
+        return
+
+    if args.theme is not None:
+        if args.theme not in app.available_themes:
+            print(f"Unknown theme: {args.theme}", file=sys.stderr)
+            raise SystemExit(1)
+        app.theme = args.theme
+
+    app.run()
 
 
 if __name__ == "__main__":
