@@ -2,6 +2,7 @@ import asyncio
 
 import httpx
 
+from prismriver_lyrics.cache import SearchCache
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.registry import default_plugins
@@ -11,12 +12,16 @@ USER_AGENT = (
     "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 )
 
+_default_cache = SearchCache()
+
 
 async def search_lyrics(
     artist: str,
     title: str,
     plugins: list[LyricsPlugin] | None = None,
     timeout: float = 10.0,
+    use_cache: bool = True,
+    cache: SearchCache | None = None,
 ) -> list[LyricsResult]:
     """Query every plugin concurrently and return every successful hit.
 
@@ -24,7 +29,18 @@ async def search_lyrics(
     error out or find nothing are silently excluded. Results are returned
     in the same order as `plugins` (or `default_plugins()`), not
     completion order, so the ranking is stable across runs.
+
+    Results are cached on disk keyed by (artist, title); pass
+    `use_cache=False` to force a fresh search.
     """
+    if cache is None:
+        cache = _default_cache
+
+    if use_cache:
+        cached = await cache.aget(artist, title)
+        if cached is not None:
+            return cached
+
     if plugins is None:
         plugins = default_plugins()
 
@@ -37,11 +53,16 @@ async def search_lyrics(
             asyncio.create_task(plugin.search(client, artist, title))
             for plugin in plugins
         ]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
+        gathered = await asyncio.gather(*tasks, return_exceptions=True)
 
-    return [
+    results = [
         result
-        for plugin_results in results
+        for plugin_results in gathered
         if isinstance(plugin_results, list)
         for result in plugin_results
     ]
+
+    if use_cache:
+        await cache.aset(artist, title, results)
+
+    return results

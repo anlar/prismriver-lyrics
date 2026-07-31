@@ -25,13 +25,20 @@ def main() -> None:
     parser.add_argument("--artist", "-a", required=True, help="Song artist.")
     parser.add_argument("--title", "-t", required=True, help="Song title.")
     parser.add_argument(
+        "--no-cache",
+        action="store_true",
+        help="Bypass the on-disk results cache and force a fresh search.",
+    )
+    parser.add_argument(
         "--version",
         action="version",
         version=_VERSION_MESSAGE.format(version=version),
     )
     args = parser.parse_args()
 
-    results = asyncio.run(search_lyrics(args.artist, args.title))
+    results = asyncio.run(
+        search_lyrics(args.artist, args.title, use_cache=not args.no_cache)
+    )
 
     if not results:
         print("No lyrics found.", file=sys.stderr)
