@@ -155,6 +155,10 @@ class TestPlugins(PluginTestCase):
             "5ab762a2f7c9f07ebb5d10ffcbb73305",
         )
 
+    @pytest.mark.xfail(
+        reason="may block requests",
+        strict=False,
+    )
     def test_genius_01(self):
         self.check_plugin_all(
             GeniusPlugin(),
