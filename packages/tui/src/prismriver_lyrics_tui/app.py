@@ -51,6 +51,7 @@ class PrismriverTuiApp(App[None]):
             with Vertical(id="left-column"):
                 with VerticalScroll(id="metadata-container") as metadata:
                     metadata.border_title = "Song"
+                    metadata.can_focus = False
                     yield Markdown(id="now-playing")
                 player_list = OptionList(id="player-list")
                 player_list.border_title = "Player"

@@ -42,7 +42,7 @@
 
 #lyrics-container {
     width: 2fr;
-    border: round $secondary;
+    border: round $accent;
     margin: 0 1 0 0;
     padding: 1 2;
 }
