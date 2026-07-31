@@ -64,9 +64,12 @@ class PluginTestCase(unittest.TestCase):
         artist: str,
         title: str,
         expected_md5s: list[str],
+        expected_langs: list[str | None] | None = None,
     ) -> None:
         asyncio.run(
-            self._check_plugin_all(plugin, artist, title, expected_md5s)
+            self._check_plugin_all(
+                plugin, artist, title, expected_md5s, expected_langs
+            )
         )
 
     async def _check_plugin_all(
@@ -75,6 +78,7 @@ class PluginTestCase(unittest.TestCase):
         artist: str,
         title: str,
         expected_md5s: list[str],
+        expected_langs: list[str | None] | None,
     ) -> None:
         async with httpx.AsyncClient(
             headers={"User-Agent": USER_AGENT},
@@ -93,6 +97,15 @@ class PluginTestCase(unittest.TestCase):
             f"{plugin.name} found {len(results)} result(s) with md5s "
             f"{digests}, expected {expected_md5s}",
         )
+
+        if expected_langs is not None:
+            langs = [result.lang for result in results]
+            self.assertEqual(
+                langs,
+                expected_langs,
+                f"{plugin.name} found {len(results)} result(s) with langs "
+                f"{langs}, expected {expected_langs}",
+            )
 
 
 class TestPlugins(PluginTestCase):
@@ -122,6 +135,7 @@ class TestPlugins(PluginTestCase):
                 "949f4524e93f0c6497c1ac84f6113f67",
                 "2db90098decbd965cb2eb53dd54fb099",
             ],
+            [None, "ru", "ru"],
         )
 
     def test_deezer_01(self):
@@ -141,11 +155,18 @@ class TestPlugins(PluginTestCase):
         )
 
     def test_genius_01(self):
-        self.check_plugin(
+        self.check_plugin_all(
             GeniusPlugin(),
             "Metallica",
             "Sad But True",
-            "b48d45c541b8f96df659c9b53b634b7b",
+            [
+                "b48d45c541b8f96df659c9b53b634b7b",
+                "aab6049a27cc42303ae0c8f44b85937f",
+                "c05214206511d40466458257cac68098",
+                "ac6cb1d33404326f3374eca01ed5c818",
+                "bf64c5d170682949dbfc296545782f8f",
+            ],
+            ["en", "ru", "de", "pt", "nl"],
         )
 
     def test_letras_01(self):

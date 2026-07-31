@@ -92,6 +92,7 @@ class AmalgamaPlugin(LyricsPlugin):
                         url=url,
                         lyrics=translated_lyrics,
                         translation=True,
+                        lang="ru",
                     )
                 )
 

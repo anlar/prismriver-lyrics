@@ -136,7 +136,12 @@ class PrismriverTuiApp(App[None]):
 
     def _result_label(self, result: LyricsResult) -> str:
         if result.translation:
-            return f"{result.source}[dim] (translation)[/dim]"
+            suffix = (
+                f"translation: {result.lang.upper()}"
+                if result.lang
+                else "translation"
+            )
+            return f"{result.source}[dim] ({suffix})[/dim]"
         return result.source
 
     def _refresh_player_list(self) -> None:

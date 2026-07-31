@@ -1,3 +1,5 @@
+import asyncio
+
 import httpx
 from bs4 import BeautifulSoup
 
@@ -5,16 +7,20 @@ from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
 
 _SEARCH_URL = "https://api.genius.com/search"
+_SONG_URL = "https://api.genius.com/songs/{song_id}"
 _TOKEN = "V_3MoK-nWNF2VKm_zG6qoH8mLnQsr4BU79c4sSNypbLXoXVQZXQI9Dl2Gg9tWed8"
 
 
 class GeniusPlugin(LyricsPlugin):
-    """Fetches lyrics from genius.com.
+    """Fetches lyrics and community translations from genius.com.
 
-    Genius's API (https://docs.genius.com/) only returns song metadata and a
-    link to the song's page, not lyrics text itself, so this plugin calls
-    the Search endpoint to find the matching song's URL, then scrapes the
-    lyrics out of that page's `data-lyrics-container` blocks.
+    Genius's Search API only returns song metadata and a link to the
+    song's page, not lyrics text itself, so this plugin scrapes lyrics out
+    of a song page's `data-lyrics-container` blocks. The song-detail API
+    (`/songs/:id`) additionally reports the song's own `language` and a
+    `translation_songs` list — other Genius pages that are full
+    translations of the song, each with its own language code — which are
+    fetched the same way to produce the translated results.
     """
 
     name = "genius.com"
@@ -48,19 +54,68 @@ class GeniusPlugin(LyricsPlugin):
             return []
 
         url = song["url"]
-        page_response = await client.get(url)
-        if page_response.status_code != 200:
-            return []
+        lang, translation_songs = await self._song_details(client, song["id"])
 
-        soup = BeautifulSoup(page_response.text, "html.parser")
+        results: list[LyricsResult] = []
+
+        lyrics = await self._scrape_lyrics(client, url)
+        if lyrics:
+            results.append(
+                LyricsResult(
+                    source=self.name, url=url, lyrics=lyrics, lang=lang
+                )
+            )
+
+        translations = await asyncio.gather(
+            *(
+                self._scrape_lyrics(client, entry["url"])
+                for entry in translation_songs
+                if entry.get("url")
+            )
+        )
+        for entry, translated_lyrics in zip(
+            translation_songs, translations, strict=False
+        ):
+            if translated_lyrics:
+                results.append(
+                    LyricsResult(
+                        source=self.name,
+                        url=entry["url"],
+                        lyrics=translated_lyrics,
+                        translation=True,
+                        lang=entry.get("language"),
+                        original_lang=lang,
+                    )
+                )
+
+        return results
+
+    async def _song_details(
+        self, client: httpx.AsyncClient, song_id: int
+    ) -> tuple[str | None, list[dict]]:
+        response = await client.get(
+            _SONG_URL.format(song_id=song_id),
+            headers={"Authorization": f"Bearer {_TOKEN}"},
+        )
+        if response.status_code != 200:
+            return None, []
+
+        song = response.json().get("response", {}).get("song", {})
+        return song.get("language"), song.get("translation_songs") or []
+
+    async def _scrape_lyrics(
+        self, client: httpx.AsyncClient, url: str
+    ) -> str | None:
+        response = await client.get(url)
+        if response.status_code != 200:
+            return None
+
+        soup = BeautifulSoup(response.text, "html.parser")
         containers = soup.select("div[data-lyrics-container='true']")
         if not containers:
-            return []
+            return None
 
         lyrics = "\n\n".join(
             self.extract_lyrics(container) for container in containers
         ).strip()
-        if not lyrics:
-            return []
-
-        return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]
+        return lyrics or None

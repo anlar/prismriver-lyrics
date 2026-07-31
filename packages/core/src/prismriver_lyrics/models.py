@@ -9,3 +9,5 @@ class LyricsResult:
     url: str
     lyrics: str
     translation: bool = False
+    lang: str | None = None
+    original_lang: str | None = None
