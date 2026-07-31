@@ -5,7 +5,7 @@ from prismriver_lyrics.search import search_lyrics
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.reactive import reactive
-from textual.widgets import OptionList, Static
+from textual.widgets import Markdown, OptionList, Static
 from textual.widgets.option_list import Option
 
 from prismriver_lyrics_tui.mpris import (
@@ -14,6 +14,18 @@ from prismriver_lyrics_tui.mpris import (
     format_duration,
     playback_status_emoji,
 )
+
+_MARKDOWN_ESCAPE_CHARS = "\\`*_{}[]()#+-.!>|"
+
+
+def _md_escape(text: str) -> str:
+    """Escape Markdown special characters in MPRIS-supplied text, so titles
+    or artist names containing `*`, `_`, `[`, etc. render as literal text
+    instead of being interpreted as formatting."""
+    escaped = text
+    for char in _MARKDOWN_ESCAPE_CHARS:
+        escaped = escaped.replace(char, f"\\{char}")
+    return escaped
 
 
 class PrismriverTuiApp(App[None]):
@@ -39,7 +51,7 @@ class PrismriverTuiApp(App[None]):
             with Vertical(id="left-column"):
                 with VerticalScroll(id="metadata-container") as metadata:
                     metadata.border_title = "Song"
-                    yield Static(id="now-playing")
+                    yield Markdown(id="now-playing")
                 player_list = OptionList(id="player-list")
                 player_list.border_title = "Player"
                 yield player_list
@@ -50,8 +62,8 @@ class PrismriverTuiApp(App[None]):
                 lyrics_container.border_title = "Lyrics"
                 yield Static(id="lyrics")
 
-    def on_mount(self) -> None:
-        self._refresh_now_playing()
+    async def on_mount(self) -> None:
+        await self._refresh_now_playing()
         self._refresh_lyrics("")
         self.query_one("#lyrics-container", VerticalScroll).focus()
         self.run_worker(self._watch_mpris(), exclusive=True, group="mpris")
@@ -172,43 +184,48 @@ class PrismriverTuiApp(App[None]):
             if event.option_id and event.option_id != self._selected_bus_name:
                 self._select_player(event.option_id)
 
-    def watch_track(self) -> None:
-        self._refresh_now_playing()
+    async def watch_track(self) -> None:
+        await self._refresh_now_playing()
 
-    def watch_status(self) -> None:
-        self._refresh_now_playing()
+    async def watch_status(self) -> None:
+        await self._refresh_now_playing()
 
-    def _refresh_now_playing(self) -> None:
+    def _now_playing_markdown(self) -> str:
         t = self.track
+
+        if not t.artist and not t.title:
+            return f"*{self.status}*"
+
         lines = [
-            f"Artist: {t.artist or '-'}",
-            f"Title:  {t.title or '-'}",
-            f"Album:  {t.album or '-'}",
+            f"**{_md_escape(t.title) or '-'}**",
+            "",
+            "---",
+            "",
+            f"- *Artist:* {_md_escape(t.artist) or '-'}",
+            f"- *Album:* {_md_escape(t.album) or '-'}",
         ]
 
-        if t.album_artist and t.album_artist != t.artist:
-            lines.append(f"Album Artist: {t.album_artist}")
+        if t.track_number is not None and t.disc_number is not None:
+            lines.append(f"- *Track:* {t.track_number} (Disc {t.disc_number})")
+        elif t.track_number is not None:
+            lines.append(f"- *Track:* {t.track_number}")
+        elif t.disc_number is not None:
+            lines.append(f"- *Disc:* {t.disc_number}")
 
-        lines.append(f"Genre:  {t.genre or '-'}")
+        lines += [
+            f"- *Genre:* {_md_escape(t.genre) or '-'}",
+            f"- *Duration:* {format_duration(t.length_us)}",
+            "",
+            "---",
+            "",
+            f"*Lyrics:* {self.status}",
+        ]
 
-        track_disc = []
-        if t.track_number is not None:
-            track_disc.append(f"Track {t.track_number}")
-        if t.disc_number is not None:
-            track_disc.append(f"Disc {t.disc_number}")
-        if track_disc:
-            lines.append(", ".join(track_disc))
+        return "\n".join(lines)
 
-        lines.append(f"Duration: {format_duration(t.length_us)}")
-
-        if t.art_url:
-            lines.append(f"Art: {t.art_url}")
-
-        lines.append("")
-        lines.append(f"Lyrics: {self.status}")
-
-        widget = self.query_one("#now-playing", Static)
-        widget.update("\n".join(lines))
+    async def _refresh_now_playing(self) -> None:
+        widget = self.query_one("#now-playing", Markdown)
+        await widget.update(self._now_playing_markdown())
 
     def _refresh_lyrics(self, lyrics: str) -> None:
         widget = self.query_one("#lyrics", Static)

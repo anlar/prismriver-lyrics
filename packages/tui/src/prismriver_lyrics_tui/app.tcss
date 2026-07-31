@@ -10,7 +10,24 @@
 #metadata-container {
     border: round $accent;
     height: auto;
-    padding: 1 2;
+    padding: 1 0;
+}
+
+#now-playing {
+    padding: 0 1;
+}
+
+#now-playing MarkdownParagraph,
+#now-playing MarkdownBulletList {
+    margin-bottom: 0;
+}
+
+#now-playing MarkdownHorizontalRule {
+    margin-bottom: 0;
+}
+
+#now-playing MarkdownBlock > .em {
+    text-style: dim;
 }
 
 #player-list {

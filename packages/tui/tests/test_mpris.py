@@ -39,7 +39,7 @@ def test_metadata_fields_with_variant_values():
         "title": "Song Title",
         "album": "Album Title",
         "album_artist": "Artist Name",
-        "genre": "Thrash Metal, Metal",
+        "genre": "Thrash Metal · Metal",
         "track_number": 3,
         "disc_number": 1,
         "length_us": 332_000_000,

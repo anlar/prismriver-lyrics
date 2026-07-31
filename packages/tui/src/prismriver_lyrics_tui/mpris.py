@@ -84,13 +84,13 @@ def _metadata_fields(metadata: dict[str, Any]) -> dict[str, Any]:
     values."""
     fields: dict[str, Any] = {}
 
-    def text(key: str, field: str) -> None:
+    def text(key: str, field: str, separator: str = ", ") -> None:
         value = metadata.get(key)
         if value is None:
             return
         unwrapped = _variant_value(value)
         if isinstance(unwrapped, list):
-            fields[field] = ", ".join(unwrapped)
+            fields[field] = separator.join(unwrapped)
         else:
             fields[field] = str(unwrapped)
 
@@ -103,7 +103,7 @@ def _metadata_fields(metadata: dict[str, Any]) -> dict[str, Any]:
     text("xesam:title", "title")
     text("xesam:album", "album")
     text("xesam:albumArtist", "album_artist")
-    text("xesam:genre", "genre")
+    text("xesam:genre", "genre", separator=" · ")
     text("mpris:artUrl", "art_url")
     integer("xesam:trackNumber", "track_number")
     integer("xesam:discNumber", "disc_number")
