@@ -20,7 +20,9 @@ from prismriver_lyrics.plugins.one_music_lyrics import OneMusicLyricsPlugin
 from prismriver_lyrics.plugins.paroles import ParolesPlugin
 from prismriver_lyrics.plugins.petitlyrics import PetitLyricsPlugin
 from prismriver_lyrics.plugins.seekalyric import SeekALyricPlugin
+from prismriver_lyrics.plugins.showmelyrics import ShowMeLyricsPlugin
 from prismriver_lyrics.plugins.snakeroot import SnakerootPlugin
+from prismriver_lyrics.plugins.song_guru import SongGuruPlugin
 from prismriver_lyrics.plugins.vagalume import VagalumePlugin
 from prismriver_lyrics.search import USER_AGENT
 
@@ -254,12 +256,28 @@ class TestPlugins(PluginTestCase):
             "ae36cad9850a767e5827129708c1657c",
         )
 
+    def test_showmelyrics_01(self):
+        self.check_plugin(
+            ShowMeLyricsPlugin(),
+            "Eminem",
+            "Just Lose It",
+            "48b836c348e5f4d4de251ed858ea8c75",
+        )
+
     def test_snakeroot_01(self):
         self.check_plugin(
             SnakerootPlugin(),
             "Hayashibara Megumi",
             "Successful Mission",
             "b0ee20935d2dd4b31efa9d47c64889aa",
+        )
+
+    def test_song_guru_01(self):
+        self.check_plugin(
+            SongGuruPlugin(),
+            "Сектор Газа",
+            "Колхозный панк",
+            "ea86197ca454df706fa1221f2125cc0c",
         )
 
     def test_vagalume_01(self):

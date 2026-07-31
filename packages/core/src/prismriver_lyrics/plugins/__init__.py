@@ -14,7 +14,9 @@ from prismriver_lyrics.plugins.one_music_lyrics import OneMusicLyricsPlugin
 from prismriver_lyrics.plugins.paroles import ParolesPlugin
 from prismriver_lyrics.plugins.petitlyrics import PetitLyricsPlugin
 from prismriver_lyrics.plugins.seekalyric import SeekALyricPlugin
+from prismriver_lyrics.plugins.showmelyrics import ShowMeLyricsPlugin
 from prismriver_lyrics.plugins.snakeroot import SnakerootPlugin
+from prismriver_lyrics.plugins.song_guru import SongGuruPlugin
 from prismriver_lyrics.plugins.vagalume import VagalumePlugin
 
 __all__ = [
@@ -34,6 +36,8 @@ __all__ = [
     "ParolesPlugin",
     "PetitLyricsPlugin",
     "SeekALyricPlugin",
+    "ShowMeLyricsPlugin",
     "SnakerootPlugin",
+    "SongGuruPlugin",
     "VagalumePlugin",
 ]
