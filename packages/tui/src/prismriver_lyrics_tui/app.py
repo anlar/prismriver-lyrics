@@ -108,7 +108,7 @@ class PrismriverTuiApp(App[None]):
         with Horizontal(id="status-bar"):
             tui_version = importlib.metadata.version("prismriver-lyrics-tui")
             yield Static(
-                f"Prismriver Lyrics v{tui_version}", id="status-bar-app"
+                f"(≧ᴗ≦)ﾉ♬  Prismriver Lyrics v{tui_version}", id="status-bar-app"
             )
             yield Static(
                 "<↑↓/j/k> scroll "
