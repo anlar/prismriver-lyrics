@@ -80,7 +80,6 @@ class PrismriverTuiApp(App[None]):
             with Vertical(id="left-column"):
                 with VerticalScroll(id="metadata-container") as metadata:
                     metadata.border_title = "Song"
-                    metadata.border_subtitle = "Prismriver Lyrics"
                     metadata.can_focus = False
                     yield Markdown(id="now-playing")
                 player_list = VimOptionList(id="player-list")
@@ -88,6 +87,12 @@ class PrismriverTuiApp(App[None]):
                 yield player_list
                 results_list = VimOptionList(id="results-list")
                 results_list.border_title = "Plugins"
+                tui_version = importlib.metadata.version(
+                    "prismriver-lyrics-tui"
+                )
+                results_list.border_subtitle = (
+                    f"Prismriver Lyrics v{tui_version}"
+                )
                 yield results_list
             with VimVerticalScroll(id="lyrics-container") as lyrics_container:
                 lyrics_container.border_title = "Lyrics"
@@ -209,12 +214,14 @@ class PrismriverTuiApp(App[None]):
             self._refresh_lyrics(results[0].lyrics)
 
     def _set_results(self, results: list[LyricsResult]) -> None:
-        self._results = results
+        self._results = sorted(
+            results, key=lambda result: result.source.lower()
+        )
         option_list = self.query_one("#results-list", OptionList)
         option_list.set_options(
-            Option(self._result_label(result)) for result in results
+            Option(self._result_label(result)) for result in self._results
         )
-        if results:
+        if self._results:
             option_list.highlighted = 0
         else:
             self._refresh_lyrics("")
