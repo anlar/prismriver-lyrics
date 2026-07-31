@@ -78,6 +78,7 @@ class PrismriverTuiApp(App[None]):
             with Vertical(id="left-column"):
                 with VerticalScroll(id="metadata-container") as metadata:
                     metadata.border_title = "Song"
+                    metadata.border_subtitle = "Prismriver Lyrics"
                     metadata.can_focus = False
                     yield Markdown(id="now-playing")
                 player_list = VimOptionList(id="player-list")
@@ -88,6 +89,13 @@ class PrismriverTuiApp(App[None]):
                 yield results_list
             with VimVerticalScroll(id="lyrics-container") as lyrics_container:
                 lyrics_container.border_title = "Lyrics"
+                lyrics_container.border_subtitle = (
+                    "<↑↓/j/k> scroll "
+                    "· <g/G> top/bottom "
+                    "· <PgUp/PgDn> move "
+                    "· <Tab> switch panels "
+                    "· <q> exit"
+                )
                 yield Static(id="lyrics", markup=False)
 
     async def on_mount(self) -> None:
