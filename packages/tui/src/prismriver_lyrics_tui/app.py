@@ -1,4 +1,6 @@
+import argparse
 import asyncio
+import importlib.metadata
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.search import search_lyrics
@@ -286,7 +288,30 @@ class PrismriverTuiApp(App[None]):
         )
 
 
+_VERSION_MESSAGE = (
+    "Prismriver Lyrics, version {version}\n"
+    "License: MIT\n"
+    "https://github.com/anlar/prismriver-lyrics"
+)
+
+
 def run() -> None:
+    version = importlib.metadata.version("prismriver-lyrics-tui")
+    parser = argparse.ArgumentParser(
+        prog="prismriver-lyrics-tui",
+        description=(
+            "Terminal UI showing lyrics for the currently playing track "
+            "via MPRIS."
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=_VERSION_MESSAGE.format(version=version),
+    )
+    parser.parse_args()
+
     PrismriverTuiApp().run()
 
 
