@@ -23,6 +23,12 @@ class LyricsPlugin(ABC):
     # paragraph/verse break (blank line).
     _PARAGRAPH_TAGS = frozenset({"p"})
 
+    # Tags that wrap real lyric text purely for styling/linking (e.g. Genius
+    # wraps individual lines in <a> tags for its referent/annotation
+    # system). Recursed into like _PARAGRAPH_TAGS, but transparently: no
+    # line boundary is inserted, since the tag isn't a real content break.
+    _INLINE_TAGS: frozenset[str] = frozenset()
+
     @abstractmethod
     async def search(
         self, client: httpx.AsyncClient, artist: str, title: str
@@ -70,6 +76,9 @@ class LyricsPlugin(ABC):
                 for child in node.contents:
                     cls._walk(child, parts)
                 parts.append("\n\n")
+            elif node.name in cls._INLINE_TAGS:
+                for child in node.contents:
+                    cls._walk(child, parts)
             else:
                 # Unknown element (ad, script, wrapper div, ...): drop its
                 # contents entirely but keep the line boundary.

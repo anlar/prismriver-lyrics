@@ -3,6 +3,7 @@ from prismriver_lyrics.plugins.alphabetlyrics import AlphabetLyricsPlugin
 from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
+from prismriver_lyrics.plugins.genius import GeniusPlugin
 from prismriver_lyrics.plugins.letras import LetrasPlugin
 from prismriver_lyrics.plugins.lrclib import LrcLibPlugin
 from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
@@ -23,6 +24,7 @@ def default_plugins() -> list[LyricsPlugin]:
         AlphabetLyricsPlugin(),
         DeezerPlugin(),
         ElyricsPlugin(),
+        GeniusPlugin(),
         LetrasPlugin(),
         LrcLibPlugin(),
         LyricsManiaPlugin(),

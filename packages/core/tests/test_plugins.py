@@ -8,6 +8,7 @@ from prismriver_lyrics.plugins.alphabetlyrics import AlphabetLyricsPlugin
 from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
+from prismriver_lyrics.plugins.genius import GeniusPlugin
 from prismriver_lyrics.plugins.letras import LetrasPlugin
 from prismriver_lyrics.plugins.lrclib import LrcLibPlugin
 from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
@@ -89,6 +90,14 @@ class TestPlugins(PluginTestCase):
             "5ab762a2f7c9f07ebb5d10ffcbb73305",
         )
 
+    def test_genius_01(self):
+        self.check_plugin(
+            GeniusPlugin(),
+            "Metallica",
+            "Sad But True",
+            "b48d45c541b8f96df659c9b53b634b7b",
+        )
+
     def test_letras_01(self):
         self.check_plugin(
             LetrasPlugin(),
@@ -126,7 +135,7 @@ class TestPlugins(PluginTestCase):
             NeteasePlugin(),
             "Metallica",
             "Sad But True",
-            "c1947bf1d3dd2154c4020d9b7a7e4e5c",
+            "6707bad0d595227027a8259b079918b9",
         )
 
     def test_one_music_lyrics_01(self):
