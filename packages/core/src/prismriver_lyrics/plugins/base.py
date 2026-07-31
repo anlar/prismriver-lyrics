@@ -6,6 +6,11 @@ from bs4.element import Tag
 
 from prismriver_lyrics.models import LyricsResult
 
+# Some APIs (e.g. lrclib.net) ask clients to self-identify via User-Agent
+# rather than pose as a browser, so plugins that talk to such APIs use this
+# instead of the shared client's browser-spoofing default.
+APP_USER_AGENT = "Prismriver Lyrics (https://github.com/anlar/prismriver-lyrics)"
+
 
 class LyricsPlugin(ABC):
     """A single lyrics source. Implementations must be safe to run

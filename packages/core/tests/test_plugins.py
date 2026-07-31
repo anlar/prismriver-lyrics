@@ -9,6 +9,7 @@ from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
 from prismriver_lyrics.plugins.letras import LetrasPlugin
+from prismriver_lyrics.plugins.lrclib import LrcLibPlugin
 from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
 from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
 from prismriver_lyrics.plugins.netease import NeteasePlugin
@@ -94,6 +95,14 @@ class TestPlugins(PluginTestCase):
             "Shakira",
             "Dai Dai (feat. Burna Boy)",
             "185a1268927a80a4e3f92498f1915967",
+        )
+
+    def test_lrclib_01(self):
+        self.check_plugin(
+            LrcLibPlugin(),
+            "Metallica",
+            "Sad But True",
+            "ccd5690dbd7f4c7aaa20e95beffd8beb",
         )
 
     def test_lyrics_ovh_01(self):
