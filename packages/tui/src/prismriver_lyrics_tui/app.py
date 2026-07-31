@@ -10,7 +10,7 @@ from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.reactive import reactive
 from textual.widgets import Markdown, OptionList, Static
-from textual.widgets.option_list import Option
+from textual.widgets.option_list import Option, OptionDoesNotExist
 
 from prismriver_lyrics_tui.mpris import (
     MprisWatcher,
@@ -147,8 +147,15 @@ class PrismriverTuiApp(App[None]):
         return result.source
 
     def _refresh_player_list(self) -> None:
+        previous_statuses = {
+            bus_name: track.playback_status
+            for bus_name, track in self._players.items()
+        }
         self._players = self._watcher.known_players()
-        bus_names = list(self._players)
+        bus_names = sorted(
+            self._players,
+            key=lambda bus_name: self._players[bus_name].player.lower(),
+        )
 
         player_list = self.query_one("#player-list", OptionList)
         if bus_names:
@@ -165,6 +172,28 @@ class PrismriverTuiApp(App[None]):
         # visible content line.
         player_list.styles.height = max(1, len(bus_names)) + 2
 
+        # If the selected player isn't playing, prefer switching to a
+        # player that just started playing (whether it's brand new or an
+        # existing one that just resumed) over keeping the current
+        # selection. Pick the first one alphabetically if several started
+        # playing at once.
+        selected_status = self._players.get(
+            self._selected_bus_name, TrackInfo()
+        ).playback_status
+        if selected_status != "Playing":
+            newly_playing = next(
+                (
+                    bus_name
+                    for bus_name in bus_names
+                    if self._players[bus_name].playback_status == "Playing"
+                    and previous_statuses.get(bus_name) != "Playing"
+                ),
+                None,
+            )
+            if newly_playing is not None:
+                self._select_player(newly_playing)
+                return
+
         if self._selected_bus_name in self._players:
             player_list.highlighted = bus_names.index(self._selected_bus_name)
         elif bus_names:
@@ -177,8 +206,8 @@ class PrismriverTuiApp(App[None]):
         self._selected_bus_name = bus_name
         player_list = self.query_one("#player-list", OptionList)
         try:
-            player_list.highlighted = list(self._players).index(bus_name)
-        except ValueError:
+            player_list.highlighted = player_list.get_option_index(bus_name)
+        except OptionDoesNotExist:
             pass
         self._handle_track(self._players.get(bus_name, TrackInfo()))
 
