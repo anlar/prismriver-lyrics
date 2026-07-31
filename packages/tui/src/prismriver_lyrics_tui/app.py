@@ -63,9 +63,13 @@ class PrismriverTuiApp(App[None]):
 
     CSS_PATH = "app.tcss"
     TITLE = "Prismriver Lyrics"
+    ENABLE_COMMAND_PALETTE = False
 
     BINDINGS = [
         Binding("q", "quit", "Quit", priority=True),
+        # Overrides App's default ctrl+q -> quit binding with a no-op, so
+        # "q" is the only way to quit.
+        Binding("ctrl+q", "no_op", "", show=False),
         Binding("s", "search", "Search lyrics", show=False),
         Binding("a", "resync", "Resume auto-sync", show=False),
     ]
@@ -274,6 +278,9 @@ class PrismriverTuiApp(App[None]):
             sources = "source" if len(results) == 1 else "sources"
             self.status = f"Found {len(results)} {sources}"
             self._refresh_lyrics(results[0].lyrics)
+
+    def action_no_op(self) -> None:
+        """Placeholder used to disable an inherited default keybinding."""
 
     @work
     async def action_search(self) -> None:
