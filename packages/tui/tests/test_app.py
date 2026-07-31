@@ -124,7 +124,10 @@ def test_result_label_translation_only():
 
 def test_result_label_synced_only():
     app = PrismriverTuiApp()
-    assert app._result_label(_synced_result()) == "lrclib.net[dim] ♫[/dim]"
+    assert (
+        app._result_label(_synced_result())
+        == "lrclib.net[palegreen bold dim] \\[synced] [/]"
+    )
 
 
 def test_result_label_synced_and_translation():
@@ -138,7 +141,8 @@ def test_result_label_synced_and_translation():
     )
     assert (
         app._result_label(result)
-        == "lrclib.net[dim] ♫[/dim][dim] (translation: EN)[/dim]"
+        == "lrclib.net[palegreen bold dim] \\[synced] [/]"
+        "[dim] (translation: EN)[/dim]"
     )
 
 
@@ -157,8 +161,10 @@ async def test_sync_result_shows_symbol_in_results_list(monkeypatch):
             results_list.get_option_at_index(i).prompt
             for i in range(results_list.option_count)
         ]
-        assert any("♫" in label for label in labels)
-        assert not any("♫" in label for label in labels if "Plain" in label)
+        assert any("[synced]" in label for label in labels)
+        assert not any(
+            "[synced]" in label for label in labels if "Plain" in label
+        )
 
 
 @pytest.mark.asyncio
