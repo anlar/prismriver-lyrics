@@ -205,9 +205,9 @@ class TestPlugins(PluginTestCase):
     def test_netease_01(self):
         self.check_plugin(
             NeteasePlugin(),
-            "Metallica",
-            "Sad But True",
-            "6707bad0d595227027a8259b079918b9",
+            "The Clash",
+            "London Calling",
+            "6cbe3b629c81aebf680eaee8f60e29e6",
         )
 
     @pytest.mark.xfail(
