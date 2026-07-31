@@ -110,7 +110,6 @@ class PrismriverTuiApp(App[None]):
                     "· <PgUp/PgDn> move "
                     "· <Tab> switch panels "
                     "· <s> search "
-                    "· <a> auto-sync "
                     "· <q> exit"
                 )
                 yield Static(id="lyrics", markup=False)
