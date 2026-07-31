@@ -5,10 +5,15 @@ from prismriver_lyrics.search import search_lyrics
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.reactive import reactive
-from textual.widgets import Footer, Header, OptionList, Static
+from textual.widgets import OptionList, Static
 from textual.widgets.option_list import Option
 
-from prismriver_lyrics_tui.mpris import MprisWatcher, TrackInfo, format_duration
+from prismriver_lyrics_tui.mpris import (
+    MprisWatcher,
+    TrackInfo,
+    format_duration,
+    playback_status_emoji,
+)
 
 
 class PrismriverTuiApp(App[None]):
@@ -30,16 +35,20 @@ class PrismriverTuiApp(App[None]):
         self._selected_bus_name: str | None = None
 
     def compose(self) -> ComposeResult:
-        yield Header()
         with Horizontal(id="body"):
             with Vertical(id="left-column"):
-                with VerticalScroll(id="metadata-container"):
+                with VerticalScroll(id="metadata-container") as metadata:
+                    metadata.border_title = "Song"
                     yield Static(id="now-playing")
-                yield OptionList(id="player-list")
-                yield OptionList(id="results-list")
-            with VerticalScroll(id="lyrics-container"):
+                player_list = OptionList(id="player-list")
+                player_list.border_title = "Player"
+                yield player_list
+                results_list = OptionList(id="results-list")
+                results_list.border_title = "Plugins"
+                yield results_list
+            with VerticalScroll(id="lyrics-container") as lyrics_container:
+                lyrics_container.border_title = "Lyrics"
                 yield Static(id="lyrics")
-        yield Footer()
 
     def on_mount(self) -> None:
         self._refresh_now_playing()
@@ -64,14 +73,19 @@ class PrismriverTuiApp(App[None]):
         elif bus_name == self._selected_bus_name:
             self._handle_track(track)
 
+    def _player_option(self, bus_name: str) -> Option:
+        track = self._players[bus_name]
+        icon = playback_status_emoji(track.playback_status)
+        label = f"{track.player}[dim] / {track.player_short}[/dim]"
+        return Option(f"{icon} {label}", id=bus_name)
+
     def _refresh_player_list(self) -> None:
         self._players = self._watcher.known_players()
         bus_names = list(self._players)
 
         player_list = self.query_one("#player-list", OptionList)
         player_list.set_options(
-            Option(self._players[bus_name].player or bus_name, id=bus_name)
-            for bus_name in bus_names
+            self._player_option(bus_name) for bus_name in bus_names
         )
         # OptionList's own "auto" height ignores CSS min-height when empty,
         # so the box height is set explicitly here instead: shrink to fit
@@ -167,9 +181,6 @@ class PrismriverTuiApp(App[None]):
     def _refresh_now_playing(self) -> None:
         t = self.track
         lines = [
-            f"Player: {t.player or '-'}",
-            f"Status: {t.playback_status or '-'}",
-            "",
             f"Artist: {t.artist or '-'}",
             f"Title:  {t.title or '-'}",
             f"Album:  {t.album or '-'}",

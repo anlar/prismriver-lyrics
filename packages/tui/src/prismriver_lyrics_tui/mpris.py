@@ -28,6 +28,7 @@ class TrackInfo:
     """A snapshot of what a single MPRIS player reports as currently playing."""
 
     player: str = ""
+    player_short: str = ""
     artist: str = ""
     title: str = ""
     album: str = ""
@@ -40,14 +41,26 @@ class TrackInfo:
     playback_status: str = ""
 
 
+_PLAYBACK_STATUS_EMOJI = {
+    "Playing": "[>]",
+    "Paused": "[=]",
+    "Stopped": "[x]",
+}
+
+
+def playback_status_emoji(playback_status: str) -> str:
+    """Single-glyph icon for an MPRIS PlaybackStatus value."""
+    return _PLAYBACK_STATUS_EMOJI.get(playback_status, "?")
+
+
 def player_short_name(bus_name: str) -> str:
     """Fallback display name derived from the D-Bus bus name.
 
     Some players (e.g. mpv) append a per-process suffix to their bus name
     (`org.mpris.MediaPlayer2.mpv.instance24901`) to allow multiple running
     instances. That suffix is an implementation detail, not a player name,
-    so prefer the MPRIS `Identity` property when it's available and only
-    fall back to this for players that don't expose one.
+    so prefer the MPRIS `Identity`/`DesktopEntry` properties when available
+    and only fall back to this for players that don't expose either.
     """
     return bus_name.removeprefix(MPRIS_PREFIX)
 
@@ -125,6 +138,7 @@ class MprisWatcher:
         self._queue: asyncio.Queue[tuple[str, TrackInfo]] = asyncio.Queue()
         self._known: set[str] = set()
         self._identities: dict[str, str] = {}
+        self._desktop_entries: dict[str, str] = {}
         self._states: dict[str, TrackInfo] = {}
 
     def known_players(self) -> dict[str, TrackInfo]:
@@ -134,10 +148,18 @@ class MprisWatcher:
     def _display_name(self, bus_name: str) -> str:
         return self._identities.get(bus_name, player_short_name(bus_name))
 
+    def _display_short_name(self, bus_name: str) -> str:
+        return self._desktop_entries.get(bus_name, player_short_name(bus_name))
+
     def _emit(self, bus_name: str, **fields: Any) -> None:
         display_name = self._display_name(bus_name)
-        current = self._states.get(bus_name, TrackInfo(player=display_name))
-        updated = replace(current, player=display_name, **fields)
+        short_name = self._display_short_name(bus_name)
+        current = self._states.get(
+            bus_name, TrackInfo(player=display_name, player_short=short_name)
+        )
+        updated = replace(
+            current, player=display_name, player_short=short_name, **fields
+        )
         self._states[bus_name] = updated
         self._queue.put_nowait((bus_name, updated))
 
@@ -167,9 +189,13 @@ class MprisWatcher:
         elif not new_owner and name in self._known:
             self._known.discard(name)
             player = self._display_name(name)
+            player_short = self._display_short_name(name)
             self._identities.pop(name, None)
+            self._desktop_entries.pop(name, None)
             self._states.pop(name, None)
-            self._queue.put_nowait((name, TrackInfo(player=player)))
+            self._queue.put_nowait(
+                (name, TrackInfo(player=player, player_short=player_short))
+            )
 
     async def _interface(
         self, bus_name: str, path: str, iface_name: str
@@ -184,7 +210,18 @@ class MprisWatcher:
 
         try:
             root_iface = await self._interface(bus_name, MPRIS_PATH, ROOT_IFACE)
-            self._identities[bus_name] = await root_iface.get_identity()
+
+            try:
+                self._identities[bus_name] = await root_iface.get_identity()
+            except Exception:
+                pass
+
+            try:
+                self._desktop_entries[bus_name] = (
+                    await root_iface.get_desktop_entry()
+                )
+            except Exception:
+                pass
         except Exception:
             pass
 
@@ -195,6 +232,7 @@ class MprisWatcher:
         except Exception:
             self._known.discard(bus_name)
             self._identities.pop(bus_name, None)
+            self._desktop_entries.pop(bus_name, None)
             return
 
         def on_properties_changed(

@@ -95,6 +95,23 @@ def test_display_name_prefers_cached_identity():
     assert watcher._display_name(bus_name) == "mpv"
 
 
+def test_display_short_name_falls_back_to_bus_name_without_desktop_entry():
+    watcher = MprisWatcher()
+    bus_name = "org.mpris.MediaPlayer2.firefox.instance_1_244"
+
+    assert (
+        watcher._display_short_name(bus_name) == "firefox.instance_1_244"
+    )
+
+
+def test_display_short_name_prefers_cached_desktop_entry():
+    watcher = MprisWatcher()
+    bus_name = "org.mpris.MediaPlayer2.firefox.instance_1_244"
+    watcher._desktop_entries[bus_name] = "firefox"
+
+    assert watcher._display_short_name(bus_name) == "firefox"
+
+
 def test_emit_merges_partial_updates_onto_existing_state():
     watcher = MprisWatcher()
     bus_name = "org.mpris.MediaPlayer2.mpv"
