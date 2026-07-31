@@ -3,6 +3,7 @@ import asyncio
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.search import search_lyrics
 from textual.app import App, ComposeResult
+from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
 from textual.reactive import reactive
 from textual.widgets import Markdown, OptionList, Static
@@ -28,11 +29,37 @@ def _md_escape(text: str) -> str:
     return escaped
 
 
+class VimOptionList(OptionList):
+    """An OptionList with vim-style j/k/g/G navigation, in addition to the
+    default arrow/home/end keys."""
+
+    BINDINGS = [
+        Binding("j", "cursor_down", "Down", show=False),
+        Binding("k", "cursor_up", "Up", show=False),
+        Binding("g", "first", "First", show=False),
+        Binding("G", "last", "Last", show=False),
+    ]
+
+
+class VimVerticalScroll(VerticalScroll):
+    """A VerticalScroll with vim-style j/k/g/G scrolling, in addition to the
+    default arrow/home/end keys."""
+
+    BINDINGS = [
+        Binding("j", "scroll_down", "Scroll Down", show=False),
+        Binding("k", "scroll_up", "Scroll Up", show=False),
+        Binding("g", "scroll_home", "Scroll Home", show=False),
+        Binding("G", "scroll_end", "Scroll End", show=False),
+    ]
+
+
 class PrismriverTuiApp(App[None]):
     """Shows the currently-playing track (via MPRIS) and its lyrics."""
 
     CSS_PATH = "app.tcss"
     TITLE = "Prismriver Lyrics"
+
+    BINDINGS = [Binding("q", "quit", "Quit", priority=True)]
 
     track: reactive[TrackInfo] = reactive(TrackInfo())
     status: reactive[str] = reactive("Waiting for a media player...")
@@ -53,13 +80,13 @@ class PrismriverTuiApp(App[None]):
                     metadata.border_title = "Song"
                     metadata.can_focus = False
                     yield Markdown(id="now-playing")
-                player_list = OptionList(id="player-list")
+                player_list = VimOptionList(id="player-list")
                 player_list.border_title = "Player"
                 yield player_list
-                results_list = OptionList(id="results-list")
+                results_list = VimOptionList(id="results-list")
                 results_list.border_title = "Plugins"
                 yield results_list
-            with VerticalScroll(id="lyrics-container") as lyrics_container:
+            with VimVerticalScroll(id="lyrics-container") as lyrics_container:
                 lyrics_container.border_title = "Lyrics"
                 yield Static(id="lyrics", markup=False)
 
@@ -184,6 +211,14 @@ class PrismriverTuiApp(App[None]):
         elif event.option_list.id == "player-list":
             if event.option_id and event.option_id != self._selected_bus_name:
                 self._select_player(event.option_id)
+
+    def on_option_list_option_selected(
+        self, event: OptionList.OptionSelected
+    ) -> None:
+        if event.option_list.id == "player-list":
+            self.query_one("#results-list", OptionList).focus()
+        elif event.option_list.id == "results-list":
+            self.query_one("#lyrics-container", VerticalScroll).focus()
 
     async def watch_track(self) -> None:
         await self._refresh_now_playing()
