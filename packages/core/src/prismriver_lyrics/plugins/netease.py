@@ -39,7 +39,7 @@ class NeteasePlugin(LyricsPlugin):
 
     async def search(
         self, client: httpx.AsyncClient, artist: str, title: str
-    ) -> LyricsResult | None:
+    ) -> list[LyricsResult]:
         response = await client.get(
             _SEARCH_URL,
             params={
@@ -51,27 +51,27 @@ class NeteasePlugin(LyricsPlugin):
             },
         )
         if response.status_code != 200:
-            return None
+            return []
 
         songs = response.json().get("result", {}).get("songs", [])
         song = next((s for s in songs if "uncollected" not in s), None)
         if song is None:
-            return None
+            return []
 
         song_id = song["id"]
         lyrics_response = await client.get(
             _LYRIC_URL, params={"id": song_id, "lv": -1, "kv": -1, "tv": -1}
         )
         if lyrics_response.status_code != 200:
-            return None
+            return []
 
         lrc = lyrics_response.json().get("lrc", {}).get("lyric")
         if not lrc:
-            return None
+            return []
 
         lyrics = _strip_lrc(lrc)
         if not lyrics:
-            return None
+            return []
 
         url = f"https://music.163.com/#/song?id={song_id}"
-        return LyricsResult(source=self.name, url=url, lyrics=lyrics)
+        return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]

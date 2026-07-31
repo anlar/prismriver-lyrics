@@ -38,17 +38,17 @@ class ParolesPlugin(LyricsPlugin):
 
     async def search(
         self, client: httpx.AsyncClient, artist: str, title: str
-    ) -> LyricsResult | None:
+    ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
         # A missing song redirects elsewhere rather than 404ing.
         response = await client.get(url, follow_redirects=False)
         if response.status_code != 200:
-            return None
+            return []
 
         soup = BeautifulSoup(response.text, "html.parser")
         container = soup.select_one("article.lyrics")
         if container is None:
-            return None
+            return []
 
         parts = []
         for div in container.find_all("div", recursive=False):
@@ -60,6 +60,6 @@ class ParolesPlugin(LyricsPlugin):
 
         lyrics = "\n\n".join(parts)
         if not lyrics:
-            return None
+            return []
 
-        return LyricsResult(source=self.name, url=url, lyrics=lyrics)
+        return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]

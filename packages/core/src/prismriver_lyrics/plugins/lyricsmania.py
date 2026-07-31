@@ -35,7 +35,7 @@ class LyricsManiaPlugin(LyricsPlugin):
 
     async def search(
         self, client: httpx.AsyncClient, artist: str, title: str
-    ) -> LyricsResult | None:
+    ) -> list[LyricsResult]:
         response = None
         url = ""
         for with_lyrics in (True, False):
@@ -44,15 +44,15 @@ class LyricsManiaPlugin(LyricsPlugin):
             if response.status_code == 200:
                 break
         if response is None or response.status_code != 200:
-            return None
+            return []
 
         soup = BeautifulSoup(response.text, "html.parser")
         container = soup.select_one(".lyrics-body")
         if container is None:
-            return None
+            return []
 
         lyrics = self.extract_lyrics(container)
         if not lyrics:
-            return None
+            return []
 
-        return LyricsResult(source=self.name, url=url, lyrics=lyrics)
+        return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]

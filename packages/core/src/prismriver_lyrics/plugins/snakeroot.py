@@ -37,16 +37,16 @@ class SnakerootPlugin(LyricsPlugin):
 
     async def search(
         self, client: httpx.AsyncClient, artist: str, title: str
-    ) -> LyricsResult | None:
+    ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
         response = await client.get(url)
         if response.status_code != 200:
-            return None
+            return []
 
         soup = BeautifulSoup(response.text, "html.parser")
         content = soup.select_one("#content")
         if content is None:
-            return None
+            return []
 
         container = None
         best_br_count = 0
@@ -56,10 +56,10 @@ class SnakerootPlugin(LyricsPlugin):
                 best_br_count = br_count
                 container = p
         if container is None:
-            return None
+            return []
 
         lyrics = self.extract_lyrics(container)
         if not lyrics:
-            return None
+            return []
 
-        return LyricsResult(source=self.name, url=url, lyrics=lyrics)
+        return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]

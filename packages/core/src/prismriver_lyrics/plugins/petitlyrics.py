@@ -22,7 +22,7 @@ class PetitLyricsPlugin(LyricsPlugin):
 
     async def search(
         self, client: httpx.AsyncClient, artist: str, title: str
-    ) -> LyricsResult | None:
+    ) -> list[LyricsResult]:
         response = await client.post(
             _SEARCH_URL,
             data={
@@ -34,28 +34,28 @@ class PetitLyricsPlugin(LyricsPlugin):
             },
         )
         if response.status_code != 200:
-            return None
+            return []
 
         try:
             root = ET.fromstring(response.text)
         except ET.ParseError:
-            return None
+            return []
 
         song = root.find("./songs/song")
         if song is None:
-            return None
+            return []
 
         lyrics_data = song.findtext("lyricsData")
         lyrics_id = song.findtext("lyricsId")
         if not lyrics_data or not lyrics_id:
-            return None
+            return []
 
         try:
             lyrics = base64.b64decode(lyrics_data).decode("utf-8").strip()
         except (ValueError, UnicodeDecodeError):
-            return None
+            return []
         if not lyrics:
-            return None
+            return []
 
         url = f"https://petitlyrics.com/lyrics/{lyrics_id}"
-        return LyricsResult(source=self.name, url=url, lyrics=lyrics)
+        return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]

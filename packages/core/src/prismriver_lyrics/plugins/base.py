@@ -32,9 +32,10 @@ class LyricsPlugin(ABC):
     @abstractmethod
     async def search(
         self, client: httpx.AsyncClient, artist: str, title: str
-    ) -> LyricsResult | None:
-        """Look up lyrics for artist/title, returning None if not found on
-        this source."""
+    ) -> list[LyricsResult]:
+        """Look up lyrics for artist/title, returning every result this
+        source has (usually one, but e.g. a source with a translation may
+        return more), or an empty list if nothing was found."""
 
     @classmethod
     def extract_lyrics(cls, container: Tag) -> str:

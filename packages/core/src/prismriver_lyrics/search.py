@@ -39,4 +39,9 @@ async def search_lyrics(
         ]
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
-    return [result for result in results if isinstance(result, LyricsResult)]
+    return [
+        result
+        for plugin_results in results
+        if isinstance(plugin_results, list)
+        for result in plugin_results
+    ]

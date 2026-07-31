@@ -1,5 +1,6 @@
 from prismriver_lyrics.plugins.absolutelyrics import AbsoluteLyricsPlugin
 from prismriver_lyrics.plugins.alphabetlyrics import AlphabetLyricsPlugin
+from prismriver_lyrics.plugins.amalgama import AmalgamaPlugin
 from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
@@ -22,6 +23,7 @@ def default_plugins() -> list[LyricsPlugin]:
     return [
         AbsoluteLyricsPlugin(),
         AlphabetLyricsPlugin(),
+        AmalgamaPlugin(),
         DeezerPlugin(),
         ElyricsPlugin(),
         GeniusPlugin(),

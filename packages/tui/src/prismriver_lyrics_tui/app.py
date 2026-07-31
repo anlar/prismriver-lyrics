@@ -119,6 +119,11 @@ class PrismriverTuiApp(App[None]):
         label = f"{track.player}[dim] / {track.player_short}[/dim]"
         return Option(f"{icon} {label}", id=bus_name)
 
+    def _result_label(self, result: LyricsResult) -> str:
+        if result.translation:
+            return f"{result.source}[dim] (translation)[/dim]"
+        return result.source
+
     def _refresh_player_list(self) -> None:
         self._players = self._watcher.known_players()
         bus_names = list(self._players)
@@ -196,7 +201,9 @@ class PrismriverTuiApp(App[None]):
     def _set_results(self, results: list[LyricsResult]) -> None:
         self._results = results
         option_list = self.query_one("#results-list", OptionList)
-        option_list.set_options(Option(result.source) for result in results)
+        option_list.set_options(
+            Option(self._result_label(result)) for result in results
+        )
         if results:
             option_list.highlighted = 0
         else:

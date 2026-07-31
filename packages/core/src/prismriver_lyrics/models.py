@@ -8,3 +8,4 @@ class LyricsResult:
     source: str
     url: str
     lyrics: str
+    translation: bool = False

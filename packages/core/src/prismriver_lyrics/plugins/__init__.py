@@ -1,5 +1,6 @@
 from prismriver_lyrics.plugins.absolutelyrics import AbsoluteLyricsPlugin
 from prismriver_lyrics.plugins.alphabetlyrics import AlphabetLyricsPlugin
+from prismriver_lyrics.plugins.amalgama import AmalgamaPlugin
 from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
@@ -19,6 +20,7 @@ from prismriver_lyrics.plugins.vagalume import VagalumePlugin
 __all__ = [
     "AbsoluteLyricsPlugin",
     "AlphabetLyricsPlugin",
+    "AmalgamaPlugin",
     "DeezerPlugin",
     "ElyricsPlugin",
     "GeniusPlugin",

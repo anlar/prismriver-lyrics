@@ -44,13 +44,13 @@ class DeezerPlugin(LyricsPlugin):
 
     async def search(
         self, client: httpx.AsyncClient, artist: str, title: str
-    ) -> LyricsResult | None:
+    ) -> list[LyricsResult]:
         auth_response = await client.get(_AUTH_URL)
         if auth_response.status_code != 200:
-            return None
+            return []
         jwt = auth_response.json().get("jwt")
         if not jwt:
-            return None
+            return []
 
         body = {
             "operationName": "Search",
@@ -89,11 +89,11 @@ class DeezerPlugin(LyricsPlugin):
                 best_node = node
 
         if best_node is None or best_score < _MIN_TITLE_SIMILARITY:
-            return None
+            return []
 
         lyrics = best_node["lyrics"]["text"].strip()
         if not lyrics:
-            return None
+            return []
 
         url = f"https://www.deezer.com/track/{best_node['id']}"
-        return LyricsResult(source=self.name, url=url, lyrics=lyrics)
+        return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]

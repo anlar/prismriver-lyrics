@@ -17,14 +17,14 @@ class LrcLibPlugin(LyricsPlugin):
 
     async def search(
         self, client: httpx.AsyncClient, artist: str, title: str
-    ) -> LyricsResult | None:
+    ) -> list[LyricsResult]:
         response = await client.get(
             _SEARCH_URL,
             params={"track_name": title, "artist_name": artist},
             headers={"User-Agent": APP_USER_AGENT},
         )
         if response.status_code != 200:
-            return None
+            return []
 
         for track in response.json():
             if track.get("instrumental"):
@@ -33,6 +33,6 @@ class LrcLibPlugin(LyricsPlugin):
             if not lyrics:
                 continue
             url = f"https://lrclib.net/api/get/{track['id']}"
-            return LyricsResult(source=self.name, url=url, lyrics=lyrics)
+            return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]
 
-        return None
+        return []

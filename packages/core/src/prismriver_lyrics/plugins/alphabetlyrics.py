@@ -38,22 +38,22 @@ class AlphabetLyricsPlugin(LyricsPlugin):
 
     async def search(
         self, client: httpx.AsyncClient, artist: str, title: str
-    ) -> LyricsResult | None:
+    ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
         response = await client.get(url)
         if response.status_code != 200:
-            return None
+            return []
 
         soup = BeautifulSoup(response.text, "html.parser")
         container = self._find_lyrics_container(soup)
         if container is None:
-            return None
+            return []
 
         lyrics = self._extract(container)
         if not lyrics:
-            return None
+            return []
 
-        return LyricsResult(source=self.name, url=url, lyrics=lyrics)
+        return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]
 
     @staticmethod
     def _find_lyrics_container(soup: BeautifulSoup) -> Tag | None:

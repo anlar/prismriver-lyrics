@@ -5,6 +5,7 @@ import unittest
 import httpx
 from prismriver_lyrics.plugins.absolutelyrics import AbsoluteLyricsPlugin
 from prismriver_lyrics.plugins.alphabetlyrics import AlphabetLyricsPlugin
+from prismriver_lyrics.plugins.amalgama import AmalgamaPlugin
 from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
@@ -43,17 +44,54 @@ class PluginTestCase(unittest.TestCase):
             timeout=20.0,
             follow_redirects=True,
         ) as client:
-            result = await plugin.search(client, artist, title)
+            results = await plugin.search(client, artist, title)
 
-        assert result is not None, (
+        assert results, (
             f"{plugin.name} found no lyrics for {artist!r} - {title!r}"
         )
+        result = results[0]
         digest = hashlib.md5(result.lyrics.encode("utf-8")).hexdigest()
         self.assertEqual(
             digest,
             expected_md5,
             f"{plugin.name} lyrics md5 was {digest}, expected "
             f"{expected_md5}\n\n{result.lyrics}",
+        )
+
+    def check_plugin_all(
+        self,
+        plugin: LyricsPlugin,
+        artist: str,
+        title: str,
+        expected_md5s: list[str],
+    ) -> None:
+        asyncio.run(
+            self._check_plugin_all(plugin, artist, title, expected_md5s)
+        )
+
+    async def _check_plugin_all(
+        self,
+        plugin: LyricsPlugin,
+        artist: str,
+        title: str,
+        expected_md5s: list[str],
+    ) -> None:
+        async with httpx.AsyncClient(
+            headers={"User-Agent": USER_AGENT},
+            timeout=20.0,
+            follow_redirects=True,
+        ) as client:
+            results = await plugin.search(client, artist, title)
+
+        digests = [
+            hashlib.md5(result.lyrics.encode("utf-8")).hexdigest()
+            for result in results
+        ]
+        self.assertEqual(
+            digests,
+            expected_md5s,
+            f"{plugin.name} found {len(results)} result(s) with md5s "
+            f"{digests}, expected {expected_md5s}",
         )
 
 
@@ -72,6 +110,18 @@ class TestPlugins(PluginTestCase):
             "Metallica",
             "Enter Sandman",
             "cd4bca18b2565ac47d9f188e5033a1a3",
+        )
+
+    def test_amalgama_01(self):
+        self.check_plugin_all(
+            AmalgamaPlugin(),
+            "Modern Talking",
+            "Cheri Cheri Lady",
+            [
+                "81bef7029732fe421ec33191da0831f0",
+                "949f4524e93f0c6497c1ac84f6113f67",
+                "2db90098decbd965cb2eb53dd54fb099",
+            ],
         )
 
     def test_deezer_01(self):

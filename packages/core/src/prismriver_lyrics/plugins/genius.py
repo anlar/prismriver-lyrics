@@ -25,14 +25,14 @@ class GeniusPlugin(LyricsPlugin):
 
     async def search(
         self, client: httpx.AsyncClient, artist: str, title: str
-    ) -> LyricsResult | None:
+    ) -> list[LyricsResult]:
         response = await client.get(
             _SEARCH_URL,
             params={"q": f"{artist} {title}"},
             headers={"Authorization": f"Bearer {_TOKEN}"},
         )
         if response.status_code != 200:
-            return None
+            return []
 
         hits = response.json().get("response", {}).get("hits", [])
         song = next(
@@ -45,22 +45,22 @@ class GeniusPlugin(LyricsPlugin):
             None,
         )
         if song is None:
-            return None
+            return []
 
         url = song["url"]
         page_response = await client.get(url)
         if page_response.status_code != 200:
-            return None
+            return []
 
         soup = BeautifulSoup(page_response.text, "html.parser")
         containers = soup.select("div[data-lyrics-container='true']")
         if not containers:
-            return None
+            return []
 
         lyrics = "\n\n".join(
             self.extract_lyrics(container) for container in containers
         ).strip()
         if not lyrics:
-            return None
+            return []
 
-        return LyricsResult(source=self.name, url=url, lyrics=lyrics)
+        return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]
