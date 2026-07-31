@@ -4,6 +4,7 @@ import importlib.metadata
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.search import search_lyrics
+from rich.markup import escape
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
@@ -64,7 +65,7 @@ class PrismriverTuiApp(App[None]):
     BINDINGS = [Binding("q", "quit", "Quit", priority=True)]
 
     track: reactive[TrackInfo] = reactive(TrackInfo())
-    status: reactive[str] = reactive("Waiting for a media player...")
+    status: reactive[str] = reactive("Waiting for a media player")
 
     def __init__(self) -> None:
         super().__init__()
@@ -106,6 +107,7 @@ class PrismriverTuiApp(App[None]):
                 yield Static(id="lyrics", markup=False)
 
     async def on_mount(self) -> None:
+        self._refresh_player_list()
         await self._refresh_now_playing()
         self._refresh_lyrics("")
         self.query_one("#lyrics-container", VerticalScroll).focus()
@@ -130,7 +132,7 @@ class PrismriverTuiApp(App[None]):
 
     def _player_option(self, bus_name: str) -> Option:
         track = self._players[bus_name]
-        icon = playback_status_emoji(track.playback_status)
+        icon = escape(playback_status_emoji(track.playback_status))
         label = f"{track.player}[dim] / {track.player_short}[/dim]"
         return Option(f"{icon} {label}", id=bus_name)
 
@@ -149,9 +151,14 @@ class PrismriverTuiApp(App[None]):
         bus_names = list(self._players)
 
         player_list = self.query_one("#player-list", OptionList)
-        player_list.set_options(
-            self._player_option(bus_name) for bus_name in bus_names
-        )
+        if bus_names:
+            player_list.set_options(
+                self._player_option(bus_name) for bus_name in bus_names
+            )
+        else:
+            player_list.set_options(
+                [Option("No player available", disabled=True)]
+            )
         # OptionList's own "auto" height ignores CSS min-height when empty,
         # so the box height is set explicitly here instead: shrink to fit
         # the player count (plus 2 rows for the border), never below 1
@@ -190,8 +197,8 @@ class PrismriverTuiApp(App[None]):
             self._search_task.cancel()
 
         if not track.artist or not track.title:
-            self.status = "No track playing."
-            self._refresh_lyrics("")
+            self.status = "No track playing"
+            self._set_results([])
             return
 
         self._search_task = asyncio.create_task(
@@ -294,6 +301,7 @@ class PrismriverTuiApp(App[None]):
 
     def _refresh_lyrics(self, lyrics: str) -> None:
         widget = self.query_one("#lyrics", Static)
+        widget.set_class(not lyrics, "placeholder")
         widget.update(lyrics or "(no lyrics)")
         self.query_one("#lyrics-container", VerticalScroll).scroll_home(
             animate=False

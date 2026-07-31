@@ -37,6 +37,10 @@
     background: $background;
 }
 
+#player-list > .option-list--option-disabled {
+    color: $text-muted;
+}
+
 #results-list {
     border: round $accent;
     height: 1fr;
@@ -49,6 +53,10 @@
     margin: 0 1 0 0;
     padding: 1 2;
     background: $background;
+}
+
+#lyrics.placeholder {
+    text-style: dim;
 }
 
 #player-list:focus,

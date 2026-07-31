@@ -50,7 +50,7 @@ _PLAYBACK_STATUS_EMOJI = {
 
 def playback_status_emoji(playback_status: str) -> str:
     """Single-glyph icon for an MPRIS PlaybackStatus value."""
-    return _PLAYBACK_STATUS_EMOJI.get(playback_status, "?")
+    return _PLAYBACK_STATUS_EMOJI.get(playback_status, "[?]")
 
 
 def player_short_name(bus_name: str) -> str:
