@@ -3,6 +3,7 @@ import hashlib
 import unittest
 
 import httpx
+import pytest
 from prismriver_lyrics.plugins.absolutelyrics import AbsoluteLyricsPlugin
 from prismriver_lyrics.plugins.alphabetlyrics import AlphabetLyricsPlugin
 from prismriver_lyrics.plugins.amalgama import AmalgamaPlugin
@@ -209,6 +210,10 @@ class TestPlugins(PluginTestCase):
             "6707bad0d595227027a8259b079918b9",
         )
 
+    @pytest.mark.xfail(
+        reason="maybe down from time to time",
+        strict=False,
+    )
     def test_one_music_lyrics_01(self):
         self.check_plugin(
             OneMusicLyricsPlugin(),
@@ -233,6 +238,10 @@ class TestPlugins(PluginTestCase):
             "d2514da2afbd7ba49d2c78b0cc5abf86",
         )
 
+    @pytest.mark.xfail(
+        reason="maybe down from time to time",
+        strict=False,
+    )
     def test_seekalyric_01(self):
         self.check_plugin(
             SeekALyricPlugin(),
