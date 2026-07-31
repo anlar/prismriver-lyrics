@@ -11,6 +11,7 @@
     border: round $accent;
     height: auto;
     padding: 1 0;
+    background: $background;
 }
 
 #now-playing {
@@ -33,11 +34,13 @@
 #player-list {
     border: round $accent;
     height: 3;
+    background: $background;
 }
 
 #results-list {
     border: round $accent;
     height: 1fr;
+    background: $background;
 }
 
 #lyrics-container {
@@ -45,4 +48,12 @@
     border: round $accent;
     margin: 0 1 0 0;
     padding: 1 2;
+    background: $background;
+}
+
+#player-list:focus,
+#results-list:focus,
+#lyrics-container:focus {
+    border: round $primary;
+    background-tint: $background 0%;
 }

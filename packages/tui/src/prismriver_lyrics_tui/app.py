@@ -61,7 +61,7 @@ class PrismriverTuiApp(App[None]):
                 yield results_list
             with VerticalScroll(id="lyrics-container") as lyrics_container:
                 lyrics_container.border_title = "Lyrics"
-                yield Static(id="lyrics")
+                yield Static(id="lyrics", markup=False)
 
     async def on_mount(self) -> None:
         await self._refresh_now_playing()
