@@ -65,3 +65,29 @@
     border: round $primary;
     background-tint: $background 0%;
 }
+
+SearchDialog {
+    align: center middle;
+}
+
+#search-dialog {
+    width: 100;
+    height: auto;
+    border: round $accent;
+    background: $background;
+    padding: 1;
+}
+
+#search-dialog Label {
+    margin-bottom: 1;
+}
+
+#search-dialog Input {
+    border: none;
+    height: 1;
+    margin-bottom: 1;
+}
+
+#search-dialog Input:focus {
+    border: none;
+}

@@ -5,6 +5,7 @@ import importlib.metadata
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.search import search_lyrics
 from rich.markup import escape
+from textual import work
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Horizontal, Vertical, VerticalScroll
@@ -18,6 +19,7 @@ from prismriver_lyrics_tui.mpris import (
     format_duration,
     playback_status_emoji,
 )
+from prismriver_lyrics_tui.search_dialog import SearchDialog
 
 _MARKDOWN_ESCAPE_CHARS = "\\`*_{}[]()#+-.!>|"
 
@@ -62,10 +64,15 @@ class PrismriverTuiApp(App[None]):
     CSS_PATH = "app.tcss"
     TITLE = "Prismriver Lyrics"
 
-    BINDINGS = [Binding("q", "quit", "Quit", priority=True)]
+    BINDINGS = [
+        Binding("q", "quit", "Quit", priority=True),
+        Binding("s", "search", "Search lyrics", show=False),
+        Binding("a", "resync", "Resume auto-sync", show=False),
+    ]
 
     track: reactive[TrackInfo] = reactive(TrackInfo())
     status: reactive[str] = reactive("Waiting for a media player")
+    auto_sync: reactive[bool] = reactive(True)
 
     def __init__(self) -> None:
         super().__init__()
@@ -102,6 +109,8 @@ class PrismriverTuiApp(App[None]):
                     "· <g/G> top/bottom "
                     "· <PgUp/PgDn> move "
                     "· <Tab> switch panels "
+                    "· <s> search "
+                    "· <a> auto-sync "
                     "· <q> exit"
                 )
                 yield Static(id="lyrics", markup=False)
@@ -123,6 +132,9 @@ class PrismriverTuiApp(App[None]):
             self.status = f"D-Bus error: {exc}"
 
     def _handle_track_event(self, bus_name: str, track: TrackInfo) -> None:
+        if not self.auto_sync:
+            return
+
         self._refresh_player_list()
 
         if self._selected_bus_name is None:
@@ -145,6 +157,13 @@ class PrismriverTuiApp(App[None]):
             )
             return f"{result.source}[dim] ({suffix})[/dim]"
         return result.source
+
+    def _clear_player_list(self, message: str) -> None:
+        self._selected_bus_name = None
+        self._players = {}
+        player_list = self.query_one("#player-list", OptionList)
+        player_list.set_options([Option(message, disabled=True)])
+        player_list.styles.height = 3
 
     def _refresh_player_list(self) -> None:
         previous_statuses = {
@@ -203,6 +222,9 @@ class PrismriverTuiApp(App[None]):
             self._handle_track(TrackInfo())
 
     def _select_player(self, bus_name: str) -> None:
+        if not self.auto_sync:
+            return
+
         self._selected_bus_name = bus_name
         player_list = self.query_one("#player-list", OptionList)
         try:
@@ -254,6 +276,34 @@ class PrismriverTuiApp(App[None]):
             self.status = f"Found {len(results)} {sources}"
             self._refresh_lyrics(results[0].lyrics)
 
+    @work
+    async def action_search(self) -> None:
+        result = await self.push_screen_wait(SearchDialog())
+        if result is not None:
+            artist, title = result
+            self._handle_manual_search(artist, title)
+
+    def action_resync(self) -> None:
+        self.auto_sync = True
+        self._last_track_key = None
+        self._refresh_player_list()
+        if self._selected_bus_name is not None:
+            self._handle_track(
+                self._players.get(self._selected_bus_name, TrackInfo())
+            )
+
+    def _handle_manual_search(self, artist: str, title: str) -> None:
+        self.auto_sync = False
+        self._last_track_key = None
+        self._clear_player_list("Auto-sync disabled")
+        self.track = TrackInfo(artist=artist, title=title)
+
+        if self._search_task is not None and not self._search_task.done():
+            self._search_task.cancel()
+        self._search_task = asyncio.create_task(
+            self._search_lyrics(artist, title)
+        )
+
     def _set_results(self, results: list[LyricsResult]) -> None:
         self._results = sorted(
             results, key=lambda result: result.source.lower()
@@ -290,6 +340,10 @@ class PrismriverTuiApp(App[None]):
 
     async def watch_status(self) -> None:
         await self._refresh_now_playing()
+
+    def watch_auto_sync(self, auto_sync: bool) -> None:
+        metadata = self.query_one("#metadata-container", VerticalScroll)
+        metadata.border_subtitle = None if auto_sync else "<a> resume auto-sync"
 
     def _now_playing_markdown(self) -> str:
         t = self.track
