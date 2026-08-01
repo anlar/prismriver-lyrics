@@ -11,6 +11,7 @@ from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
 from prismriver_lyrics.plugins.genius import GeniusPlugin
+from prismriver_lyrics.plugins.kashinavi import KashiNaviPlugin
 from prismriver_lyrics.plugins.letras import LetrasPlugin
 from prismriver_lyrics.plugins.lrclib import LrcLibPlugin
 from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
@@ -26,6 +27,7 @@ from prismriver_lyrics.plugins.seekalyric import SeekALyricPlugin
 from prismriver_lyrics.plugins.showmelyrics import ShowMeLyricsPlugin
 from prismriver_lyrics.plugins.snakeroot import SnakerootPlugin
 from prismriver_lyrics.plugins.song_guru import SongGuruPlugin
+from prismriver_lyrics.plugins.utaten import UtaTenPlugin
 from prismriver_lyrics.plugins.vagalume import VagalumePlugin
 from prismriver_lyrics.search import USER_AGENT
 
@@ -179,6 +181,14 @@ class TestPlugins(PluginTestCase):
             ["en", "ru", "de", "pt", "nl"],
         )
 
+    def test_kashinavi_01(self):
+        self.check_plugin(
+            KashiNaviPlugin(),
+            "Kalafina",
+            "monochrome",
+            "c4882ce77d83c81ca189eddeb2580640",
+        )
+
     def test_letras_01(self):
         self.check_plugin(
             LetrasPlugin(),
@@ -309,6 +319,30 @@ class TestPlugins(PluginTestCase):
             "Сектор Газа",
             "Колхозный панк",
             "ea86197ca454df706fa1221f2125cc0c",
+        )
+
+    def test_utaten_01(self):
+        self.check_plugin_all(
+            UtaTenPlugin(),
+            "Kalafina",
+            "adore",
+            [
+                "9e7408d6a148d54288af18cf29f050ae",
+                "e492440dbf1fee18976a3c45de7a0160",
+                "9ed5d8dfb6bc194bf85cd52392938235",
+            ],
+            ["ja", "ja-Hira", "ja-Latn"],
+        )
+
+    def test_utaten_02(self):
+        # No furigana on this one (non-Japanese lyrics), so only a single,
+        # unlabeled result is expected instead of three.
+        self.check_plugin_all(
+            UtaTenPlugin(),
+            "The Clash",
+            "Should I Stay or Should I Go",
+            ["ea73fc2c07846a2418fc1243bde7b795"],
+            [None],
         )
 
     def test_vagalume_01(self):
