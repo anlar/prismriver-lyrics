@@ -78,6 +78,10 @@
     background: $panel;
 }
 
+#song-progress-row Bar > .bar--indeterminate {
+    color: $panel;
+}
+
 #song-position {
     width: 6;
     text-align: right;
@@ -91,6 +95,7 @@
 
 #player-list > .option-list--option-disabled {
     color: $text-muted;
+    text-style: italic;
 }
 
 #results-list {
@@ -127,7 +132,7 @@
 }
 
 #lyrics.placeholder {
-    text-style: dim;
+    text-style: dim italic;
 }
 
 #lyrics-sync-view .current-line {
