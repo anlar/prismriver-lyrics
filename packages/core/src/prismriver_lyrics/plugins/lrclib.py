@@ -54,9 +54,13 @@ class LrcLibPlugin(LyricsPlugin):
         title: str,
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
+        params = {"track_name": title, "artist_name": artist}
+        if duration_ms is not None:
+            params["duration"] = str(round(duration_ms / 1000))
+
         response = await client.get(
             _SEARCH_URL,
-            params={"track_name": title, "artist_name": artist},
+            params=params,
             headers={"User-Agent": APP_USER_AGENT},
         )
         if response.status_code != 200:
