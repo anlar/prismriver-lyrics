@@ -15,6 +15,8 @@ from prismriver_lyrics.plugins.letras import LetrasPlugin
 from prismriver_lyrics.plugins.lrclib import LrcLibPlugin
 from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
 from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
+from prismriver_lyrics.plugins.lyricsmode import LyricsModePlugin
+from prismriver_lyrics.plugins.lyrsense import LyrsensePlugin
 from prismriver_lyrics.plugins.netease import NeteasePlugin
 from prismriver_lyrics.plugins.one_music_lyrics import OneMusicLyricsPlugin
 from prismriver_lyrics.plugins.paroles import ParolesPlugin
@@ -206,6 +208,26 @@ class TestPlugins(PluginTestCase):
             "Metallica",
             "Sad But True",
             "a1a484a129f48294fb08985c7d85de58",
+        )
+
+    def test_lyricsmode_01(self):
+        self.check_plugin(
+            LyricsModePlugin(),
+            "Metallica",
+            "Nothing Else Matters",
+            "89cfe45a4f42ff099ce689c80c18ca97",
+        )
+
+    def test_lyrsense_01(self):
+        self.check_plugin_all(
+            LyrsensePlugin(),
+            "System of a Down",
+            "Suite-Pee",
+            [
+                "b5f53c28fcaca70767590ea8d0ef16c0",
+                "db691a5ab8bae6dc801aebd7339b66bf",
+            ],
+            [None, "ru"],
         )
 
     def test_netease_01(self):

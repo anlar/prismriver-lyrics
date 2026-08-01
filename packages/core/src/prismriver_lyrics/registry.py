@@ -9,6 +9,8 @@ from prismriver_lyrics.plugins.letras import LetrasPlugin
 from prismriver_lyrics.plugins.lrclib import LrcLibPlugin
 from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
 from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
+from prismriver_lyrics.plugins.lyricsmode import LyricsModePlugin
+from prismriver_lyrics.plugins.lyrsense import LyrsensePlugin
 from prismriver_lyrics.plugins.netease import NeteasePlugin
 from prismriver_lyrics.plugins.one_music_lyrics import OneMusicLyricsPlugin
 from prismriver_lyrics.plugins.paroles import ParolesPlugin
@@ -32,7 +34,9 @@ def default_plugins() -> list[LyricsPlugin]:
         LetrasPlugin(),
         LrcLibPlugin(),
         LyricsManiaPlugin(),
+        LyricsModePlugin(),
         LyricsOvhPlugin(),
+        LyrsensePlugin(),
         NeteasePlugin(),
         OneMusicLyricsPlugin(),
         ParolesPlugin(),
