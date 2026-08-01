@@ -94,7 +94,6 @@ class PrismriverTuiApp(App[None]):
                             id="song-progress", show_eta=False
                         )
                         yield Label(id="song-position")
-                    yield Static(id="status-line")
                 player_list = VimOptionList(id="player-list")
                 player_list.border_title = "Player"
                 yield player_list
@@ -129,7 +128,6 @@ class PrismriverTuiApp(App[None]):
     async def on_mount(self) -> None:
         self._refresh_player_list()
         self._refresh_song_panel()
-        self._refresh_status_line()
         self._refresh_lyrics(None)
         self.query_one("#lyrics-plain-scroll", VerticalScroll).focus()
         self.run_worker(self._watch_mpris(), exclusive=True, group="mpris")
@@ -276,7 +274,7 @@ class PrismriverTuiApp(App[None]):
 
         if not track.artist or not track.title:
             self.status = "No track playing"
-            self._set_results([])
+            self._set_results([], placeholder=self.status)
             return
 
         self._search_task = asyncio.create_task(
@@ -284,23 +282,18 @@ class PrismriverTuiApp(App[None]):
         )
 
     async def _search_lyrics(self, artist: str, title: str) -> None:
-        self.status = "Searching..."
-        self._set_results([])
+        self._set_results([], placeholder="Searching...")
 
         try:
             results = await search_lyrics(artist, title)
         except asyncio.CancelledError:
             raise
         except Exception as exc:
-            self.status = f"Error: {exc}"
+            self._set_results([], placeholder=f"Error: {exc}")
             return
 
-        self._set_results(results)
-        if not results:
-            self.status = "No lyrics found"
-        else:
-            sources = "source" if len(results) == 1 else "sources"
-            self.status = f"Found {len(results)} {sources}"
+        self._set_results(results, placeholder="No lyrics found")
+        if results:
             self._refresh_lyrics(results[0])
 
     def action_no_op(self) -> None:
@@ -334,7 +327,9 @@ class PrismriverTuiApp(App[None]):
             self._search_lyrics(artist, title)
         )
 
-    def _set_results(self, results: list[LyricsResult]) -> None:
+    def _set_results(
+        self, results: list[LyricsResult], *, placeholder: str = ""
+    ) -> None:
         self._results = sorted(
             results, key=lambda result: result.source.lower()
         )
@@ -342,11 +337,13 @@ class PrismriverTuiApp(App[None]):
             isinstance(result.lyrics, SyncedLyrics) for result in self._results
         )
         option_list = self.query_one("#results-list", OptionList)
-        option_list.set_options(
-            Option(self._result_label(result, has_synced))
-            for result in self._results
-        )
+        option_list.set_class(not self._results, "placeholder")
+
         if self._results:
+            option_list.set_options(
+                Option(self._result_label(result, has_synced))
+                for result in self._results
+            )
             # Prefer a synced-lyrics result over the alphabetically-first
             # one, since a highlighted current line is a nicer default view
             # than plain text when both are available.
@@ -359,7 +356,10 @@ class PrismriverTuiApp(App[None]):
                 0,
             )
             option_list.highlighted = sync_index
+            option_list.border_title = f"Results ({len(self._results)})"
         else:
+            option_list.set_options([Option(placeholder, disabled=True)])
+            option_list.border_title = "Results"
             self._refresh_lyrics(None)
 
     def on_option_list_option_highlighted(
@@ -385,11 +385,12 @@ class PrismriverTuiApp(App[None]):
 
     def watch_status(self) -> None:
         self._refresh_song_panel()
-        self._refresh_status_line()
 
     def watch_auto_sync(self, auto_sync: bool) -> None:
-        metadata = self.query_one("#metadata-container", VerticalScroll)
-        metadata.border_subtitle = None if auto_sync else "<a> resume auto-sync"
+        player_list = self.query_one("#player-list", OptionList)
+        player_list.border_subtitle = (
+            None if auto_sync else "<a> resume auto-sync"
+        )
 
     def _refresh_song_panel(self) -> None:
         t = self.track
@@ -398,14 +399,12 @@ class PrismriverTuiApp(App[None]):
         title_widget = self.query_one("#song-title", Static)
         fields = self.query_one("#song-fields", Grid)
         progress_row = self.query_one("#song-progress-row", Horizontal)
-        status_line = self.query_one("#status-line", Static)
 
         if not has_track:
             title_widget.update(self.status)
             title_widget.set_class(True, "placeholder")
             fields.display = False
             progress_row.display = False
-            status_line.display = False
             return
 
         title_widget.set_class(False, "placeholder")
@@ -418,16 +417,12 @@ class PrismriverTuiApp(App[None]):
         )
         fields.display = True
         progress_row.display = True
-        status_line.display = True
 
         total_seconds = t.length_us / 1_000_000 if t.length_us else None
         self.query_one("#song-progress", ProgressBar).update(
             total=total_seconds, progress=0
         )
         self.query_one("#song-position", Label).update(format_duration(0))
-
-    def _refresh_status_line(self) -> None:
-        self.query_one("#status-line", Static).update(self.status)
 
     def _refresh_lyrics(self, result: LyricsResult | None) -> None:
         synced = (

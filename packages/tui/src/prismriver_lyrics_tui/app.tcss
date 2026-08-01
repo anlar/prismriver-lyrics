@@ -101,14 +101,17 @@
 #results-list {
     border: round $accent;
     height: 1fr;
+    padding: 0 1;
     background: $background;
 }
 
-#status-line {
-    height: 1;
-    padding: 0 1;
-    margin-top: 1;
-    text-style: dim;
+#results-list.placeholder {
+    padding: 1;
+}
+
+#results-list > .option-list--option-disabled {
+    color: $text-muted;
+    text-style: italic;
 }
 
 #lyrics-container {
