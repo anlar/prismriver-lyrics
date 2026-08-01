@@ -8,6 +8,7 @@ from prismriver_lyrics.plugins.genius import GeniusPlugin
 from prismriver_lyrics.plugins.kashinavi import KashiNaviPlugin
 from prismriver_lyrics.plugins.letras import LetrasPlugin
 from prismriver_lyrics.plugins.lrclib import LrcLibPlugin
+from prismriver_lyrics.plugins.lrcmux import LrcmuxPlugin
 from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
 from prismriver_lyrics.plugins.lyricsfreak import LyricsFreakPlugin
 from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
@@ -22,6 +23,7 @@ from prismriver_lyrics.plugins.seekalyric import SeekALyricPlugin
 from prismriver_lyrics.plugins.showmelyrics import ShowMeLyricsPlugin
 from prismriver_lyrics.plugins.snakeroot import SnakerootPlugin
 from prismriver_lyrics.plugins.song_guru import SongGuruPlugin
+from prismriver_lyrics.plugins.synclrc import SyncLrcPlugin
 from prismriver_lyrics.plugins.utaten import UtaTenPlugin
 from prismriver_lyrics.plugins.vagalume import VagalumePlugin
 
@@ -38,6 +40,7 @@ def default_plugins() -> list[LyricsPlugin]:
         KashiNaviPlugin(),
         LetrasPlugin(),
         LrcLibPlugin(),
+        LrcmuxPlugin(),
         LyricsFreakPlugin(),
         LyricsManiaPlugin(),
         LyricsModePlugin(),
@@ -52,6 +55,7 @@ def default_plugins() -> list[LyricsPlugin]:
         ShowMeLyricsPlugin(),
         SnakerootPlugin(),
         SongGuruPlugin(),
+        SyncLrcPlugin(),
         UtaTenPlugin(),
         VagalumePlugin(),
     ]

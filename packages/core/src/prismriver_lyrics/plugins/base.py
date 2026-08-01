@@ -1,3 +1,4 @@
+import importlib.metadata
 from abc import ABC, abstractmethod
 
 import httpx
@@ -9,7 +10,10 @@ from prismriver_lyrics.models import LyricsResult
 # Some APIs (e.g. lrclib.net) ask clients to self-identify via User-Agent
 # rather than pose as a browser, so plugins that talk to such APIs use this
 # instead of the shared client's browser-spoofing default.
-APP_USER_AGENT = "Prismriver Lyrics (https://github.com/anlar/prismriver-lyrics)"
+APP_USER_AGENT = (
+    f"Prismriver Lyrics v{importlib.metadata.version('prismriver-lyrics')} "
+    "(https://github.com/anlar/prismriver-lyrics)"
+)
 
 
 class LyricsPlugin(ABC):
