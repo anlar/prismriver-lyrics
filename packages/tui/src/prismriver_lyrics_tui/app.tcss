@@ -36,21 +36,51 @@
     background: $background;
 }
 
-#now-playing {
+#song-title {
+    padding: 0 1;
+    margin-bottom: 1;
+    text-style: bold;
+}
+
+#song-title.placeholder {
+    text-style: italic dim;
+}
+
+#song-fields {
+    grid-size: 2;
+    grid-columns: 9 1fr;
+    grid-rows: auto;
+    height: auto;
     padding: 0 1;
 }
 
-#now-playing MarkdownParagraph,
-#now-playing MarkdownBulletList {
-    margin-bottom: 0;
-}
-
-#now-playing MarkdownHorizontalRule {
-    margin-bottom: 0;
-}
-
-#now-playing MarkdownBlock > .em {
+.song-field-label {
     text-style: dim;
+}
+
+#song-progress-row {
+    height: 1;
+    padding: 0 1;
+    margin-top: 1;
+}
+
+#song-progress-row ProgressBar {
+    width: 1fr;
+}
+
+#song-progress-row Bar {
+    width: 1fr;
+}
+
+#song-progress-row Bar > .bar--bar,
+#song-progress-row Bar > .bar--indeterminate,
+#song-progress-row Bar > .bar--complete {
+    background: $panel;
+}
+
+#song-position {
+    width: 6;
+    text-align: right;
 }
 
 #player-list {
@@ -67,6 +97,13 @@
     border: round $accent;
     height: 1fr;
     background: $background;
+}
+
+#status-line {
+    height: 1;
+    padding: 0 1;
+    margin-top: 1;
+    text-style: dim;
 }
 
 #lyrics-container {

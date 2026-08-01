@@ -9,9 +9,16 @@ from rich.markup import escape
 from textual import work
 from textual.app import App, ComposeResult
 from textual.binding import Binding
-from textual.containers import Horizontal, Vertical, VerticalScroll
+from textual.containers import Grid, Horizontal, Vertical, VerticalScroll
 from textual.reactive import reactive
-from textual.widgets import Markdown, OptionList, Static, TabbedContent, TabPane
+from textual.widgets import (
+    Label,
+    OptionList,
+    ProgressBar,
+    Static,
+    TabbedContent,
+    TabPane,
+)
 from textual.widgets.option_list import Option, OptionDoesNotExist
 
 from prismriver_lyrics_tui.mpris import (
@@ -22,25 +29,18 @@ from prismriver_lyrics_tui.mpris import (
 )
 from prismriver_lyrics_tui.search_dialog import SearchDialog
 from prismriver_lyrics_tui.synced_lyrics import SyncedLyricsView
-from prismriver_lyrics_tui.widgets import VimOptionList, VimVerticalScroll
-
-_MARKDOWN_ESCAPE_CHARS = "\\`*_{}[]()#+-.!>|"
+from prismriver_lyrics_tui.widgets import (
+    StillProgressBar,
+    VimOptionList,
+    VimVerticalScroll,
+)
 
 # How often the currently-selected player's position is polled to advance
-# the synced-lyrics highlight. MPRIS doesn't push position updates on its
-# own (see the note by mpris._PLAYER_PROPERTY_GETTERS), so this trades a
-# little precision for not hammering D-Bus.
+# the synced-lyrics highlight and the song progress bar. MPRIS doesn't push
+# position updates on its own (see the note by
+# mpris._PLAYER_PROPERTY_GETTERS), so this trades a little precision for not
+# hammering D-Bus.
 _POSITION_POLL_INTERVAL = 0.5
-
-
-def _md_escape(text: str) -> str:
-    """Escape Markdown special characters in MPRIS-supplied text, so titles
-    or artist names containing `*`, `_`, `[`, etc. render as literal text
-    instead of being interpreted as formatting."""
-    escaped = text
-    for char in _MARKDOWN_ESCAPE_CHARS:
-        escaped = escaped.replace(char, f"\\{char}")
-    return escaped
 
 
 class PrismriverTuiApp(App[None]):
@@ -79,7 +79,22 @@ class PrismriverTuiApp(App[None]):
                 with VerticalScroll(id="metadata-container") as metadata:
                     metadata.border_title = "Song"
                     metadata.can_focus = False
-                    yield Markdown(id="now-playing")
+                    yield Static(id="song-title", markup=False)
+                    with Grid(id="song-fields"):
+                        yield Label("Artist", classes="song-field-label")
+                        yield Static(id="song-artist", markup=False)
+                        yield Label("Album", classes="song-field-label")
+                        yield Static(id="song-album", markup=False)
+                        yield Label("Genre", classes="song-field-label")
+                        yield Static(id="song-genre", markup=False)
+                        yield Label("Length", classes="song-field-label")
+                        yield Static(id="song-length", markup=False)
+                    with Horizontal(id="song-progress-row"):
+                        yield StillProgressBar(
+                            id="song-progress", show_eta=False
+                        )
+                        yield Label(id="song-position")
+                    yield Static(id="status-line")
                 player_list = VimOptionList(id="player-list")
                 player_list.border_title = "Player"
                 yield player_list
@@ -113,7 +128,8 @@ class PrismriverTuiApp(App[None]):
 
     async def on_mount(self) -> None:
         self._refresh_player_list()
-        await self._refresh_now_playing()
+        self._refresh_song_panel()
+        self._refresh_status_line()
         self._refresh_lyrics(None)
         self.query_one("#lyrics-plain-scroll", VerticalScroll).focus()
         self.run_worker(self._watch_mpris(), exclusive=True, group="mpris")
@@ -281,7 +297,7 @@ class PrismriverTuiApp(App[None]):
 
         self._set_results(results)
         if not results:
-            self.status = "No lyrics found."
+            self.status = "No lyrics found"
         else:
             sources = "source" if len(results) == 1 else "sources"
             self.status = f"Found {len(results)} {sources}"
@@ -364,52 +380,54 @@ class PrismriverTuiApp(App[None]):
         elif event.option_list.id == "results-list":
             self._focus_lyrics()
 
-    async def watch_track(self) -> None:
-        await self._refresh_now_playing()
+    def watch_track(self) -> None:
+        self._refresh_song_panel()
 
-    async def watch_status(self) -> None:
-        await self._refresh_now_playing()
+    def watch_status(self) -> None:
+        self._refresh_song_panel()
+        self._refresh_status_line()
 
     def watch_auto_sync(self, auto_sync: bool) -> None:
         metadata = self.query_one("#metadata-container", VerticalScroll)
         metadata.border_subtitle = None if auto_sync else "<a> resume auto-sync"
 
-    def _now_playing_markdown(self) -> str:
+    def _refresh_song_panel(self) -> None:
         t = self.track
+        has_track = bool(t.artist or t.title)
 
-        if not t.artist and not t.title:
-            return f"*{self.status}*"
+        title_widget = self.query_one("#song-title", Static)
+        fields = self.query_one("#song-fields", Grid)
+        progress_row = self.query_one("#song-progress-row", Horizontal)
+        status_line = self.query_one("#status-line", Static)
 
-        lines = [
-            f"**{_md_escape(t.title) or '-'}**",
-            "",
-            "---",
-            "",
-            f"- *Artist:* {_md_escape(t.artist) or '-'}",
-            f"- *Album:* {_md_escape(t.album) or '-'}",
-        ]
+        if not has_track:
+            title_widget.update(self.status)
+            title_widget.set_class(True, "placeholder")
+            fields.display = False
+            progress_row.display = False
+            status_line.display = False
+            return
 
-        if t.track_number is not None and t.disc_number is not None:
-            lines.append(f"- *Track:* {t.track_number} (Disc {t.disc_number})")
-        elif t.track_number is not None:
-            lines.append(f"- *Track:* {t.track_number}")
-        elif t.disc_number is not None:
-            lines.append(f"- *Disc:* {t.disc_number}")
+        title_widget.set_class(False, "placeholder")
+        title_widget.update(t.title or "-")
+        self.query_one("#song-artist", Static).update(t.artist or "-")
+        self.query_one("#song-album", Static).update(t.album or "-")
+        self.query_one("#song-genre", Static).update(t.genre or "-")
+        self.query_one("#song-length", Static).update(
+            format_duration(t.length_us)
+        )
+        fields.display = True
+        progress_row.display = True
+        status_line.display = True
 
-        lines += [
-            f"- *Genre:* {_md_escape(t.genre) or '-'}",
-            f"- *Duration:* {format_duration(t.length_us)}",
-            "",
-            "---",
-            "",
-            f"*Lyrics:* {self.status}",
-        ]
+        total_seconds = t.length_us / 1_000_000 if t.length_us else None
+        self.query_one("#song-progress", ProgressBar).update(
+            total=total_seconds, progress=0
+        )
+        self.query_one("#song-position", Label).update(format_duration(0))
 
-        return "\n".join(lines)
-
-    async def _refresh_now_playing(self) -> None:
-        widget = self.query_one("#now-playing", Markdown)
-        await widget.update(self._now_playing_markdown())
+    def _refresh_status_line(self) -> None:
+        self.query_one("#status-line", Static).update(self.status)
 
     def _refresh_lyrics(self, result: LyricsResult | None) -> None:
         synced = (
@@ -445,17 +463,25 @@ class PrismriverTuiApp(App[None]):
     async def _tick_position(self) -> None:
         if self._selected_bus_name is None:
             return
-        tabs = self.query_one("#lyrics-tabs", TabbedContent)
-        if tabs.active != "lyrics-synced":
-            return
 
         position_us = await self._watcher.get_position(self._selected_bus_name)
         if position_us is None:
             return
 
-        self.query_one("#lyrics-sync-view", SyncedLyricsView).highlight(
-            position_us // 1000
-        )
+        progress_row = self.query_one("#song-progress-row", Horizontal)
+        if progress_row.display:
+            self.query_one("#song-progress", ProgressBar).update(
+                progress=position_us / 1_000_000
+            )
+            self.query_one("#song-position", Label).update(
+                format_duration(position_us)
+            )
+
+        tabs = self.query_one("#lyrics-tabs", TabbedContent)
+        if tabs.active == "lyrics-synced":
+            self.query_one("#lyrics-sync-view", SyncedLyricsView).highlight(
+                position_us // 1000
+            )
 
 
 _VERSION_MESSAGE = (
