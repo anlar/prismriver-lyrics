@@ -439,19 +439,26 @@ class PrismriverTuiApp(App[None]):
             result.lyrics if result and isinstance(result.lyrics, str) else ""
         )
 
+        plain_scroll = self.query_one("#lyrics-plain-scroll", VerticalScroll)
+        sync_view = self.query_one("#lyrics-sync-view", SyncedLyricsView)
+        # Switching tabs below hides whichever pane is losing focus, which
+        # blurs it without moving focus anywhere else. Track whether lyrics
+        # currently hold focus so it can follow onto the pane that becomes
+        # active, instead of vanishing.
+        had_lyrics_focus = self.focused in (plain_scroll, sync_view)
+
         plain_widget = self.query_one("#lyrics", Static)
         plain_widget.set_class(not lyrics, "placeholder")
         plain_widget.update(lyrics or "(no lyrics)")
-        self.query_one("#lyrics-plain-scroll", VerticalScroll).scroll_home(
-            animate=False
-        )
+        plain_scroll.scroll_home(animate=False)
 
-        self.query_one("#lyrics-sync-view", SyncedLyricsView).set_lines(
-            synced.lines if synced else ()
-        )
+        sync_view.set_lines(synced.lines if synced else ())
 
         tabs = self.query_one("#lyrics-tabs", TabbedContent)
         tabs.active = "lyrics-synced" if synced else "lyrics-plain"
+
+        if had_lyrics_focus:
+            self._focus_lyrics()
 
     def _focus_lyrics(self) -> None:
         tabs = self.query_one("#lyrics-tabs", TabbedContent)
