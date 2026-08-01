@@ -99,7 +99,7 @@ class PrismriverTuiApp(App[None]):
                 player_list.border_title = "Player"
                 yield player_list
                 results_list = VimOptionList(id="results-list")
-                results_list.border_title = "Plugins"
+                results_list.border_title = "Results"
                 yield results_list
             with Vertical(id="lyrics-container") as lyrics_container:
                 lyrics_container.border_title = "Lyrics"
