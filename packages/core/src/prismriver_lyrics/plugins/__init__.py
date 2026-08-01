@@ -8,6 +8,7 @@ from prismriver_lyrics.plugins.genius import GeniusPlugin
 from prismriver_lyrics.plugins.letras import LetrasPlugin
 from prismriver_lyrics.plugins.lrclib import LrcLibPlugin
 from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
+from prismriver_lyrics.plugins.lyricsfreak import LyricsFreakPlugin
 from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
 from prismriver_lyrics.plugins.lyricsmode import LyricsModePlugin
 from prismriver_lyrics.plugins.lyrsense import LyrsensePlugin
@@ -30,6 +31,7 @@ __all__ = [
     "GeniusPlugin",
     "LetrasPlugin",
     "LrcLibPlugin",
+    "LyricsFreakPlugin",
     "LyricsManiaPlugin",
     "LyricsModePlugin",
     "LyricsOvhPlugin",

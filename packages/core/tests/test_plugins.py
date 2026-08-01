@@ -14,6 +14,7 @@ from prismriver_lyrics.plugins.genius import GeniusPlugin
 from prismriver_lyrics.plugins.letras import LetrasPlugin
 from prismriver_lyrics.plugins.lrclib import LrcLibPlugin
 from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
+from prismriver_lyrics.plugins.lyricsfreak import LyricsFreakPlugin
 from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
 from prismriver_lyrics.plugins.lyricsmode import LyricsModePlugin
 from prismriver_lyrics.plugins.lyrsense import LyrsensePlugin
@@ -200,6 +201,14 @@ class TestPlugins(PluginTestCase):
             "Metallica",
             "Sad But True",
             "a1a484a129f48294fb08985c7d85de58",
+        )
+
+    def test_lyricsfreak_01(self):
+        self.check_plugin(
+            LyricsFreakPlugin(),
+            "System of a Down",
+            "Shame",
+            "d343f1479c619ad34a6450f57a2237d9",
         )
 
     def test_lyricsmania_01(self):
