@@ -28,7 +28,11 @@ class OneMusicLyricsPlugin(LyricsPlugin):
         return f"https://www.1musiclyrics.net/m/{artist_slug}/{title_slug}.html"
 
     async def search(
-        self, client: httpx.AsyncClient, artist: str, title: str
+        self,
+        client: httpx.AsyncClient,
+        artist: str,
+        title: str,
+        duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
         response = await client.get(url)

@@ -22,7 +22,13 @@ class _FakeSearch:
         self.results = results if results is not None else []
         self.calls: list[tuple[str, str]] = []
 
-    async def __call__(self, artist: str, title: str, **kwargs: object):
+    async def __call__(
+        self,
+        artist: str,
+        title: str,
+        duration_ms: int | None = None,
+        **kwargs: object,
+    ):
         self.calls.append((artist, title))
         return self.results
 

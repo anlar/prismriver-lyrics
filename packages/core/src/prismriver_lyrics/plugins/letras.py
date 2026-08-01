@@ -20,7 +20,11 @@ class LetrasPlugin(LyricsPlugin):
         return f"https://www.letras.mus.br/{artist_slug}/{title_slug}/"
 
     async def search(
-        self, client: httpx.AsyncClient, artist: str, title: str
+        self,
+        client: httpx.AsyncClient,
+        artist: str,
+        title: str,
+        duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
         response = await client.get(url)

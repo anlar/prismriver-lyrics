@@ -43,7 +43,11 @@ class DeezerPlugin(LyricsPlugin):
     name = "deezer.com"
 
     async def search(
-        self, client: httpx.AsyncClient, artist: str, title: str
+        self,
+        client: httpx.AsyncClient,
+        artist: str,
+        title: str,
+        duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         auth_response = await client.get(_AUTH_URL)
         if auth_response.status_code != 200:

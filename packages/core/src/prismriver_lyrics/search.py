@@ -18,6 +18,7 @@ _default_cache = SearchCache()
 async def search_lyrics(
     artist: str,
     title: str,
+    duration_ms: int | None = None,
     plugins: list[LyricsPlugin] | None = None,
     timeout: float = 10.0,
     use_cache: bool = True,
@@ -29,6 +30,10 @@ async def search_lyrics(
     error out or find nothing are silently excluded. Results are returned
     in the same order as `plugins` (or `default_plugins()`), not
     completion order, so the ranking is stable across runs.
+
+    `duration_ms` (the track's known length, if any) is passed through to
+    plugins that can use it to disambiguate same-titled results (e.g. a
+    remix returned alongside the original); most plugins ignore it.
 
     Results are cached on disk keyed by (artist, title); pass
     `use_cache=False` to force a fresh search.
@@ -50,7 +55,9 @@ async def search_lyrics(
         follow_redirects=True,
     ) as client:
         tasks = [
-            asyncio.create_task(plugin.search(client, artist, title))
+            asyncio.create_task(
+                plugin.search(client, artist, title, duration_ms)
+            )
             for plugin in plugins
         ]
         gathered = await asyncio.gather(*tasks, return_exceptions=True)

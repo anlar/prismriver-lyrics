@@ -277,15 +277,20 @@ class PrismriverTuiApp(App[None]):
             self._set_results([], placeholder=self.status)
             return
 
+        duration_ms = (
+            track.length_us // 1000 if track.length_us is not None else None
+        )
         self._search_task = asyncio.create_task(
-            self._search_lyrics(track.artist, track.title)
+            self._search_lyrics(track.artist, track.title, duration_ms)
         )
 
-    async def _search_lyrics(self, artist: str, title: str) -> None:
+    async def _search_lyrics(
+        self, artist: str, title: str, duration_ms: int | None = None
+    ) -> None:
         self._set_results([], placeholder="Searching...")
 
         try:
-            results = await search_lyrics(artist, title)
+            results = await search_lyrics(artist, title, duration_ms)
         except asyncio.CancelledError:
             raise
         except Exception as exc:

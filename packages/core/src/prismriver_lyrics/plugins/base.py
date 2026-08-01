@@ -35,7 +35,11 @@ class LyricsPlugin(ABC):
 
     @abstractmethod
     async def search(
-        self, client: httpx.AsyncClient, artist: str, title: str
+        self,
+        client: httpx.AsyncClient,
+        artist: str,
+        title: str,
+        duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         """Look up lyrics for artist/title, returning every result this
         source has (usually one, but e.g. a source with a translation may

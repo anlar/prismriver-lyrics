@@ -20,7 +20,11 @@ class LyricsFreakPlugin(LyricsPlugin):
     name = "lyricsfreak.com"
 
     async def search(
-        self, client: httpx.AsyncClient, artist: str, title: str
+        self,
+        client: httpx.AsyncClient,
+        artist: str,
+        title: str,
+        duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         url = await self._find_song_url(client, artist, title)
         if url is None:

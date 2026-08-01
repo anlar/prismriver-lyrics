@@ -37,7 +37,11 @@ class ParolesPlugin(LyricsPlugin):
         return f"https://www.paroles.net/{artist_slug}/paroles-{title_slug}"
 
     async def search(
-        self, client: httpx.AsyncClient, artist: str, title: str
+        self,
+        client: httpx.AsyncClient,
+        artist: str,
+        title: str,
+        duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
         # A missing song redirects elsewhere rather than 404ing.

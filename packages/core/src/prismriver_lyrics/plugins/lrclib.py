@@ -48,7 +48,11 @@ class LrcLibPlugin(LyricsPlugin):
     name = "lrclib.net"
 
     async def search(
-        self, client: httpx.AsyncClient, artist: str, title: str
+        self,
+        client: httpx.AsyncClient,
+        artist: str,
+        title: str,
+        duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         response = await client.get(
             _SEARCH_URL,

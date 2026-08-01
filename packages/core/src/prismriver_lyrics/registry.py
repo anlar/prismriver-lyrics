@@ -6,6 +6,7 @@ from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
 from prismriver_lyrics.plugins.genius import GeniusPlugin
 from prismriver_lyrics.plugins.kashinavi import KashiNaviPlugin
+from prismriver_lyrics.plugins.kugou import KuGouPlugin
 from prismriver_lyrics.plugins.letras import LetrasPlugin
 from prismriver_lyrics.plugins.lrclib import LrcLibPlugin
 from prismriver_lyrics.plugins.lrcmux import LrcmuxPlugin
@@ -38,6 +39,7 @@ def default_plugins() -> list[LyricsPlugin]:
         ElyricsPlugin(),
         GeniusPlugin(),
         KashiNaviPlugin(),
+        KuGouPlugin(),
         LetrasPlugin(),
         LrcLibPlugin(),
         LrcmuxPlugin(),

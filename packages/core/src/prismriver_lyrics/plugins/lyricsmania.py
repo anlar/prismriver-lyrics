@@ -34,7 +34,11 @@ class LyricsManiaPlugin(LyricsPlugin):
         return f"https://www.lyricsmania.com/{title_slug}{middle}{artist_slug}.html"
 
     async def search(
-        self, client: httpx.AsyncClient, artist: str, title: str
+        self,
+        client: httpx.AsyncClient,
+        artist: str,
+        title: str,
+        duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         response = None
         url = ""

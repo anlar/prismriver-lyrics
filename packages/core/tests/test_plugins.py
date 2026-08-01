@@ -12,6 +12,7 @@ from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
 from prismriver_lyrics.plugins.genius import GeniusPlugin
 from prismriver_lyrics.plugins.kashinavi import KashiNaviPlugin
+from prismriver_lyrics.plugins.kugou import KuGouPlugin
 from prismriver_lyrics.plugins.letras import LetrasPlugin
 from prismriver_lyrics.plugins.lrclib import LrcLibPlugin
 from prismriver_lyrics.plugins.lrcmux import LrcmuxPlugin
@@ -190,6 +191,14 @@ class TestPlugins(PluginTestCase):
             "Kalafina",
             "monochrome",
             "c4882ce77d83c81ca189eddeb2580640",
+        )
+
+    def test_kugou_01(self):
+        self.check_plugin(
+            KuGouPlugin(),
+            "Кино",
+            "Звезда по имени Солнце",
+            "010f51e62c60f75f75b0c148fc0ecbff",
         )
 
     def test_letras_01(self):
