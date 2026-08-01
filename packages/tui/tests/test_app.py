@@ -111,23 +111,57 @@ def _synced_result(source: str = "lrclib.net") -> LyricsResult:
 def test_result_label_plain():
     app = PrismriverTuiApp()
     result = LyricsResult(source="Test", url="u", lyrics="text")
-    assert app._result_label(result) == "Test"
+    assert app._result_label(result, has_synced=False) == "Test"
 
 
-def test_result_label_translation_only():
+def test_result_label_lang_only():
+    app = PrismriverTuiApp()
+    result = LyricsResult(source="Test", url="u", lyrics="text", lang="en")
+    assert (
+        app._result_label(result, has_synced=False)
+        == "Test[dim] \\[EN][/dim]"
+    )
+
+
+def test_result_label_translated_no_original_lang():
     app = PrismriverTuiApp()
     result = LyricsResult(
         source="Test", url="u", lyrics="text", translation=True, lang="en"
     )
-    assert app._result_label(result) == "Test[dim] (translation: EN)[/dim]"
+    assert (
+        app._result_label(result, has_synced=False)
+        == "Test[dim] \\[?? -> EN][/dim]"
+    )
+
+
+def test_result_label_translated_with_original_lang():
+    app = PrismriverTuiApp()
+    result = LyricsResult(
+        source="Test",
+        url="u",
+        lyrics="text",
+        translation=True,
+        lang="en",
+        original_lang="ja",
+    )
+    assert (
+        app._result_label(result, has_synced=False)
+        == "Test[dim] \\[JA -> EN][/dim]"
+    )
 
 
 def test_result_label_synced_only():
     app = PrismriverTuiApp()
     assert (
-        app._result_label(_synced_result())
-        == "lrclib.net[palegreen bold dim] \\[synced] [/]"
+        app._result_label(_synced_result(), has_synced=True)
+        == "[palegreen bold dim]\\[S] [/]lrclib.net"
     )
+
+
+def test_result_label_plain_alongside_synced_is_indented():
+    app = PrismriverTuiApp()
+    result = LyricsResult(source="Test", url="u", lyrics="text")
+    assert app._result_label(result, has_synced=True) == "    Test"
 
 
 def test_result_label_synced_and_translation():
@@ -138,11 +172,12 @@ def test_result_label_synced_and_translation():
         lyrics=SyncedLyrics(lines=(SyncedLine(time_ms=0, text="A"),)),
         translation=True,
         lang="en",
+        original_lang="ja",
     )
     assert (
-        app._result_label(result)
-        == "lrclib.net[palegreen bold dim] \\[synced] [/]"
-        "[dim] (translation: EN)[/dim]"
+        app._result_label(result, has_synced=True)
+        == "[palegreen bold dim]\\[S] [/]lrclib.net"
+        "[dim] \\[JA -> EN][/dim]"
     )
 
 
@@ -161,10 +196,10 @@ async def test_sync_result_shows_symbol_in_results_list(monkeypatch):
             results_list.get_option_at_index(i).prompt
             for i in range(results_list.option_count)
         ]
-        assert any("[synced]" in label for label in labels)
-        assert not any(
-            "[synced]" in label for label in labels if "Plain" in label
+        assert any(
+            "\\[S]" in label and "lrclib.net" in label for label in labels
         )
+        assert any("    Plain Source" in label for label in labels)
 
 
 @pytest.mark.asyncio

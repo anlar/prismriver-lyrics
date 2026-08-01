@@ -145,17 +145,28 @@ class PrismriverTuiApp(App[None]):
         label = f"{track.player}[dim] / {track.player_short}[/dim]"
         return Option(f"{icon} {label}", id=bus_name)
 
-    def _result_label(self, result: LyricsResult) -> str:
-        label = result.source
-        if isinstance(result.lyrics, SyncedLyrics):
-            label += "[palegreen bold dim] \\[synced] [/]"
-        if result.translation:
-            suffix = (
-                f"translation: {result.lang.upper()}"
-                if result.lang
-                else "translation"
+    def _result_label(self, result: LyricsResult, has_synced: bool) -> str:
+        if has_synced:
+            prefix = (
+                "[palegreen bold dim]\\[S] [/]"
+                if isinstance(result.lyrics, SyncedLyrics)
+                else "    "
             )
-            label += f"[dim] ({suffix})[/dim]"
+        else:
+            prefix = ""
+        label = prefix + result.source
+        if result.lang:
+            target = result.lang.upper()
+            if result.translation:
+                source_lang = (
+                    result.original_lang.upper()
+                    if result.original_lang
+                    else "??"
+                )
+                suffix = f"{source_lang} -> {target}"
+            else:
+                suffix = target
+            label += f"[dim] \\[{suffix}][/dim]"
         return label
 
     def _clear_player_list(self, message: str) -> None:
@@ -311,9 +322,13 @@ class PrismriverTuiApp(App[None]):
         self._results = sorted(
             results, key=lambda result: result.source.lower()
         )
+        has_synced = any(
+            isinstance(result.lyrics, SyncedLyrics) for result in self._results
+        )
         option_list = self.query_one("#results-list", OptionList)
         option_list.set_options(
-            Option(self._result_label(result)) for result in self._results
+            Option(self._result_label(result, has_synced))
+            for result in self._results
         )
         if self._results:
             # Prefer a synced-lyrics result over the alphabetically-first

@@ -49,12 +49,13 @@ class MusixmatchPlugin(LyricsPlugin):
         if not original:
             return []
 
+        original_lang = lyrics_info.get("language") or None
         results = [
             LyricsResult(
                 source=self.name,
                 url=url,
                 lyrics=original,
-                lang=lyrics_info.get("language") or None,
+                lang=original_lang,
             )
         ]
 
@@ -67,7 +68,9 @@ class MusixmatchPlugin(LyricsPlugin):
 
         translations = await asyncio.gather(
             *(
-                self._fetch_translation(client, url, original, lang_by_code3[code])
+                self._fetch_translation(
+                    client, url, original, original_lang, lang_by_code3[code]
+                )
                 for code in translation_statuses
                 if code in lang_by_code3
             )
@@ -80,6 +83,7 @@ class MusixmatchPlugin(LyricsPlugin):
         client: httpx.AsyncClient,
         base_url: str,
         original: str,
+        original_lang: str | None,
         lang_info: dict,
     ) -> LyricsResult | None:
         translation_url = f"{base_url}/translation/{lang_info['language_name']}"
@@ -103,6 +107,7 @@ class MusixmatchPlugin(LyricsPlugin):
             lyrics=text,
             translation=True,
             lang=lang_info.get("language_iso_code_1"),
+            original_lang=original_lang,
         )
 
     @staticmethod
