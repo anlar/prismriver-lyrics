@@ -19,6 +19,7 @@ from prismriver_lyrics.plugins.lyricsfreak import LyricsFreakPlugin
 from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
 from prismriver_lyrics.plugins.lyricsmode import LyricsModePlugin
 from prismriver_lyrics.plugins.lyrsense import LyrsensePlugin
+from prismriver_lyrics.plugins.musixmatch import MusixmatchPlugin
 from prismriver_lyrics.plugins.netease import NeteasePlugin
 from prismriver_lyrics.plugins.one_music_lyrics import OneMusicLyricsPlugin
 from prismriver_lyrics.plugins.paroles import ParolesPlugin
@@ -247,6 +248,41 @@ class TestPlugins(PluginTestCase):
                 "db691a5ab8bae6dc801aebd7339b66bf",
             ],
             [None, "ru"],
+        )
+
+    def test_musixmatch_01(self):
+        self.check_plugin_all(
+            MusixmatchPlugin(),
+            "Metallica",
+            "Sad But True",
+            [
+                "ccd5690dbd7f4c7aaa20e95beffd8beb",
+                "9700485d585d988166091aff1d239d27",
+                "0e70f1e1bf5c5b205998bb71f2d51356",
+                "eb960d72081821c70efbc54f9ed17def",
+                "20c4407e017c2b8a7f8785ddc8da7dc1",
+                "9d738da80bc738ccac851be7a5702571",
+                "398a286a969e7391afb9ff66db80dd09",
+                "5f7f405000a4f7a705d55bf1de923451",
+                "f2f375a9b0e7073c41e1546e2ac150a3",
+                "e79ad51c8d0a28b468ea058f9664e3f4",
+                "a2e959a3cc286af1e6e1f807b9d9612b",
+                "30bb41dffcc8efb2f78505734482765b",
+            ],
+            [
+                "en",
+                "it",
+                "uk",
+                "cs",
+                "es",
+                "pt",
+                "ru",
+                "fr",
+                "tr",
+                "pl",
+                "nl",
+                "de",
+            ],
         )
 
     def test_netease_01(self):
