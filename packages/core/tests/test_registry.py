@@ -4,7 +4,12 @@ from prismriver_lyrics.models import (
     SyncedLyrics,
 )
 from prismriver_lyrics.plugins.base import LyricsPlugin
-from prismriver_lyrics.registry import filter_plugins, filter_results, parse_ids
+from prismriver_lyrics.registry import (
+    filter_cache_key,
+    filter_plugins,
+    filter_results,
+    parse_ids,
+)
 
 
 class _FakePlugin(LyricsPlugin):
@@ -136,6 +141,27 @@ def test_filter_results_combines_constraints():
         langs=frozenset({"ru"}),
         translated=True,
     ) == [results[0]]
+
+
+def test_filter_cache_key_is_none_without_any_constraint():
+    assert filter_cache_key() is None
+
+
+def test_filter_cache_key_is_stable_regardless_of_lang_order():
+    assert filter_cache_key(langs=frozenset({"ru", "en"})) == filter_cache_key(
+        langs=frozenset({"en", "ru"})
+    )
+
+
+def test_filter_cache_key_differs_by_constraint():
+    keys = {
+        filter_cache_key(langs=frozenset({"ru"})),
+        filter_cache_key(translated=True),
+        filter_cache_key(synced=True),
+        filter_cache_key(langs=frozenset({"en"})),
+    }
+    assert len(keys) == 4
+    assert None not in keys
 
 
 def test_filter_plugins_no_constraints_is_noop():

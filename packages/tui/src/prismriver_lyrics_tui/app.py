@@ -7,7 +7,6 @@ from prismriver_lyrics.cache import SearchCache
 from prismriver_lyrics.models import LyricsResult, SyncedLyrics
 from prismriver_lyrics.registry import (
     default_plugins,
-    filter_plugins,
     filter_results,
     parse_ids,
     print_plugins,
@@ -312,34 +311,15 @@ class PrismriverTuiApp(App[None]):
     ) -> None:
         self._set_results([], placeholder="Searching...")
 
-        # A lang/translated/sync filter lets some plugins be skipped up
-        # front (see filter_plugins()), but that means the search may no
-        # longer cover every plugin a plain, unfiltered search would
-        # have — so the shared (artist, title) cache is bypassed rather
-        # than read from or polluted with a partial result set in that
-        # case.
-        hint_filtered = (
-            self._langs is not None
-            or self._translated is not None
-            or self._synced is not None
-        )
-        plugins = (
-            filter_plugins(
-                default_plugins(), self._langs, self._translated,
-                self._synced,
-            )
-            if hint_filtered
-            else None
-        )
-
         try:
             results = await search_lyrics(
                 artist,
                 title,
                 duration_ms,
-                plugins=plugins,
-                use_cache=not hint_filtered,
                 cache=self._cache,
+                langs=self._langs,
+                translated=self._translated,
+                synced=self._synced,
             )
         except asyncio.CancelledError:
             raise

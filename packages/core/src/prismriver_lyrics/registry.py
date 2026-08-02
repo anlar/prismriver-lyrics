@@ -70,6 +70,25 @@ def parse_ids(value: str | None) -> frozenset[str] | None:
     return frozenset(v.strip() for v in value.split(",") if v.strip())
 
 
+def filter_cache_key(
+    langs: frozenset[str] | None = None,
+    translated: bool | None = None,
+    synced: bool | None = None,
+) -> str | None:
+    """A stable string identifying this lang/translated/synced filter
+    combination, for SearchCache's `filter_key` — so a filtered search
+    (which may only cover a hint-narrowed subset of plugins) is cached
+    separately from the plain, every-plugin (artist, title) entry rather
+    than shadowing or being shadowed by it. Returns None when every axis
+    is unconstrained, so callers can use that directly to mean "no
+    filter, use the plain cache entry".
+    """
+    if langs is None and translated is None and synced is None:
+        return None
+    lang_part = ",".join(sorted(langs)) if langs is not None else ""
+    return f"lang={lang_part}|translated={translated}|synced={synced}"
+
+
 def _lang_hint_matches(plugin_langs: set[str], langs: frozenset[str]) -> bool:
     """Whether a plugin whose results may carry any of `plugin_langs`
     (see LyricsPlugin.lang) could produce something the `langs` filter

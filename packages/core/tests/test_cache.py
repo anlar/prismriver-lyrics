@@ -35,3 +35,28 @@ def test_cache_round_trips_plain_lyrics(tmp_path):
 
     assert cached == results
     assert isinstance(cached[0].lyrics, str)
+
+
+def test_cache_filter_key_is_namespaced_separately_from_plain_entry(tmp_path):
+    cache = SearchCache(ttl=3600, path=tmp_path / "cache.sqlite3")
+    plain = [LyricsResult(source="Plain", url="u", lyrics="all plugins")]
+    filtered = [LyricsResult(source="Filtered", url="u", lyrics="subset")]
+
+    cache.set("Some Artist", "Some Title", plain)
+    cache.set("Some Artist", "Some Title", filtered, filter_key="lang=ru")
+
+    assert cache.get("Some Artist", "Some Title") == plain
+    assert (
+        cache.get("Some Artist", "Some Title", filter_key="lang=ru")
+        == filtered
+    )
+    # A different (or missing) filter key doesn't see another one's entry.
+    assert cache.get("Some Artist", "Some Title", filter_key="lang=en") is None
+
+
+def test_cache_get_filter_key_is_a_miss_before_being_set(tmp_path):
+    cache = SearchCache(ttl=3600, path=tmp_path / "cache.sqlite3")
+    results = [LyricsResult(source="Plain", url="u", lyrics="all plugins")]
+    cache.set("Some Artist", "Some Title", results)
+
+    assert cache.get("Some Artist", "Some Title", filter_key="lang=ru") is None

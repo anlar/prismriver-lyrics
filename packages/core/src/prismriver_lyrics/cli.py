@@ -7,7 +7,6 @@ from prismriver_lyrics.cache import SearchCache
 from prismriver_lyrics.models import SyncedLyrics
 from prismriver_lyrics.registry import (
     default_plugins,
-    filter_plugins,
     filter_results,
     parse_ids,
     print_plugins,
@@ -130,28 +129,15 @@ def main() -> None:
                 f"unknown plugin id(s): {', '.join(sorted(unknown))}"
             )
 
-    # A lang/translated/sync filter lets some plugins be skipped up front
-    # (see filter_plugins()), but that means the search may no longer
-    # cover every plugin a plain, unfiltered search would have — so the
-    # shared (artist, title) cache is bypassed rather than read from or
-    # polluted with a partial result set in that case.
-    hint_filtered = (
-        langs is not None or translated is not None or synced is not None
-    )
-    plugins = (
-        filter_plugins(default_plugins(), langs, translated, synced)
-        if hint_filtered
-        else None
-    )
-    use_cache = not args.no_cache and not hint_filtered
-
     results = asyncio.run(
         search_lyrics(
             args.artist,
             args.title,
-            plugins=plugins,
-            use_cache=use_cache,
+            use_cache=not args.no_cache,
             cache=SearchCache(ttl=args.cache_ttl),
+            langs=langs,
+            translated=translated,
+            synced=synced,
         )
     )
     results = filter_results(results, plugin_ids, langs, translated, synced)
