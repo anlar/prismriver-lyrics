@@ -21,6 +21,8 @@ class SyncLrcPlugin(LyricsPlugin):
     id = "synclrc"
     name = "SyncLRC"
 
+    sync = 1
+
     async def search(
         self,
         client: httpx.AsyncClient,

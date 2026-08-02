@@ -5,7 +5,7 @@ import httpx
 from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
-from prismriver_lyrics.plugins.base import LyricsPlugin
+from prismriver_lyrics.plugins.base import ANY_LANG, LyricsPlugin
 from prismriver_lyrics.util import slugify
 
 _BASE_URL = "https://www.musixmatch.com"
@@ -31,6 +31,11 @@ class MusixmatchPlugin(LyricsPlugin):
 
     id = "musixmatch"
     name = "Musixmatch"
+
+    # Reports whatever language the matched song and its crowd
+    # translations happen to be tagged with, so this varies per song.
+    lang = [ANY_LANG]
+    translated = 1
 
     def build_url(self, artist: str, title: str) -> str:
         return f"{_BASE_URL}/lyrics/{slugify(artist)}/{slugify(title)}"

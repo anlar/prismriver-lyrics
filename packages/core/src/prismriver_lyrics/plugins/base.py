@@ -15,6 +15,18 @@ APP_USER_AGENT = (
     "(https://github.com/anlar/prismriver-lyrics)"
 )
 
+# LyricsPlugin.lang / registry filter_* token standing in for
+# LyricsResult.lang=None (language not tagged/unknown), since the real
+# value isn't a valid lang code to type.
+UNKNOWN_LANG = "?"
+
+# Two uses: as a LyricsPlugin.lang hint, "results may carry any language
+# code, varies per search" (e.g. musixmatch); as a registry filter_lang
+# token, "any *tagged* language, whichever code it is" (i.e. not
+# UNKNOWN_LANG). Either way it subsumes specific codes; only UNKNOWN_LANG
+# is distinct from it.
+ANY_LANG = "*"
+
 
 class LyricsPlugin(ABC):
     """A single lyrics source. Implementations must be safe to run
@@ -26,6 +38,30 @@ class LyricsPlugin(ABC):
 
     # Human-readable resource name (e.g. "LRCLIB"), shown in results lists.
     name: str
+
+    # Filter hints: describe what this plugin's results *could* look
+    # like, so callers (see registry.filter_plugins()) can skip querying
+    # a plugin that provably can't satisfy an active lang/translated/sync
+    # filter instead of making the request and discarding the result.
+    # Advisory only, not authoritative — a search can still legitimately
+    # return fewer variants than the hints allow, or nothing at all.
+
+    # Language codes this plugin's results may carry, matched against
+    # LyricsResult.lang (not the actual song's language, for plugins that
+    # never tag it). UNKNOWN_LANG stands in for untagged (lang=None);
+    # ANY_LANG means "varies, could be any code" (e.g. musixmatch, whose
+    # original_lang depends on whichever song is found) and subsumes
+    # UNKNOWN_LANG too.
+    lang: list[str] = [UNKNOWN_LANG]
+
+    # 0 if this plugin only ever returns original lyrics, 1 if it may
+    # also return translated results (LyricsResult.translation=True) —
+    # always alongside the original, never translated-only.
+    translated: int = 0
+
+    # 0 if this plugin only ever returns plain-text lyrics, 1 if it may
+    # also return time-synced lyrics (a SyncedLyrics).
+    sync: int = 0
 
     # <p> wraps a verse on some sources (e.g. letras.mus.br); it's real
     # content, so it's recursed into, and its close also marks a

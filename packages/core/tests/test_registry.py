@@ -3,7 +3,36 @@ from prismriver_lyrics.models import (
     SyncedLine,
     SyncedLyrics,
 )
-from prismriver_lyrics.registry import filter_results, parse_ids
+from prismriver_lyrics.plugins.base import LyricsPlugin
+from prismriver_lyrics.registry import filter_plugins, filter_results, parse_ids
+
+
+class _FakePlugin(LyricsPlugin):
+    id = "fake"
+    name = "Fake"
+
+    async def search(self, client, artist, title, duration_ms=None):
+        return []
+
+
+def _plugin(
+    plugin_id: str,
+    lang: list[str] | None = None,
+    translated: int = 0,
+    sync: int = 0,
+) -> LyricsPlugin:
+    cls = type(
+        plugin_id,
+        (_FakePlugin,),
+        {
+            "id": plugin_id,
+            "name": plugin_id,
+            "lang": lang if lang is not None else ["?"],
+            "translated": translated,
+            "sync": sync,
+        },
+    )
+    return cls()
 
 
 def _result(source: str, lang: str | None = None, translation: bool = False):
@@ -64,6 +93,19 @@ def test_filter_results_by_lang_unknown_token_matches_untagged():
     assert filter_results(results, langs=frozenset({"en", "?"})) == results
 
 
+def test_filter_results_by_lang_any_token_matches_any_tagged_result():
+    tagged_en = _result("Genius", lang="en")
+    tagged_ru = _result("Amalgama-Lab", lang="ru")
+    untagged = _result("LRCLIB", lang=None)
+    results = [tagged_en, tagged_ru, untagged]
+
+    assert filter_results(results, langs=frozenset({"*"})) == [
+        tagged_en,
+        tagged_ru,
+    ]
+    assert filter_results(results, langs=frozenset({"*", "?"})) == results
+
+
 def test_filter_results_by_translated():
     original = _result("Amalgama-Lab", translation=False)
     translated = _result("Amalgama-Lab", lang="ru", translation=True)
@@ -94,3 +136,72 @@ def test_filter_results_combines_constraints():
         langs=frozenset({"ru"}),
         translated=True,
     ) == [results[0]]
+
+
+def test_filter_plugins_no_constraints_is_noop():
+    plugins = [_plugin("untagged"), _plugin("wildcard", lang=["*"])]
+    assert filter_plugins(plugins) == plugins
+
+
+def test_filter_plugins_by_lang_drops_plugins_that_cant_tag_it():
+    untagged = _plugin("untagged")
+    ru_only = _plugin("ru_only", lang=["?", "ru"])
+    wildcard = _plugin("wildcard", lang=["*"])
+    plugins = [untagged, ru_only, wildcard]
+
+    assert filter_plugins(plugins, langs=frozenset({"en"})) == [wildcard]
+    assert filter_plugins(plugins, langs=frozenset({"ru"})) == [
+        ru_only,
+        wildcard,
+    ]
+
+
+def test_filter_plugins_by_lang_unknown_token_matches_untagged_and_wildcard():
+    untagged = _plugin("untagged")
+    ru_only = _plugin("ru_only", lang=["?", "ru"])
+    wildcard = _plugin("wildcard", lang=["*"])
+    plugins = [untagged, ru_only, wildcard]
+
+    assert filter_plugins(plugins, langs=frozenset({"?"})) == plugins
+
+
+def test_filter_plugins_by_lang_any_token_keeps_plugins_that_can_tag():
+    untagged_only = _plugin("untagged_only")
+    ru_only = _plugin("ru_only", lang=["?", "ru"])
+    wildcard = _plugin("wildcard", lang=["*"])
+    plugins = [untagged_only, ru_only, wildcard]
+
+    assert filter_plugins(plugins, langs=frozenset({"*"})) == [
+        ru_only,
+        wildcard,
+    ]
+
+
+def test_filter_plugins_by_translated_only_excludes_when_true():
+    original_only = _plugin("original_only")
+    with_translation = _plugin("with_translation", translated=1)
+    plugins = [original_only, with_translation]
+
+    assert filter_plugins(plugins, translated=True) == [with_translation]
+    assert filter_plugins(plugins, translated=False) == plugins
+
+
+def test_filter_plugins_by_sync_only_excludes_when_true():
+    unsynced_only = _plugin("unsynced_only")
+    with_sync = _plugin("with_sync", sync=1)
+    plugins = [unsynced_only, with_sync]
+
+    assert filter_plugins(plugins, synced=True) == [with_sync]
+    assert filter_plugins(plugins, synced=False) == plugins
+
+
+def test_filter_plugins_combines_constraints():
+    plugins = [
+        _plugin("amalgama_like", lang=["?", "ru"], translated=1),
+        _plugin("untagged_only"),
+        _plugin("wildcard", lang=["*"], translated=1),
+    ]
+
+    assert filter_plugins(
+        plugins, langs=frozenset({"ru"}), translated=True
+    ) == [plugins[0], plugins[2]]

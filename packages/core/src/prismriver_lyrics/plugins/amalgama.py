@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from bs4.element import Tag
 
 from prismriver_lyrics.models import LyricsResult
-from prismriver_lyrics.plugins.base import LyricsPlugin
+from prismriver_lyrics.plugins.base import UNKNOWN_LANG, LyricsPlugin
 from prismriver_lyrics.util import slugify
 
 # A single blank `div.empty_container` is a normal stanza break within one
@@ -31,6 +31,10 @@ class AmalgamaPlugin(LyricsPlugin):
 
     id = "amalgama"
     name = "Amalgama-Lab"
+
+    # Original results are untagged; translations are always into Russian.
+    lang = [UNKNOWN_LANG, "ru"]
+    translated = 1
 
     # amalgama-lab.com bolds some words within a line via <strong>; that's
     # real lyric text, not chrome, so it's recursed into transparently.

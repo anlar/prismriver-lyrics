@@ -48,6 +48,8 @@ class LrcLibPlugin(LyricsPlugin):
     id = "lrclib"
     name = "LRCLIB"
 
+    sync = 1
+
     async def search(
         self,
         client: httpx.AsyncClient,

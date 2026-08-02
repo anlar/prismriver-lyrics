@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from bs4.element import Tag
 
 from prismriver_lyrics.models import LyricsResult
-from prismriver_lyrics.plugins.base import LyricsPlugin
+from prismriver_lyrics.plugins.base import UNKNOWN_LANG, LyricsPlugin
 
 _SEARCH_URL = "https://lyrsense.com/search"
 _BASE_URL = "https://lyrsense.com"
@@ -24,6 +24,10 @@ class LyrsensePlugin(LyricsPlugin):
 
     id = "lyrsense"
     name = "Lyrsense"
+
+    # Original results are untagged; translations are always into Russian.
+    lang = [UNKNOWN_LANG, "ru"]
+    translated = 1
 
     async def search(
         self,

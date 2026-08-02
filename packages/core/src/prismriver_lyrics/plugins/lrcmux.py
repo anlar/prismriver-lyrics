@@ -22,6 +22,8 @@ class LrcmuxPlugin(LyricsPlugin):
     id = "lrcmux"
     name = "LRCMux"
 
+    sync = 1
+
     async def search(
         self,
         client: httpx.AsyncClient,

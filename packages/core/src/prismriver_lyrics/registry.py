@@ -5,7 +5,7 @@ import pkgutil
 
 from prismriver_lyrics import plugins as plugins_package
 from prismriver_lyrics.models import LyricsResult, SyncedLyrics
-from prismriver_lyrics.plugins.base import LyricsPlugin
+from prismriver_lyrics.plugins.base import ANY_LANG, UNKNOWN_LANG, LyricsPlugin
 
 logger = logging.getLogger(__name__)
 
@@ -70,9 +70,54 @@ def parse_ids(value: str | None) -> frozenset[str] | None:
     return frozenset(v.strip() for v in value.split(",") if v.strip())
 
 
-# langs filter token standing in for LyricsResult.lang=None (language not
-# tagged/unknown), since the real value isn't a valid lang code to type.
-UNKNOWN_LANG = "?"
+def _lang_hint_matches(plugin_langs: set[str], langs: frozenset[str]) -> bool:
+    """Whether a plugin whose results may carry any of `plugin_langs`
+    (see LyricsPlugin.lang) could produce something the `langs` filter
+    would keep. Three ways to match: the plugin's hint says it varies
+    (ANY_LANG, e.g. musixmatch) and so could tag anything, including a
+    code the caller asked for; a hint code is directly requested (this
+    also covers UNKNOWN_LANG, i.e. explicitly requesting untagged
+    results); or the caller asked for ANY_LANG ("any defined language")
+    and the plugin can tag at least one real code (not just
+    UNKNOWN_LANG)."""
+    return (
+        ANY_LANG in plugin_langs
+        or bool(plugin_langs & langs)
+        or (
+            ANY_LANG in langs
+            and bool(plugin_langs - {UNKNOWN_LANG})
+        )
+    )
+
+
+def filter_plugins(
+    plugins: list[LyricsPlugin],
+    langs: frozenset[str] | None = None,
+    translated: bool | None = None,
+    synced: bool | None = None,
+) -> list[LyricsPlugin]:
+    """Narrow plugins down to those whose lang/translated/sync hints
+    (LyricsPlugin class attributes) don't already rule out ever
+    satisfying the given constraints, so a plugin that provably can't
+    match doesn't have to be queried over the network at all. None means
+    "no constraint" for that axis, same as filter_results().
+
+    Hints are advisory, not authoritative: a plugin kept by this filter
+    may still end up contributing nothing (or nothing matching) once its
+    actual results are checked by filter_results() afterward. This
+    function should never discard a plugin that filter_results() could
+    still have kept results from.
+    """
+    return [
+        plugin
+        for plugin in plugins
+        if (
+            langs is None
+            or _lang_hint_matches(set(plugin.lang), langs)
+        )
+        and (translated is not True or plugin.translated)
+        and (synced is not True or plugin.sync)
+    ]
 
 
 def filter_results(
@@ -86,8 +131,10 @@ def filter_results(
     constraint" for that axis. plugin_ids is matched by resolving ids to
     their plugin's `name` and comparing against LyricsResult.source,
     since results don't carry the id directly. langs matches against
-    LyricsResult.lang, with UNKNOWN_LANG ("?") standing in for lang=None
-    so untagged results can be included/excluded explicitly. synced
+    LyricsResult.lang: UNKNOWN_LANG ("?") stands in for lang=None so
+    untagged results can be included/excluded explicitly, and ANY_LANG
+    ("*") matches any *tagged* (non-None) lang regardless of the actual
+    code, alongside whatever specific codes are also in `langs`. synced
     matches whether LyricsResult.lyrics is time-synced (a SyncedLyrics)
     rather than plain text."""
     names = (
@@ -99,7 +146,11 @@ def filter_results(
         r
         for r in results
         if (names is None or r.source in names)
-        and (langs is None or (r.lang or UNKNOWN_LANG) in langs)
+        and (
+            langs is None
+            or (r.lang or UNKNOWN_LANG) in langs
+            or (ANY_LANG in langs and r.lang is not None)
+        )
         and (translated is None or r.translation == translated)
         and (
             synced is None

@@ -2,7 +2,7 @@ import httpx
 from bs4 import BeautifulSoup, NavigableString, Tag
 
 from prismriver_lyrics.models import LyricsResult
-from prismriver_lyrics.plugins.base import LyricsPlugin
+from prismriver_lyrics.plugins.base import UNKNOWN_LANG, LyricsPlugin
 
 _SEARCH_URL = "https://utaten.com/search"
 _BASE_URL = "https://utaten.com"
@@ -31,6 +31,10 @@ class UtaTenPlugin(LyricsPlugin):
 
     id = "utaten"
     name = "UtaTen"
+
+    # Japanese original, kana reading, and romaji reading, or untagged
+    # when a song has no furigana annotations to derive those from.
+    lang = [UNKNOWN_LANG, "ja", "ja-Hira", "ja-Latn"]
 
     async def search(
         self,

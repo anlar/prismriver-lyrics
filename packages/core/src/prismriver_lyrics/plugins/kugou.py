@@ -138,6 +138,8 @@ class KuGouPlugin(LyricsPlugin):
     id = "kugou"
     name = "KuGou"
 
+    sync = 1
+
     async def search(
         self,
         client: httpx.AsyncClient,

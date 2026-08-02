@@ -4,7 +4,7 @@ import httpx
 from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
-from prismriver_lyrics.plugins.base import LyricsPlugin
+from prismriver_lyrics.plugins.base import ANY_LANG, LyricsPlugin
 
 _SEARCH_URL = "https://genius.com/api/search/multi"
 _SONG_URL = "https://api.genius.com/songs/{song_id}"
@@ -55,6 +55,11 @@ class GeniusPlugin(LyricsPlugin):
 
     id = "genius"
     name = "Genius"
+
+    # Reports whatever language the matched song and its translations
+    # happen to be tagged with on genius.com, so this varies per song.
+    lang = [ANY_LANG]
+    translated = 1
 
     # Genius wraps most lyric lines in <a> (referent/annotation) tags and
     # some styled spans in <span>; both wrap real lyric text, not chrome.
