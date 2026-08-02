@@ -127,17 +127,17 @@ class PrismriverTuiApp(App[None]):
         with Horizontal(id="status-bar"):
             tui_version = importlib.metadata.version("prismriver-lyrics-tui")
             yield Static(
-                f"(≧ᴗ≦)ﾉ♬  Prismriver Lyrics v{tui_version}",
+                f"[dim](≧ᴗ≦)ﾉ♬[/]  Prismriver Lyrics v{tui_version}",
                 id="status-bar-app",
             )
             yield Static(
-                "<↑↓/j/k> scroll "
-                "· <g/G> top/bottom "
-                "· <PgUp/PgDn> move "
-                "· <Tab> switch panels "
-                "· <s> search "
-                "· <t> theme "
-                "· <q> exit",
+                "<↑↓/j/k> [dim]scroll[/] "
+                "[dim]·[/] <g/G> [dim]top/bottom[/] "
+                "[dim]·[/] <PgUp/PgDn> [dim]move[/] "
+                "[dim]·[/] <Tab> [dim]switch panels[/] "
+                "[dim]·[/] <s> [dim]search[/] "
+                "[dim]·[/] <t> [dim]theme[/] "
+                "[dim]·[/] <q> [dim]exit[/]",
                 id="status-bar-hotkeys",
             )
 
@@ -417,7 +417,7 @@ class PrismriverTuiApp(App[None]):
     def watch_auto_sync(self, auto_sync: bool) -> None:
         player_list = self.query_one("#player-list", OptionList)
         player_list.border_subtitle = (
-            None if auto_sync else "<a> resume auto-sync"
+            None if auto_sync else "<a> [dim]resume auto-sync[/]"
         )
 
     def _refresh_song_panel(self) -> None:
