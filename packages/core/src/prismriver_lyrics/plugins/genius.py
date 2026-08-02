@@ -10,16 +10,11 @@ _SEARCH_URL = "https://genius.com/api/search/multi"
 _SONG_URL = "https://api.genius.com/songs/{song_id}"
 _TOKEN = "V_3MoK-nWNF2VKm_zG6qoH8mLnQsr4BU79c4sSNypbLXoXVQZXQI9Dl2Gg9tWed8"
 
-_USER_AGENT = (
-    "Mozilla/5.0 (X11; Linux x86_64; rv:151.0) Gecko/20100101 Firefox/151.0"
-)
-
 # genius.com's own search-embed widget calls this unauthenticated endpoint;
 # it needs to look like a same-site XHR (Referer/X-Requested-With) to avoid
 # being blocked, unlike the official api.genius.com/search, which requires
 # a bearer token we don't own.
 _SEARCH_HEADERS = {
-    "User-Agent": _USER_AGENT,
     "Accept": "application/json, text/plain, */*",
     "Accept-Language": "en-US,en;q=0.9",
     "X-Requested-With": "XMLHttpRequest",
@@ -32,7 +27,6 @@ _SEARCH_HEADERS = {
 # Sent on the lyrics-page scrape too, since Genius's anti-bot checks aren't
 # limited to the search XHR above.
 _SCRAPE_HEADERS = {
-    "User-Agent": _USER_AGENT,
     "Accept": (
         "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
     ),
