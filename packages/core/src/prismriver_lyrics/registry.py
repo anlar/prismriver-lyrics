@@ -1,72 +1,48 @@
-from prismriver_lyrics.plugins.absolutelyrics import AbsoluteLyricsPlugin
-from prismriver_lyrics.plugins.alphabetlyrics import AlphabetLyricsPlugin
-from prismriver_lyrics.plugins.amalgama import AmalgamaPlugin
+import importlib
+import inspect
+import pkgutil
+
+from prismriver_lyrics import plugins as plugins_package
 from prismriver_lyrics.plugins.base import LyricsPlugin
-from prismriver_lyrics.plugins.deezer import DeezerPlugin
-from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
-from prismriver_lyrics.plugins.genius import GeniusPlugin
-from prismriver_lyrics.plugins.kashinavi import KashiNaviPlugin
-from prismriver_lyrics.plugins.kugou import KuGouPlugin
-from prismriver_lyrics.plugins.letras import LetrasPlugin
-from prismriver_lyrics.plugins.lrclib import LrcLibPlugin
-from prismriver_lyrics.plugins.lrcmux import LrcmuxPlugin
-from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
-from prismriver_lyrics.plugins.lyricsfreak import LyricsFreakPlugin
-from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
-from prismriver_lyrics.plugins.lyricsmode import LyricsModePlugin
-from prismriver_lyrics.plugins.lyrsense import LyrsensePlugin
-from prismriver_lyrics.plugins.musixmatch import MusixmatchPlugin
-from prismriver_lyrics.plugins.netease import NeteasePlugin
-from prismriver_lyrics.plugins.one_music_lyrics import OneMusicLyricsPlugin
-from prismriver_lyrics.plugins.paroles import ParolesPlugin
-from prismriver_lyrics.plugins.petitlyrics import PetitLyricsPlugin
-from prismriver_lyrics.plugins.seekalyric import SeekALyricPlugin
-from prismriver_lyrics.plugins.showmelyrics import ShowMeLyricsPlugin
-from prismriver_lyrics.plugins.snakeroot import SnakerootPlugin
-from prismriver_lyrics.plugins.song_guru import SongGuruPlugin
-from prismriver_lyrics.plugins.synclrc import SyncLrcPlugin
-from prismriver_lyrics.plugins.utaten import UtaTenPlugin
-from prismriver_lyrics.plugins.vagalume import VagalumePlugin
+
+
+def _discover_plugin_classes() -> list[type[LyricsPlugin]]:
+    """Import every module in the `plugins` package and collect the
+    concrete LyricsPlugin subclasses each one defines (not re-exported
+    ones, so importing e.g. LyricsPlugin itself into a plugin module
+    doesn't register it)."""
+    classes: list[type[LyricsPlugin]] = []
+    for module_info in pkgutil.iter_modules(plugins_package.__path__):
+        if module_info.name == "base":
+            continue
+        module = importlib.import_module(
+            f"{plugins_package.__name__}.{module_info.name}"
+        )
+        for _, obj in inspect.getmembers(module, inspect.isclass):
+            if (
+                obj.__module__ == module.__name__
+                and issubclass(obj, LyricsPlugin)
+                and not inspect.isabstract(obj)
+            ):
+                classes.append(obj)
+    return classes
 
 
 def default_plugins() -> list[LyricsPlugin]:
-    """Plugins queried by default, one instance per lyrics source."""
-    return [
-        AbsoluteLyricsPlugin(),
-        AlphabetLyricsPlugin(),
-        AmalgamaPlugin(),
-        DeezerPlugin(),
-        ElyricsPlugin(),
-        GeniusPlugin(),
-        KashiNaviPlugin(),
-        KuGouPlugin(),
-        LetrasPlugin(),
-        LrcLibPlugin(),
-        LrcmuxPlugin(),
-        LyricsFreakPlugin(),
-        LyricsManiaPlugin(),
-        LyricsModePlugin(),
-        LyricsOvhPlugin(),
-        LyrsensePlugin(),
-        MusixmatchPlugin(),
-        NeteasePlugin(),
-        OneMusicLyricsPlugin(),
-        ParolesPlugin(),
-        PetitLyricsPlugin(),
-        SeekALyricPlugin(),
-        ShowMeLyricsPlugin(),
-        SnakerootPlugin(),
-        SongGuruPlugin(),
-        SyncLrcPlugin(),
-        UtaTenPlugin(),
-        VagalumePlugin(),
-    ]
+    """Plugins queried by default, one instance per lyrics source.
+
+    Auto-discovered from the `plugins` package, so adding a new plugin
+    module is enough to register it here; sorted by id for a result order
+    that's stable across runs.
+    """
+    plugins = [cls() for cls in _discover_plugin_classes()]
+    return sorted(plugins, key=lambda plugin: plugin.id)
 
 
 def print_plugins() -> None:
     """Print the available plugins as id/name columns, one per line,
     the id column padded to align with the longest id."""
-    plugins = sorted(default_plugins(), key=lambda plugin: plugin.id)
+    plugins = default_plugins()
     width = max(len(plugin.id) for plugin in plugins)
     for plugin in plugins:
         print(f"{plugin.id:<{width}}  {plugin.name}")
