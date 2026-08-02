@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import os
 import sqlite3
 import time
@@ -7,6 +8,8 @@ from dataclasses import asdict
 from pathlib import Path
 
 from prismriver_lyrics.models import LyricsResult, SyncedLine, SyncedLyrics
+
+logger = logging.getLogger(__name__)
 
 # Week-long TTL
 DEFAULT_TTL = 7 * 24 * 60 * 60.0
@@ -89,7 +92,17 @@ class SearchCache:
 
         if row is None:
             return None
-        return [_decode_result(item) for item in json.loads(row[0])]
+        try:
+            return [_decode_result(item) for item in json.loads(row[0])]
+        except Exception:
+            logger.warning(
+                "failed to decode cache entry for %r/%r, treating as a "
+                "cache miss",
+                artist,
+                title,
+                exc_info=True,
+            )
+            return None
 
     def set(self, artist: str, title: str, results: list[LyricsResult]) -> None:
         """Cache results for (artist, title), and prune expired entries."""

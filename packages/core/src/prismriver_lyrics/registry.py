@@ -1,24 +1,35 @@
 import importlib
 import inspect
+import logging
 import pkgutil
 
 from prismriver_lyrics import plugins as plugins_package
 from prismriver_lyrics.models import LyricsResult, SyncedLyrics
 from prismriver_lyrics.plugins.base import LyricsPlugin
 
+logger = logging.getLogger(__name__)
+
 
 def _discover_plugin_classes() -> list[type[LyricsPlugin]]:
     """Import every module in the `plugins` package and collect the
     concrete LyricsPlugin subclasses each one defines (not re-exported
     ones, so importing e.g. LyricsPlugin itself into a plugin module
-    doesn't register it)."""
+    doesn't register it). A module that fails to import is logged and
+    skipped rather than taking down discovery for every other plugin."""
     classes: list[type[LyricsPlugin]] = []
     for module_info in pkgutil.iter_modules(plugins_package.__path__):
         if module_info.name == "base":
             continue
-        module = importlib.import_module(
-            f"{plugins_package.__name__}.{module_info.name}"
-        )
+        try:
+            module = importlib.import_module(
+                f"{plugins_package.__name__}.{module_info.name}"
+            )
+        except Exception:
+            logger.warning(
+                "failed to import plugin module %r", module_info.name,
+                exc_info=True,
+            )
+            continue
         for _, obj in inspect.getmembers(module, inspect.isclass):
             if (
                 obj.__module__ == module.__name__
@@ -44,6 +55,8 @@ def print_plugins() -> None:
     """Print the available plugins as id/name columns, one per line,
     the id column padded to align with the longest id."""
     plugins = default_plugins()
+    if not plugins:
+        return
     width = max(len(plugin.id) for plugin in plugins)
     for plugin in plugins:
         print(f"{plugin.id:<{width}}  {plugin.name}")

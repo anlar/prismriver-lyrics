@@ -1,18 +1,8 @@
-import re
-
 import httpx
-from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
-
-# lyricsmode.com joins words with underscores rather than the shared
-# slug.slugify's hyphens.
-_NON_ALNUM = re.compile(r"[^a-z0-9]+")
-
-
-def _slugify(value: str) -> str:
-    return _NON_ALNUM.sub("_", value.strip().lower()).strip("_")
+from prismriver_lyrics.util import slugify
 
 
 class LyricsModePlugin(LyricsPlugin):
@@ -29,8 +19,8 @@ class LyricsModePlugin(LyricsPlugin):
     _INLINE_TAGS = frozenset({"span"})
 
     def build_url(self, artist: str, title: str) -> str:
-        artist_slug = _slugify(artist)
-        title_slug = _slugify(title)
+        artist_slug = slugify(artist, sep="_")
+        title_slug = slugify(title, sep="_")
         letter = artist_slug[0] if artist_slug else "a"
         return (
             f"https://www.lyricsmode.com/lyrics/{letter}/"
@@ -45,11 +35,10 @@ class LyricsModePlugin(LyricsPlugin):
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
-        response = await client.get(url)
-        if response.status_code != 200:
+        soup = await self.fetch_soup(client, url)
+        if soup is None:
             return []
 
-        soup = BeautifulSoup(response.text, "html.parser")
         container = soup.select_one("#lyrics_text")
         if container is None:
             return []

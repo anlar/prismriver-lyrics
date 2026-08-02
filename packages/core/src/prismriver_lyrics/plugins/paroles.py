@@ -2,7 +2,6 @@ import re
 import unicodedata
 
 import httpx
-from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
@@ -46,11 +45,10 @@ class ParolesPlugin(LyricsPlugin):
     ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
         # A missing song redirects elsewhere rather than 404ing.
-        response = await client.get(url, follow_redirects=False)
-        if response.status_code != 200:
+        soup = await self.fetch_soup(client, url, follow_redirects=False)
+        if soup is None:
             return []
 
-        soup = BeautifulSoup(response.text, "html.parser")
         container = soup.select_one("article.lyrics")
         if container is None:
             return []

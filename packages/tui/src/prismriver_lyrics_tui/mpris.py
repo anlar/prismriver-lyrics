@@ -1,10 +1,13 @@
 import asyncio
+import logging
 from collections.abc import AsyncIterator
 from dataclasses import dataclass, replace
 from typing import Any
 
 from dbus_next import BusType
 from dbus_next.aio import MessageBus, ProxyInterface
+
+logger = logging.getLogger(__name__)
 
 MPRIS_PREFIX = "org.mpris.MediaPlayer2."
 MPRIS_PATH = "/org/mpris/MediaPlayer2"
@@ -162,6 +165,9 @@ class MprisWatcher:
         try:
             return await iface.get_position()
         except Exception:
+            logger.debug(
+                "failed to get position for %r", bus_name, exc_info=True
+            )
             return None
 
     def _display_name(self, bus_name: str) -> str:
@@ -234,22 +240,35 @@ class MprisWatcher:
             try:
                 self._identities[bus_name] = await root_iface.get_identity()
             except Exception:
-                pass
+                logger.debug(
+                    "failed to get identity for %r", bus_name, exc_info=True
+                )
 
             try:
                 self._desktop_entries[bus_name] = (
                     await root_iface.get_desktop_entry()
                 )
             except Exception:
-                pass
+                logger.debug(
+                    "failed to get desktop entry for %r",
+                    bus_name,
+                    exc_info=True,
+                )
         except Exception:
-            pass
+            logger.debug(
+                "failed to get root interface for %r", bus_name, exc_info=True
+            )
 
         try:
             props_iface = await self._interface(
                 bus_name, MPRIS_PATH, PROPS_IFACE
             )
         except Exception:
+            logger.debug(
+                "failed to get properties interface for %r",
+                bus_name,
+                exc_info=True,
+            )
             self._known.discard(bus_name)
             self._identities.pop(bus_name, None)
             self._desktop_entries.pop(bus_name, None)
@@ -277,6 +296,11 @@ class MprisWatcher:
                 bus_name, MPRIS_PATH, PLAYER_IFACE
             )
         except Exception:
+            logger.debug(
+                "failed to get player interface for %r",
+                bus_name,
+                exc_info=True,
+            )
             return
 
         self._player_ifaces[bus_name] = player_iface
@@ -286,13 +310,20 @@ class MprisWatcher:
         try:
             fields.update(_metadata_fields(await player_iface.get_metadata()))
         except Exception:
-            pass
+            logger.debug(
+                "failed to get metadata for %r", bus_name, exc_info=True
+            )
 
         for field, getter_name in _PLAYER_PROPERTY_GETTERS.items():
             try:
                 fields[field] = await getattr(player_iface, getter_name)()
             except Exception:
-                pass
+                logger.debug(
+                    "failed to get %r for %r",
+                    field,
+                    bus_name,
+                    exc_info=True,
+                )
 
         if fields:
             self._emit(bus_name, **fields)

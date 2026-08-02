@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
-from prismriver_lyrics.slug import slugify
+from prismriver_lyrics.util import slugify
 
 _BASE_URL = "https://www.musixmatch.com"
 

@@ -1,7 +1,6 @@
 import re
 
 import httpx
-from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
@@ -48,16 +47,12 @@ class ShowMeLyricsPlugin(LyricsPlugin):
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
-        response = await client.get(url, headers={"User-Agent": _USER_AGENT})
-        if response.status_code != 200:
-            return []
-
-        soup = BeautifulSoup(response.text, "html.parser")
-        container = soup.select_one(".editable-content[itemprop='text']")
-        if container is None:
-            return []
-
-        lyrics = self.extract_lyrics(container)
+        lyrics = await self.fetch_lyrics(
+            client,
+            url,
+            ".editable-content[itemprop='text']",
+            headers={"User-Agent": _USER_AGENT},
+        )
         if not lyrics:
             return []
 

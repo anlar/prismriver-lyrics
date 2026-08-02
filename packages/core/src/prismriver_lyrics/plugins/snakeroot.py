@@ -1,7 +1,6 @@
 import re
 
 import httpx
-from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
@@ -44,11 +43,10 @@ class SnakerootPlugin(LyricsPlugin):
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
-        response = await client.get(url)
-        if response.status_code != 200:
+        soup = await self.fetch_soup(client, url)
+        if soup is None:
             return []
 
-        soup = BeautifulSoup(response.text, "html.parser")
         content = soup.select_one("#content")
         if content is None:
             return []

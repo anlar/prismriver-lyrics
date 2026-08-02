@@ -1,12 +1,8 @@
-import re
-
 import httpx
-from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
-
-_NON_ALNUM = re.compile(r"[^a-z0-9]+")
+from prismriver_lyrics.util import slugify
 
 
 class AbsoluteLyricsPlugin(LyricsPlugin):
@@ -20,12 +16,9 @@ class AbsoluteLyricsPlugin(LyricsPlugin):
     id = "absolutelyrics"
     name = "AbsoluteLyrics"
 
-    def _slug(self, value: str) -> str:
-        return _NON_ALNUM.sub("_", value.lower()).strip("_")
-
     def build_url(self, artist: str, title: str) -> str:
-        artist_slug = self._slug(artist)
-        title_slug = self._slug(title)
+        artist_slug = slugify(artist, sep="_")
+        title_slug = slugify(title, sep="_")
         return f"http://www.absolutelyrics.com/lyrics/view/{artist_slug}/{title_slug}"
 
     async def search(
@@ -36,16 +29,7 @@ class AbsoluteLyricsPlugin(LyricsPlugin):
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
-        response = await client.get(url)
-        if response.status_code != 200:
-            return []
-
-        soup = BeautifulSoup(response.text, "html.parser")
-        container = soup.select_one("p#view_lyrics")
-        if container is None:
-            return []
-
-        lyrics = self.extract_lyrics(container)
+        lyrics = await self.fetch_lyrics(client, url, "p#view_lyrics")
         if not lyrics:
             return []
 

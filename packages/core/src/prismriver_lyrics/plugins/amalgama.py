@@ -1,13 +1,10 @@
-import re
-
 import httpx
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
-
-_NON_ALNUM = re.compile(r"[^a-z0-9]+")
+from prismriver_lyrics.util import slugify
 
 # A single blank `div.empty_container` is a normal stanza break within one
 # translation. When a song has been translated by more than one contributor,
@@ -15,12 +12,6 @@ _NON_ALNUM = re.compile(r"[^a-z0-9]+")
 # with a run of (at least) this many consecutive empty_container elements
 # instead, so that's used as the section boundary.
 _SECTION_BREAK_RUN = 3
-
-
-def _slugify(value: str) -> str:
-    """Lowercase and underscore a string for amalgama-lab.com's URL path
-    (unlike most sources here, it uses underscores rather than hyphens)."""
-    return _NON_ALNUM.sub("_", value.strip().lower()).strip("_")
 
 
 class AmalgamaPlugin(LyricsPlugin):
@@ -46,8 +37,8 @@ class AmalgamaPlugin(LyricsPlugin):
     _INLINE_TAGS = frozenset({"strong"})
 
     def build_url(self, artist: str, title: str) -> str:
-        artist_slug = _slugify(artist)
-        title_slug = _slugify(title)
+        artist_slug = slugify(artist, sep="_")
+        title_slug = slugify(title, sep="_")
         first_letter = artist_slug[:1] or "0"
         return (
             f"https://www.amalgama-lab.com/songs/{first_letter}/"

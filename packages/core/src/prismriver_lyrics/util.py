@@ -13,3 +13,13 @@ def parse_duration(value: str) -> int:
     if not value or _CHUNK.sub("", value) != "":
         raise ValueError(f"invalid duration: {value!r}")
     return sum(int(n) * _UNITS[unit] for n, unit in _CHUNK.findall(value))
+
+
+_NON_ALNUM = re.compile(r"[^a-z0-9]+")
+
+
+def slugify(value: str, sep: str = "-") -> str:
+    """Lowercase and join a string's words with `sep` for use in a
+    lyrics-site URL path."""
+    value = _NON_ALNUM.sub(sep, value.strip().lower())
+    return value.strip(sep)

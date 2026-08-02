@@ -1,5 +1,5 @@
 import pytest
-from prismriver_lyrics.util import parse_duration
+from prismriver_lyrics.util import parse_duration, slugify
 
 
 def test_parse_duration_single_unit():
@@ -22,3 +22,15 @@ def test_parse_duration_rejects_garbage():
         parse_duration("5x")
     with pytest.raises(ValueError):
         parse_duration("")
+
+
+def test_slugify_basic():
+    assert slugify("Chuck Strangers") == "chuck-strangers"
+
+
+def test_slugify_strips_punctuation():
+    assert slugify("Master of Puppets!") == "master-of-puppets"
+
+
+def test_slugify_collapses_whitespace_and_symbols():
+    assert slugify("  Guns N' Roses  ") == "guns-n-roses"

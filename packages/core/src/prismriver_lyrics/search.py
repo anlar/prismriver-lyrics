@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 import httpx
 
@@ -6,6 +7,8 @@ from prismriver_lyrics.cache import SearchCache
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.registry import default_plugins
+
+logger = logging.getLogger(__name__)
 
 USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
@@ -61,6 +64,12 @@ async def search_lyrics(
             for plugin in plugins
         ]
         gathered = await asyncio.gather(*tasks, return_exceptions=True)
+
+    for plugin, plugin_results in zip(plugins, gathered, strict=True):
+        if isinstance(plugin_results, BaseException):
+            logger.warning(
+                "%s search failed: %r", plugin.id, plugin_results
+            )
 
     results = [
         result

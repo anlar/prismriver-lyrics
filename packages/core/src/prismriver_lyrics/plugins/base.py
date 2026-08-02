@@ -2,7 +2,7 @@ import importlib.metadata
 from abc import ABC, abstractmethod
 
 import httpx
-from bs4 import Comment
+from bs4 import BeautifulSoup, Comment
 from bs4.element import Tag
 
 from prismriver_lyrics.models import LyricsResult
@@ -49,6 +49,36 @@ class LyricsPlugin(ABC):
         """Look up lyrics for artist/title, returning every result this
         source has (usually one, but e.g. a source with a translation may
         return more), or an empty list if nothing was found."""
+
+    @staticmethod
+    async def fetch_soup(
+        client: httpx.AsyncClient, url: str, **request_kwargs: object
+    ) -> BeautifulSoup | None:
+        """GET url and parse it, or None on a non-200 response.
+        `request_kwargs` (e.g. `headers=`, `follow_redirects=`) are passed
+        through to `client.get()`."""
+        response = await client.get(url, **request_kwargs)
+        if response.status_code != 200:
+            return None
+        return BeautifulSoup(response.text, "html.parser")
+
+    @classmethod
+    async def fetch_lyrics(
+        cls,
+        client: httpx.AsyncClient,
+        url: str,
+        selector: str,
+        **request_kwargs: object,
+    ) -> str | None:
+        """fetch_soup() + select_one(selector) + extract_lyrics(), or None
+        if any step comes up empty."""
+        soup = await cls.fetch_soup(client, url, **request_kwargs)
+        if soup is None:
+            return None
+        container = soup.select_one(selector)
+        if container is None:
+            return None
+        return cls.extract_lyrics(container) or None
 
     @classmethod
     def extract_lyrics(cls, container: Tag) -> str:

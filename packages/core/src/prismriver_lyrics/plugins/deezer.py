@@ -66,7 +66,7 @@ class DeezerPlugin(LyricsPlugin):
             _API_URL, json=body, headers={"Authorization": f"Bearer {jwt}"}
         )
         if response.status_code != 200:
-            return None
+            return []
 
         edges = (
             response.json()

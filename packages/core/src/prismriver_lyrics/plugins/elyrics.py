@@ -1,9 +1,8 @@
 import httpx
-from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
-from prismriver_lyrics.slug import slugify
+from prismriver_lyrics.util import slugify
 
 
 class ElyricsPlugin(LyricsPlugin):
@@ -32,16 +31,9 @@ class ElyricsPlugin(LyricsPlugin):
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
-        response = await client.get(url)
-        if response.status_code != 200:
-            return []
-
-        soup = BeautifulSoup(response.text, "html.parser")
-        container = soup.select_one("div#lyr.ly div#inlyr.translate")
-        if container is None:
-            return []
-
-        lyrics = self.extract_lyrics(container)
+        lyrics = await self.fetch_lyrics(
+            client, url, "div#lyr.ly div#inlyr.translate"
+        )
         if not lyrics:
             return []
 
