@@ -7,6 +7,7 @@ from prismriver_lyrics.cache import SearchCache
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.registry import default_plugins
+from prismriver_lyrics.util import DEFAULT_CACHE_TTL, parse_duration
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +16,7 @@ USER_AGENT = (
     "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
 )
 
-_default_cache = SearchCache()
+_default_cache = SearchCache(ttl=parse_duration(DEFAULT_CACHE_TTL))
 
 
 async def search_lyrics(

@@ -11,9 +11,6 @@ from prismriver_lyrics.models import LyricsResult, SyncedLine, SyncedLyrics
 
 logger = logging.getLogger(__name__)
 
-# Week-long TTL
-DEFAULT_TTL = 7 * 24 * 60 * 60.0
-
 
 def _decode_result(item: dict) -> LyricsResult:
     # asdict() flattens a SyncedLyrics `lyrics` value to a plain dict;
@@ -64,9 +61,7 @@ class SearchCache:
     different threads.
     """
 
-    def __init__(
-        self, path: Path | None = None, ttl: float = DEFAULT_TTL
-    ) -> None:
+    def __init__(self, ttl: float, path: Path | None = None) -> None:
         self._path = path or default_cache_path()
         self._ttl = ttl
 

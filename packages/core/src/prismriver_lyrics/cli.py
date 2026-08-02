@@ -12,7 +12,7 @@ from prismriver_lyrics.registry import (
     print_plugins,
 )
 from prismriver_lyrics.search import search_lyrics
-from prismriver_lyrics.util import parse_duration
+from prismriver_lyrics.util import DEFAULT_CACHE_TTL, parse_duration
 
 _VERSION_MESSAGE = (
     "Prismriver Lyrics, version {version}\n"
@@ -53,7 +53,7 @@ def main() -> None:
     parser.add_argument(
         "--cache-ttl",
         type=parse_duration,
-        default="1w",
+        default=DEFAULT_CACHE_TTL,
         metavar="DURATION",
         help="How long cached results stay valid, e.g. 1w, 1d5h, 90m. "
         "Default: %(default)s.",

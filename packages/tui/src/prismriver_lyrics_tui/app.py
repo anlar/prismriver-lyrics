@@ -12,7 +12,7 @@ from prismriver_lyrics.registry import (
     print_plugins,
 )
 from prismriver_lyrics.search import search_lyrics
-from prismriver_lyrics.util import parse_duration
+from prismriver_lyrics.util import DEFAULT_CACHE_TTL, parse_duration
 from rich.markup import escape
 from textual import work
 from textual.app import App, ComposeResult
@@ -79,7 +79,7 @@ class PrismriverTuiApp(App[None]):
         translated: bool | None = None,
         synced: bool | None = None,
         limit: int | None = None,
-        cache_ttl: float | None = None,
+        cache_ttl: float = parse_duration(DEFAULT_CACHE_TTL),
     ) -> None:
         super().__init__()
         self._watcher = MprisWatcher()
@@ -93,9 +93,7 @@ class PrismriverTuiApp(App[None]):
         self._translated = translated
         self._synced = synced
         self._limit = limit
-        self._cache = (
-            SearchCache() if cache_ttl is None else SearchCache(ttl=cache_ttl)
-        )
+        self._cache = SearchCache(ttl=cache_ttl)
 
     def compose(self) -> ComposeResult:
         with Horizontal(id="body"):
@@ -593,7 +591,7 @@ def run() -> None:
     parser.add_argument(
         "--cache-ttl",
         type=parse_duration,
-        default="1w",
+        default=DEFAULT_CACHE_TTL,
         metavar="DURATION",
         help="How long cached results stay valid, e.g. 1w, 1d5h, 90m. "
         "Default: %(default)s.",

@@ -3,7 +3,7 @@ from prismriver_lyrics.models import LyricsResult, SyncedLine, SyncedLyrics
 
 
 def test_cache_round_trips_synced_lyrics(tmp_path):
-    cache = SearchCache(path=tmp_path / "cache.sqlite3")
+    cache = SearchCache(ttl=3600, path=tmp_path / "cache.sqlite3")
     results = [
         LyricsResult(
             source="lrclib.net",
@@ -25,7 +25,7 @@ def test_cache_round_trips_synced_lyrics(tmp_path):
 
 
 def test_cache_round_trips_plain_lyrics(tmp_path):
-    cache = SearchCache(path=tmp_path / "cache.sqlite3")
+    cache = SearchCache(ttl=3600, path=tmp_path / "cache.sqlite3")
     results = [
         LyricsResult(source="lrclib.net", url="u", lyrics="plain text")
     ]

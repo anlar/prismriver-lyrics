@@ -1,5 +1,10 @@
 import re
 
+# Default for every "how long should cached results stay valid" knob (CLI
+# args, TUI args, the module-level default cache), so they can't drift out
+# of sync with each other.
+DEFAULT_CACHE_TTL = "1w"
+
 _UNITS = {"w": 604800, "d": 86400, "h": 3600, "m": 60, "s": 1}
 _CHUNK = re.compile(r"(\d+)([wdhms])")
 
