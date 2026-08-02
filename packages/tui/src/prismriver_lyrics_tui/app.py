@@ -4,7 +4,12 @@ import importlib.metadata
 import sys
 
 from prismriver_lyrics.models import LyricsResult, SyncedLyrics
-from prismriver_lyrics.registry import print_plugins
+from prismriver_lyrics.registry import (
+    default_plugins,
+    filter_results,
+    parse_ids,
+    print_plugins,
+)
 from prismriver_lyrics.search import search_lyrics
 from rich.markup import escape
 from textual import work
@@ -65,7 +70,13 @@ class PrismriverTuiApp(App[None]):
     status: reactive[str] = reactive("Waiting for a media player")
     auto_sync: reactive[bool] = reactive(True)
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        plugin_ids: frozenset[str] | None = None,
+        langs: frozenset[str] | None = None,
+        translated: bool | None = None,
+        synced: bool | None = None,
+    ) -> None:
         super().__init__()
         self._watcher = MprisWatcher()
         self._search_task: asyncio.Task[None] | None = None
@@ -73,6 +84,10 @@ class PrismriverTuiApp(App[None]):
         self._results: list[LyricsResult] = []
         self._players: dict[str, TrackInfo] = {}
         self._selected_bus_name: str | None = None
+        self._plugin_ids = plugin_ids
+        self._langs = langs
+        self._translated = translated
+        self._synced = synced
 
     def compose(self) -> ComposeResult:
         with Horizontal(id="body"):
@@ -298,6 +313,13 @@ class PrismriverTuiApp(App[None]):
             self._set_results([], placeholder=f"Error: {exc}")
             return
 
+        results = filter_results(
+            results,
+            self._plugin_ids,
+            self._langs,
+            self._translated,
+            self._synced,
+        )
         self._set_results(results, placeholder="No lyrics found")
         if results:
             self._refresh_lyrics(results[0])
@@ -529,13 +551,62 @@ def run() -> None:
         action="store_true",
         help="Print the available plugins (id<TAB>name) and exit.",
     )
+    parser.add_argument(
+        "--filter-plugins",
+        metavar="ID[,ID...]",
+        help="Only show results from these plugin ids (see --plugins). "
+        "Default: all.",
+    )
+    parser.add_argument(
+        "--filter-lang",
+        metavar="CODE[,CODE...]",
+        help="Only show results tagged with one of these language codes; "
+        "use ? to include results with an unknown/untagged language. "
+        "Default: all.",
+    )
+    parser.add_argument(
+        "--filter-translated",
+        choices=("0", "1"),
+        metavar="{0,1}",
+        help="Only show translated (1) or original (0) results. "
+        "Default: both.",
+    )
+    parser.add_argument(
+        "--filter-sync",
+        choices=("0", "1"),
+        metavar="{0,1}",
+        help="Only show time-synced (1) or plain-text (0) results. "
+        "Default: both.",
+    )
     args = parser.parse_args()
 
     if args.plugins:
         print_plugins()
         return
 
-    app = PrismriverTuiApp()
+    plugin_ids = parse_ids(args.filter_plugins)
+    langs = parse_ids(args.filter_lang)
+    translated = (
+        None if args.filter_translated is None
+        else args.filter_translated == "1"
+    )
+    synced = None if args.filter_sync is None else args.filter_sync == "1"
+
+    if plugin_ids is not None:
+        unknown = plugin_ids - {p.id for p in default_plugins()}
+        if unknown:
+            print(
+                f"Unknown plugin id(s): {', '.join(sorted(unknown))}",
+                file=sys.stderr,
+            )
+            raise SystemExit(1)
+
+    app = PrismriverTuiApp(
+        plugin_ids=plugin_ids,
+        langs=langs,
+        translated=translated,
+        synced=synced,
+    )
 
     if args.themes:
         for name in sorted(app.available_themes):
