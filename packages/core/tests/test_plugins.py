@@ -120,6 +120,10 @@ class PluginTestCase(unittest.TestCase):
             )
 
 
+@pytest.mark.xfail(
+    reason="live plugin tests hit real sites and may fail or be blocked",
+    strict=False,
+)
 class TestPlugins(PluginTestCase):
     def test_absolutelyrics_01(self):
         self.check_plugin(
@@ -166,10 +170,6 @@ class TestPlugins(PluginTestCase):
             "5ab762a2f7c9f07ebb5d10ffcbb73305",
         )
 
-    @pytest.mark.xfail(
-        reason="may block requests",
-        strict=False,
-    )
     def test_genius_01(self):
         self.check_plugin_all(
             GeniusPlugin(),
@@ -312,10 +312,6 @@ class TestPlugins(PluginTestCase):
             "6cbe3b629c81aebf680eaee8f60e29e6",
         )
 
-    @pytest.mark.xfail(
-        reason="maybe down from time to time",
-        strict=False,
-    )
     def test_one_music_lyrics_01(self):
         self.check_plugin(
             OneMusicLyricsPlugin(),
@@ -340,10 +336,6 @@ class TestPlugins(PluginTestCase):
             "d2514da2afbd7ba49d2c78b0cc5abf86",
         )
 
-    @pytest.mark.xfail(
-        reason="maybe down from time to time",
-        strict=False,
-    )
     def test_seekalyric_01(self):
         self.check_plugin(
             SeekALyricPlugin(),
