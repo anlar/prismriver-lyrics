@@ -19,6 +19,18 @@ _VERSION_MESSAGE = (
 )
 
 
+def _lang_info(result) -> str | None:
+    if not result.lang:
+        return None
+    target = result.lang.upper()
+    if result.translation:
+        source_lang = (
+            result.original_lang.upper() if result.original_lang else "??"
+        )
+        return f"{source_lang} -> {target}"
+    return target
+
+
 def main() -> None:
     version = importlib.metadata.version("prismriver-lyrics")
     parser = argparse.ArgumentParser(
@@ -108,14 +120,22 @@ def main() -> None:
         print("No lyrics found.", file=sys.stderr)
         raise SystemExit(1)
 
-    result = results[0]
+    results = sorted(results, key=lambda result: result.source.lower())
+
+    blocks = []
+    for result in results:
+        lines = [f"source: {result.source}", f"url: {result.url}"]
+        lang = _lang_info(result)
+        if lang:
+            lines.append(f"lang: {lang}")
+        if not isinstance(result.lyrics, SyncedLyrics):
+            lines.append("")
+            lines.append(result.lyrics)
+        blocks.append("\n".join(lines))
+
     print(f"# {args.artist} - {args.title}")
-    print(f"# source: {result.source} ({result.url})")
     print()
-    if isinstance(result.lyrics, SyncedLyrics):
-        print("\n".join(line.text for line in result.lyrics.lines))
-    else:
-        print(result.lyrics)
+    print("\n\n---\n\n".join(blocks))
 
 
 if __name__ == "__main__":
