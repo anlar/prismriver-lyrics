@@ -59,10 +59,14 @@ class UtaTenPlugin(LyricsPlugin):
 
         has_furigana = bool(hiragana.select("span.ruby"))
         if not has_furigana:
-            return [LyricsResult(source=self.name, url=song_url, lyrics=original)]
+            return [
+                LyricsResult(source=self.name, url=song_url, lyrics=original)
+            ]
 
         results = [
-            LyricsResult(source=self.name, url=song_url, lyrics=original, lang="ja")
+            LyricsResult(
+                source=self.name, url=song_url, lyrics=original, lang="ja"
+            )
         ]
 
         kana = self._extract(hiragana, "rt")

@@ -1,8 +1,15 @@
-.PHONY: test run run-tui install-pipx
+.PHONY: test test-local test-plugin run run-tui install-pipx
 
 test:
 	uv run --all-packages pytest
 	uv run ruff check packages
+
+test-local:
+	uv run --all-packages pytest --ignore=packages/core/tests/test_plugins.py
+	uv run ruff check packages
+
+test-plugin:
+	uv run --all-packages pytest packages/core/tests/test_plugins.py -k "$(PARAMETER)"
 
 run:
 	uv run prismriver-lyrics $(ARGS)

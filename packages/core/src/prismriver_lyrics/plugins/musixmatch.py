@@ -97,11 +97,15 @@ class MusixmatchPlugin(LyricsPlugin):
             return None
 
         page_props = data.get("props", {}).get("pageProps", {}).get("data", {})
-        translation_map = page_props.get("crowdTranslationGet", {}).get("data") or {}
+        translation_map = (
+            page_props.get("crowdTranslationGet", {}).get("data") or {}
+        )
         if not translation_map:
             return None
 
-        lines = [translation_map.get(line, line) for line in original.splitlines()]
+        lines = [
+            translation_map.get(line, line) for line in original.splitlines()
+        ]
         text = "\n".join(lines).strip()
         if not text or text == original:
             return None
