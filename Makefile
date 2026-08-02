@@ -13,4 +13,5 @@ run-tui:
 install-pipx:
 	rm -rf dist
 	uv build --all-packages -o dist
+	pipx install --force dist/prismriver_lyrics-*-py3-none-any.whl --pip-args "--find-links dist"
 	pipx install --force dist/prismriver_lyrics_tui-*-py3-none-any.whl --pip-args "--find-links dist"
