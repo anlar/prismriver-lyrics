@@ -3,6 +3,7 @@ import asyncio
 import importlib.metadata
 import sys
 
+from prismriver_lyrics.cache import SearchCache
 from prismriver_lyrics.models import LyricsResult, SyncedLyrics
 from prismriver_lyrics.registry import (
     default_plugins,
@@ -11,6 +12,7 @@ from prismriver_lyrics.registry import (
     print_plugins,
 )
 from prismriver_lyrics.search import search_lyrics
+from prismriver_lyrics.util import parse_duration
 from rich.markup import escape
 from textual import work
 from textual.app import App, ComposeResult
@@ -76,6 +78,8 @@ class PrismriverTuiApp(App[None]):
         langs: frozenset[str] | None = None,
         translated: bool | None = None,
         synced: bool | None = None,
+        limit: int | None = None,
+        cache_ttl: float | None = None,
     ) -> None:
         super().__init__()
         self._watcher = MprisWatcher()
@@ -88,6 +92,10 @@ class PrismriverTuiApp(App[None]):
         self._langs = langs
         self._translated = translated
         self._synced = synced
+        self._limit = limit
+        self._cache = (
+            SearchCache() if cache_ttl is None else SearchCache(ttl=cache_ttl)
+        )
 
     def compose(self) -> ComposeResult:
         with Horizontal(id="body"):
@@ -306,7 +314,9 @@ class PrismriverTuiApp(App[None]):
         self._set_results([], placeholder="Searching...")
 
         try:
-            results = await search_lyrics(artist, title, duration_ms)
+            results = await search_lyrics(
+                artist, title, duration_ms, cache=self._cache
+            )
         except asyncio.CancelledError:
             raise
         except Exception as exc:
@@ -361,6 +371,8 @@ class PrismriverTuiApp(App[None]):
         self._results = sorted(
             results, key=lambda result: result.source.lower()
         )
+        if self._limit is not None:
+            self._results = self._results[: self._limit]
         has_synced = any(
             isinstance(result.lyrics, SyncedLyrics) for result in self._results
         )
@@ -578,6 +590,21 @@ def run() -> None:
         help="Only show time-synced (1) or plain-text (0) results. "
         "Default: both.",
     )
+    parser.add_argument(
+        "--cache-ttl",
+        type=parse_duration,
+        default="1w",
+        metavar="DURATION",
+        help="How long cached results stay valid, e.g. 1w, 1d5h, 90m. "
+        "Default: %(default)s.",
+    )
+    parser.add_argument(
+        "--limit",
+        "-l",
+        type=int,
+        metavar="N",
+        help="Limit the number of results shown. Default: unlimited.",
+    )
     args = parser.parse_args()
 
     if args.plugins:
@@ -606,6 +633,8 @@ def run() -> None:
         langs=langs,
         translated=translated,
         synced=synced,
+        limit=args.limit,
+        cache_ttl=args.cache_ttl,
     )
 
     if args.themes:

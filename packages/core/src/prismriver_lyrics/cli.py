@@ -3,6 +3,7 @@ import asyncio
 import importlib.metadata
 import sys
 
+from prismriver_lyrics.cache import SearchCache
 from prismriver_lyrics.models import SyncedLyrics
 from prismriver_lyrics.registry import (
     default_plugins,
@@ -11,6 +12,7 @@ from prismriver_lyrics.registry import (
     print_plugins,
 )
 from prismriver_lyrics.search import search_lyrics
+from prismriver_lyrics.util import parse_duration
 
 _VERSION_MESSAGE = (
     "Prismriver Lyrics, version {version}\n"
@@ -47,6 +49,21 @@ def main() -> None:
         "--no-cache",
         action="store_true",
         help="Bypass the on-disk results cache and force a fresh search.",
+    )
+    parser.add_argument(
+        "--cache-ttl",
+        type=parse_duration,
+        default="1w",
+        metavar="DURATION",
+        help="How long cached results stay valid, e.g. 1w, 1d5h, 90m. "
+        "Default: %(default)s.",
+    )
+    parser.add_argument(
+        "--limit",
+        "-l",
+        type=int,
+        metavar="N",
+        help="Limit the number of results printed. Default: unlimited.",
     )
     parser.add_argument(
         "--plugins",
@@ -112,7 +129,12 @@ def main() -> None:
             )
 
     results = asyncio.run(
-        search_lyrics(args.artist, args.title, use_cache=not args.no_cache)
+        search_lyrics(
+            args.artist,
+            args.title,
+            use_cache=not args.no_cache,
+            cache=SearchCache(ttl=args.cache_ttl),
+        )
     )
     results = filter_results(results, plugin_ids, langs, translated, synced)
 
@@ -121,6 +143,8 @@ def main() -> None:
         raise SystemExit(1)
 
     results = sorted(results, key=lambda result: result.source.lower())
+    if args.limit is not None:
+        results = results[: args.limit]
 
     blocks = []
     for result in results:
