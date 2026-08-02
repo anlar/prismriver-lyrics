@@ -7,15 +7,6 @@ from prismriver_lyrics.plugins.base import LyricsPlugin
 
 _NON_ALNUM = re.compile(r"[^a-zA-Z0-9]+")
 
-# showmelyrics.com's server blocks requests whose User-Agent reports an
-# outdated Chrome version (the shared client's "Chrome/124.0" among
-# them) with a 403, but accepts a recent one; override the shared
-# client's User-Agent with a newer version just for this source.
-_USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-)
-
 
 class ShowMeLyricsPlugin(LyricsPlugin):
     """Fetches lyrics from showmelyrics.com.
@@ -48,10 +39,7 @@ class ShowMeLyricsPlugin(LyricsPlugin):
     ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
         lyrics = await self.fetch_lyrics(
-            client,
-            url,
-            ".editable-content[itemprop='text']",
-            headers={"User-Agent": _USER_AGENT},
+            client, url, ".editable-content[itemprop='text']"
         )
         if not lyrics:
             return []
