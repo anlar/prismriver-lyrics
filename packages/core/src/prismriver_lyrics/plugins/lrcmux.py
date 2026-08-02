@@ -19,7 +19,8 @@ class LrcmuxPlugin(LyricsPlugin):
     SyncedLyrics represents).
     """
 
-    name = "lrcmux.dev"
+    id = "lrcmux"
+    name = "LRCMux"
 
     async def search(
         self,

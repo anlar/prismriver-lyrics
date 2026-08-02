@@ -19,7 +19,8 @@ class LyricsManiaPlugin(LyricsPlugin):
     underscore).
     """
 
-    name = "lyricsmania.com"
+    id = "lyricsmania"
+    name = "LyricsMania"
 
     def _slug(self, value: str) -> str:
         return _NON_ALNUM.sub("_", value.lower()).strip("_")

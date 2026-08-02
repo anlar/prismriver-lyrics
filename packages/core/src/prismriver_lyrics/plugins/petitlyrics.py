@@ -18,7 +18,8 @@ class PetitLyricsPlugin(LyricsPlugin):
     base64-encoded inside the first matching <song> of the XML response.
     """
 
-    name = "petitlyrics.com"
+    id = "petitlyrics"
+    name = "PetitLyrics"
 
     async def search(
         self,

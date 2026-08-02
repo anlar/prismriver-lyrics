@@ -17,7 +17,8 @@ class OneMusicLyricsPlugin(LyricsPlugin):
     collapsed to a single underscore).
     """
 
-    name = "1musiclyrics.net"
+    id = "onemusiclyrics"
+    name = "1MusicLyrics"
 
     def _slug(self, value: str) -> str:
         return _NON_ALNUM.sub("_", value.lower()).strip("_")

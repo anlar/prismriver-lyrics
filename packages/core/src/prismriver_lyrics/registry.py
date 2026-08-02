@@ -61,3 +61,12 @@ def default_plugins() -> list[LyricsPlugin]:
         UtaTenPlugin(),
         VagalumePlugin(),
     ]
+
+
+def print_plugins() -> None:
+    """Print the available plugins as id/name columns, one per line,
+    the id column padded to align with the longest id."""
+    plugins = sorted(default_plugins(), key=lambda plugin: plugin.id)
+    width = max(len(plugin.id) for plugin in plugins)
+    for plugin in plugins:
+        print(f"{plugin.id:<{width}}  {plugin.name}")

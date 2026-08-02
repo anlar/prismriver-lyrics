@@ -35,7 +35,8 @@ class NeteasePlugin(LyricsPlugin):
     the [mm:ss.xx] timestamps down to plain text.
     """
 
-    name = "music.163.com"
+    id = "netease"
+    name = "NetEase"
 
     async def search(
         self,

@@ -12,7 +12,8 @@ class ElyricsPlugin(LyricsPlugin):
     URL shape: https://www.elyrics.net/read/{letter}/{artist}-lyrics/{title}-lyrics.html
     """
 
-    name = "elyrics.net"
+    id = "elyrics"
+    name = "eLyrics"
 
     def build_url(self, artist: str, title: str) -> str:
         artist_slug = slugify(artist)

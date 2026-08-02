@@ -21,7 +21,8 @@ class LyricsModePlugin(LyricsPlugin):
     URL shape: https://www.lyricsmode.com/lyrics/{letter}/{artist}/{title}.html
     """
 
-    name = "lyricsmode.com"
+    id = "lyricsmode"
+    name = "LyricsMode"
 
     # Individual lines are wrapped in <span> for the site's annotation
     # feature; it wraps real lyric text, not chrome, so it's recursed into.

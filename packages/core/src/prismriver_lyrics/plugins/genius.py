@@ -59,7 +59,8 @@ class GeniusPlugin(LyricsPlugin):
     which are fetched the same way to produce the translated results.
     """
 
-    name = "genius.com"
+    id = "genius"
+    name = "Genius"
 
     # Genius wraps most lyric lines in <a> (referent/annotation) tags and
     # some styled spans in <span>; both wrap real lyric text, not chrome.

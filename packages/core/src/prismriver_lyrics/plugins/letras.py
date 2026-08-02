@@ -12,7 +12,8 @@ class LetrasPlugin(LyricsPlugin):
     URL shape: https://www.letras.mus.br/{artist}/{title}/
     """
 
-    name = "letras.mus.br"
+    id = "letras"
+    name = "Letras"
 
     def build_url(self, artist: str, title: str) -> str:
         artist_slug = slugify(artist)

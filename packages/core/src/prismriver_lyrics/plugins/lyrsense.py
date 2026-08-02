@@ -22,7 +22,8 @@ class LyrsensePlugin(LyricsPlugin):
     entries mark stanza breaks.
     """
 
-    name = "lyrsense.com"
+    id = "lyrsense"
+    name = "Lyrsense"
 
     async def search(
         self,

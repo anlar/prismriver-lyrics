@@ -26,7 +26,8 @@ class AlphabetLyricsPlugin(LyricsPlugin):
     stripped first since get_text() would otherwise leak their JS content.
     """
 
-    name = "alphabetlyrics.com"
+    id = "alphabetlyrics"
+    name = "AlphabetLyrics"
 
     def _slug(self, value: str) -> str:
         return _NON_ALNUM.sub("_", value.lower()).strip("_")

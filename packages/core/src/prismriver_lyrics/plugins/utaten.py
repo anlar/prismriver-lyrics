@@ -29,7 +29,8 @@ class UtaTenPlugin(LyricsPlugin):
     identical ones.
     """
 
-    name = "utaten.com"
+    id = "utaten"
+    name = "UtaTen"
 
     async def search(
         self,

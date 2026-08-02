@@ -13,7 +13,8 @@ class LyricsOvhPlugin(LyricsPlugin):
     ({"lyrics": "..."}).
     """
 
-    name = "lyrics.ovh"
+    id = "lyricsovh"
+    name = "Lyrics.ovh"
 
     def build_url(self, artist: str, title: str) -> str:
         return f"https://api.lyrics.ovh/v1/{quote(artist)}/{quote(title)}"

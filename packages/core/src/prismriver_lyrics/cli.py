@@ -4,6 +4,7 @@ import importlib.metadata
 import sys
 
 from prismriver_lyrics.models import SyncedLyrics
+from prismriver_lyrics.registry import print_plugins
 from prismriver_lyrics.search import search_lyrics
 
 _VERSION_MESSAGE = (
@@ -23,12 +24,17 @@ def main() -> None:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--artist", "-a", required=True, help="Song artist.")
-    parser.add_argument("--title", "-t", required=True, help="Song title.")
+    parser.add_argument("--artist", "-a", help="Song artist.")
+    parser.add_argument("--title", "-t", help="Song title.")
     parser.add_argument(
         "--no-cache",
         action="store_true",
         help="Bypass the on-disk results cache and force a fresh search.",
+    )
+    parser.add_argument(
+        "--plugins",
+        action="store_true",
+        help="Print the available plugins (id<TAB>name) and exit.",
     )
     parser.add_argument(
         "--version",
@@ -36,6 +42,15 @@ def main() -> None:
         version=_VERSION_MESSAGE.format(version=version),
     )
     args = parser.parse_args()
+
+    if args.plugins:
+        print_plugins()
+        return
+
+    if not args.artist or not args.title:
+        parser.error(
+            "the following arguments are required: --artist/-a, --title/-t"
+        )
 
     results = asyncio.run(
         search_lyrics(args.artist, args.title, use_cache=not args.no_cache)

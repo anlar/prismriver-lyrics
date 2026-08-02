@@ -29,7 +29,8 @@ class MusixmatchPlugin(LyricsPlugin):
     back to the original line rather than being dropped.
     """
 
-    name = "musixmatch.com"
+    id = "musixmatch"
+    name = "Musixmatch"
 
     def build_url(self, artist: str, title: str) -> str:
         return f"{_BASE_URL}/lyrics/{slugify(artist)}/{slugify(title)}"

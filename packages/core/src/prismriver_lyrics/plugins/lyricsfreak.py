@@ -17,7 +17,8 @@ class LyricsFreakPlugin(LyricsPlugin):
     song's page.
     """
 
-    name = "lyricsfreak.com"
+    id = "lyricsfreak"
+    name = "LyricsFreak"
 
     async def search(
         self,

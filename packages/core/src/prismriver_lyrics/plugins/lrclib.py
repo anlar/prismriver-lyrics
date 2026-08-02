@@ -45,7 +45,8 @@ class LrcLibPlugin(LyricsPlugin):
     is a SyncedLyrics instead.
     """
 
-    name = "lrclib.net"
+    id = "lrclib"
+    name = "LRCLIB"
 
     async def search(
         self,

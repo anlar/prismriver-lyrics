@@ -21,7 +21,8 @@ class ParolesPlugin(LyricsPlugin):
     class and are skipped.
     """
 
-    name = "paroles.net"
+    id = "paroles"
+    name = "Paroles.net"
 
     def _slug(self, value: str) -> str:
         deburred = "".join(

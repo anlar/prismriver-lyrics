@@ -17,7 +17,8 @@ class SeekALyricPlugin(LyricsPlugin):
     (capitalized, not lowercased), joined by underscores.
     """
 
-    name = "seekalyric.com"
+    id = "seekalyric"
+    name = "SeekALyric"
 
     def _slug(self, value: str) -> str:
         words = [w for w in _NON_ALNUM.split(value.strip()) if w]

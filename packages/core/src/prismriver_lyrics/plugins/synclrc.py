@@ -18,7 +18,8 @@ class SyncLrcPlugin(LyricsPlugin):
     `synced` field already provides that at line granularity.
     """
 
-    name = "synclrc.dev"
+    id = "synclrc"
+    name = "SyncLRC"
 
     async def search(
         self,

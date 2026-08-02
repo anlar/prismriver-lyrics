@@ -28,7 +28,8 @@ class ShowMeLyricsPlugin(LyricsPlugin):
     with "-2"); httpx's client follows that automatically.
     """
 
-    name = "showmelyrics.com"
+    id = "showmelyrics"
+    name = "ShowMeLyrics"
 
     def _slug(self, value: str) -> str:
         words = [w for w in _NON_ALNUM.split(value.strip()) if w]

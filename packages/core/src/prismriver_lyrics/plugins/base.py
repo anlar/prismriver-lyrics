@@ -20,6 +20,11 @@ class LyricsPlugin(ABC):
     """A single lyrics source. Implementations must be safe to run
     concurrently."""
 
+    # Short lower-case identifier (e.g. "lrclib"), stable for scripting/CLI
+    # use.
+    id: str
+
+    # Human-readable resource name (e.g. "LRCLIB"), shown in results lists.
     name: str
 
     # <p> wraps a verse on some sources (e.g. letras.mus.br); it's real

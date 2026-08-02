@@ -23,7 +23,8 @@ class SongGuruPlugin(LyricsPlugin):
     hyphen-joined slug covering both artist and title.
     """
 
-    name = "song.guru"
+    id = "songguru"
+    name = "Гуру Песен"
 
     def build_url(self, artist: str, title: str) -> str:
         artist_slug = _slugify(artist)

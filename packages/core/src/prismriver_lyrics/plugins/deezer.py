@@ -40,7 +40,8 @@ class DeezerPlugin(LyricsPlugin):
     best matches the requested one, among results that carry lyrics text.
     """
 
-    name = "deezer.com"
+    id = "deezer"
+    name = "Deezer"
 
     async def search(
         self,

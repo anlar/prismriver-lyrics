@@ -20,7 +20,8 @@ class SnakerootPlugin(LyricsPlugin):
     breaks (the others are empty spacer paragraphs).
     """
 
-    name = "lyrics.snakeroot.ru"
+    id = "snakeroot"
+    name = "Snakeroot"
 
     def _words(self, value: str) -> list[str]:
         return [w for w in _NON_ALNUM.split(value.strip()) if w]

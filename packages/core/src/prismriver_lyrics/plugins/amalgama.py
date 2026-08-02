@@ -38,7 +38,8 @@ class AmalgamaPlugin(LyricsPlugin):
     from the first section.
     """
 
-    name = "amalgama-lab.com"
+    id = "amalgama"
+    name = "Amalgama-Lab"
 
     # amalgama-lab.com bolds some words within a line via <strong>; that's
     # real lyric text, not chrome, so it's recursed into transparently.

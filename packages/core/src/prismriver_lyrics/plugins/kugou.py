@@ -135,7 +135,8 @@ class KuGouPlugin(LyricsPlugin):
     since that's all SyncedLyrics represents.
     """
 
-    name = "kugou.com"
+    id = "kugou"
+    name = "KuGou"
 
     async def search(
         self,

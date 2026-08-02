@@ -4,6 +4,7 @@ import importlib.metadata
 import sys
 
 from prismriver_lyrics.models import LyricsResult, SyncedLyrics
+from prismriver_lyrics.registry import print_plugins
 from prismriver_lyrics.search import search_lyrics
 from rich.markup import escape
 from textual import work
@@ -523,7 +524,16 @@ def run() -> None:
         action="store_true",
         help="Print the available color themes and exit.",
     )
+    parser.add_argument(
+        "--plugins",
+        action="store_true",
+        help="Print the available plugins (id<TAB>name) and exit.",
+    )
     args = parser.parse_args()
+
+    if args.plugins:
+        print_plugins()
+        return
 
     app = PrismriverTuiApp()
 

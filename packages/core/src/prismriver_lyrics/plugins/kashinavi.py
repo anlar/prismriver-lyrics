@@ -28,7 +28,8 @@ class KashiNaviPlugin(LyricsPlugin):
     header.
     """
 
-    name = "kashinavi.com"
+    id = "kashinavi"
+    name = "KashiNavi"
 
     async def search(
         self,

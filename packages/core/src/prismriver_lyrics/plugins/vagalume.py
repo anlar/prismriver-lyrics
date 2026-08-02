@@ -12,7 +12,8 @@ class VagalumePlugin(LyricsPlugin):
     URL shape: https://www.vagalume.com.br/{artist}/{title}.html
     """
 
-    name = "vagalume.com.br"
+    id = "vagalume"
+    name = "Vagalume"
 
     def build_url(self, artist: str, title: str) -> str:
         artist_slug = slugify(artist)
