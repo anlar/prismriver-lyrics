@@ -9,6 +9,7 @@ from prismriver_lyrics.plugins.alphabetlyrics import AlphabetLyricsPlugin
 from prismriver_lyrics.plugins.amalgama import AmalgamaPlugin
 from prismriver_lyrics.plugins.azlyrics import AZLyricsPlugin
 from prismriver_lyrics.plugins.base import LyricsPlugin
+from prismriver_lyrics.plugins.colorcodedlyrics import ColorCodedLyricsPlugin
 from prismriver_lyrics.plugins.darklyrics import DarkLyricsPlugin
 from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
@@ -166,6 +167,27 @@ class TestPlugins(PluginTestCase):
             "Joe Dassin",
             "Salut",
             "be92383df51cdd1a2d4b3637fc8db08e",
+        )
+
+    def test_colorcodedlyrics_01(self):
+        self.check_plugin_all(
+            ColorCodedLyricsPlugin(),
+            "Red Velvet",
+            "Surfin' Boy",
+            [
+                "f5c4c049b862e5b595671255fc02fab8",
+                "e43e99b370fe4028d2a4bb81691514c0",
+                "310699d4b178ee313ca6729031322d8a",
+            ],
+            ["ko-Latn", "ko", "en"],
+        )
+
+    def test_colorcodedlyrics_02(self):
+        self.check_plugin(
+            ColorCodedLyricsPlugin(),
+            "KATSEYE",
+            "Animal",
+            "80d328f9e3e6aa87c28118461736a58c",
         )
 
     def test_darklyrics_01(self):
