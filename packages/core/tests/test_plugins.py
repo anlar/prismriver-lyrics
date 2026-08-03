@@ -24,6 +24,7 @@ from prismriver_lyrics.plugins.lyrics_ovh import LyricsOvhPlugin
 from prismriver_lyrics.plugins.lyricsfreak import LyricsFreakPlugin
 from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
 from prismriver_lyrics.plugins.lyricsmode import LyricsModePlugin
+from prismriver_lyrics.plugins.lyricstranslate import LyricsTranslatePlugin
 from prismriver_lyrics.plugins.lyrsense import LyrsensePlugin
 from prismriver_lyrics.plugins.musixmatch import MusixmatchPlugin
 from prismriver_lyrics.plugins.netease import NeteasePlugin
@@ -307,6 +308,22 @@ class TestPlugins(PluginTestCase):
             "Metallica",
             "Nothing Else Matters",
             "89cfe45a4f42ff099ce689c80c18ca97",
+        )
+
+    def test_lyricstranslate_01(self):
+        self.check_plugin(
+            LyricsTranslatePlugin(),
+            "The Clash",
+            "White Riot",
+            "d551b605c0bfd334984420c3273f09f4",
+        )
+
+    def test_lyricstranslate_02(self):
+        self.check_plugin(
+            LyricsTranslatePlugin(),
+            "Ariana Grande",
+            "Bye",
+            "1184ccf8b84192dff21c42b01bbc8a30",
         )
 
     def test_lyrsense_01(self):
