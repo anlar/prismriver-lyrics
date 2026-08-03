@@ -28,6 +28,7 @@ from prismriver_lyrics.plugins.netease import NeteasePlugin
 from prismriver_lyrics.plugins.one_music_lyrics import OneMusicLyricsPlugin
 from prismriver_lyrics.plugins.paroles import ParolesPlugin
 from prismriver_lyrics.plugins.petitlyrics import PetitLyricsPlugin
+from prismriver_lyrics.plugins.rentanadviser import RentAnAdviserPlugin
 from prismriver_lyrics.plugins.seekalyric import SeekALyricPlugin
 from prismriver_lyrics.plugins.showmelyrics import ShowMeLyricsPlugin
 from prismriver_lyrics.plugins.snakeroot import SnakerootPlugin
@@ -353,6 +354,14 @@ class TestPlugins(PluginTestCase):
             "Metallica",
             "Sad But True",
             "d2514da2afbd7ba49d2c78b0cc5abf86",
+        )
+
+    def test_rentanadviser_01(self):
+        self.check_plugin(
+            RentAnAdviserPlugin(),
+            "Metallica",
+            "Sad But True",
+            "45e292fc201e33e484aec39db6d628e5",
         )
 
     def test_seekalyric_01(self):
