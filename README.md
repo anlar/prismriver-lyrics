@@ -5,6 +5,7 @@
 
   [![test](https://github.com/anlar/prismriver-lyrics/actions/workflows/test.yml/badge.svg)](https://github.com/anlar/prismriver-lyrics/actions/workflows/test.yml)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.txt)
+  [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](pyproject.toml)
 </div>
 
 ## About
