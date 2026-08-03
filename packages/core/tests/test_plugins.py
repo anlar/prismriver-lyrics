@@ -35,6 +35,7 @@ from prismriver_lyrics.plugins.song_guru import SongGuruPlugin
 from prismriver_lyrics.plugins.synclrc import SyncLrcPlugin
 from prismriver_lyrics.plugins.utaten import UtaTenPlugin
 from prismriver_lyrics.plugins.vagalume import VagalumePlugin
+from prismriver_lyrics.plugins.ytmusic import YTMusicPlugin
 from prismriver_lyrics.search import USER_AGENT
 
 
@@ -424,4 +425,12 @@ class TestPlugins(PluginTestCase):
             "Metallica",
             "...And Justice For All",
             "eef7dbd45da708054e09aca95c983b28",
+        )
+
+    def test_ytmusic_01(self):
+        self.check_plugin(
+            YTMusicPlugin(),
+            "Metallica",
+            "Sad But True",
+            "3325cc64867f3226f1a8389154298097",
         )
