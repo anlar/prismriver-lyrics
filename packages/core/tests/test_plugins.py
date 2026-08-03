@@ -115,6 +115,8 @@ class PluginTestCase(unittest.TestCase):
         expected_md5s: list[str],
         expected_langs: list[str | None] | None,
     ) -> None:
+        # Order-independent: a source's extra results (translations, language
+        # variants, ...) aren't guaranteed to come back in a stable sequence
         async with httpx.AsyncClient(
             headers={"User-Agent": USER_AGENT},
             timeout=20.0,
@@ -123,21 +125,20 @@ class PluginTestCase(unittest.TestCase):
             results = await plugin.search(client, artist, title)
 
         digests = [_digest(result) for result in results]
-        self.assertEqual(
-            digests,
-            expected_md5s,
-            f"{plugin.name} found {len(results)} result(s) with md5s "
-            f"{digests}, expected {expected_md5s}",
-        )
+        langs = [result.lang for result in results]
 
-        if expected_langs is not None:
-            langs = [result.lang for result in results]
-            self.assertEqual(
-                langs,
-                expected_langs,
-                f"{plugin.name} found {len(results)} result(s) with langs "
-                f"{langs}, expected {expected_langs}",
-            )
+        expected_pairs = expected_md5s if expected_langs is None else list(
+            zip(expected_md5s, expected_langs, strict=True)
+        )
+        actual_pairs = digests if expected_langs is None else list(
+            zip(digests, langs, strict=True)
+        )
+        self.assertEqual(
+            sorted(actual_pairs),
+            sorted(expected_pairs),
+            f"{plugin.name} found {len(results)} result(s) with "
+            f"(md5, lang) pairs {actual_pairs}, expected {expected_pairs}",
+        )
 
 
 @pytest.mark.xfail(
