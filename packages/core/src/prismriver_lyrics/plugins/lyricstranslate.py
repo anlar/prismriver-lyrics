@@ -10,7 +10,7 @@ from prismriver_lyrics.util import slugify
 _BASE_URL = "https://lyricstranslate.com"
 
 # Requires some non-browser UA
-_USER_AGENT = f"User-Agent"
+_USER_AGENT = "User-Agent"
 
 
 class LyricsTranslatePlugin(LyricsPlugin):
