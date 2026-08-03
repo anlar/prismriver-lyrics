@@ -7,6 +7,7 @@ import pytest
 from prismriver_lyrics.plugins.absolutelyrics import AbsoluteLyricsPlugin
 from prismriver_lyrics.plugins.alphabetlyrics import AlphabetLyricsPlugin
 from prismriver_lyrics.plugins.amalgama import AmalgamaPlugin
+from prismriver_lyrics.plugins.azlyrics import AZLyricsPlugin
 from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
@@ -153,6 +154,14 @@ class TestPlugins(PluginTestCase):
                 "2db90098decbd965cb2eb53dd54fb099",
             ],
             [None, "ru", "ru"],
+        )
+
+    def test_azlyrics_01(self):
+        self.check_plugin(
+            AZLyricsPlugin(),
+            "Joe Dassin",
+            "Salut",
+            "be92383df51cdd1a2d4b3637fc8db08e",
         )
 
     def test_deezer_01(self):
