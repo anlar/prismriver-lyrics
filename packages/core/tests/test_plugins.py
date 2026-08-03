@@ -34,6 +34,7 @@ from prismriver_lyrics.plugins.seekalyric import SeekALyricPlugin
 from prismriver_lyrics.plugins.showmelyrics import ShowMeLyricsPlugin
 from prismriver_lyrics.plugins.snakeroot import SnakerootPlugin
 from prismriver_lyrics.plugins.song_guru import SongGuruPlugin
+from prismriver_lyrics.plugins.songmeanings import SongMeaningsPlugin
 from prismriver_lyrics.plugins.synclrc import SyncLrcPlugin
 from prismriver_lyrics.plugins.utaten import UtaTenPlugin
 from prismriver_lyrics.plugins.vagalume import VagalumePlugin
@@ -403,6 +404,14 @@ class TestPlugins(PluginTestCase):
             "Сектор Газа",
             "Колхозный панк",
             "ea86197ca454df706fa1221f2125cc0c",
+        )
+
+    def test_songmeanings_01(self):
+        self.check_plugin(
+            SongMeaningsPlugin(),
+            "Linkin Park",
+            "Numb",
+            "1724f33109dffef7d11de3627c04225f",
         )
 
     def test_synclrc_01(self):
