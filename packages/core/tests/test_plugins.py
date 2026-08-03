@@ -11,6 +11,7 @@ from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
 from prismriver_lyrics.plugins.genius import GeniusPlugin
+from prismriver_lyrics.plugins.j_lyric import JLyricPlugin
 from prismriver_lyrics.plugins.kashinavi import KashiNaviPlugin
 from prismriver_lyrics.plugins.kugou import KuGouPlugin
 from prismriver_lyrics.plugins.letras import LetrasPlugin
@@ -183,6 +184,14 @@ class TestPlugins(PluginTestCase):
                 "bf64c5d170682949dbfc296545782f8f",
             ],
             ["en", "ru", "de", "pt", "nl"],
+        )
+
+    def test_jlyric_01(self):
+        self.check_plugin(
+            JLyricPlugin(),
+            "林原めぐみ",
+            "Just be conscious",
+            "70ee37d02ea88c91ce870e4e732e5082",
         )
 
     def test_kashinavi_01(self):
