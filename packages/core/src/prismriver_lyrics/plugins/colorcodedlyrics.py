@@ -109,13 +109,15 @@ class ColorCodedLyricsPlugin(LyricsPlugin):
     async def _find_post(
         self, client: httpx.AsyncClient, artist: str, title: str
     ) -> dict | None:
-        response = await client.get(
-            _API_URL, params={"search": f"{artist} {title}", "per_page": "5"}
+        posts = await self.fetch_json(
+            client,
+            _API_URL,
+            params={"search": f"{artist} {title}", "per_page": "5"},
         )
-        if response.status_code != 200:
+        if posts is None:
             return None
 
-        for post in response.json():
+        for post in posts:
             raw_title = html.unescape(
                 (post.get("title") or {}).get("rendered") or ""
             )

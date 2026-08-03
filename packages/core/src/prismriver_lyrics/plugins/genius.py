@@ -71,15 +71,16 @@ class GeniusPlugin(LyricsPlugin):
         title: str,
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
-        response = await client.get(
+        data = await self.fetch_json(
+            client,
             _SEARCH_URL,
             params={"per_page": 5, "q": f"{artist} {title}"},
             headers=_SEARCH_HEADERS,
         )
-        if response.status_code != 200:
+        if data is None:
             return []
 
-        sections = response.json().get("response", {}).get("sections", [])
+        sections = data.get("response", {}).get("sections", [])
         song = next(
             (
                 hit["result"]
@@ -135,14 +136,15 @@ class GeniusPlugin(LyricsPlugin):
     async def _song_details(
         self, client: httpx.AsyncClient, song_id: int
     ) -> tuple[str | None, list[dict]]:
-        response = await client.get(
+        data = await self.fetch_json(
+            client,
             _SONG_URL.format(song_id=song_id),
             headers={"Authorization": f"Bearer {_TOKEN}"},
         )
-        if response.status_code != 200:
+        if data is None:
             return None, []
 
-        song = response.json().get("response", {}).get("song", {})
+        song = data.get("response", {}).get("song", {})
         return song.get("language"), song.get("translation_songs") or []
 
     async def _scrape_lyrics(

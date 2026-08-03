@@ -27,11 +27,11 @@ class LyricsOvhPlugin(LyricsPlugin):
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
-        response = await client.get(url)
-        if response.status_code != 200:
+        data = await self.fetch_json(client, url)
+        if data is None:
             return []
 
-        lyrics = response.json().get("lyrics", "").strip()
+        lyrics = data.get("lyrics", "").strip()
         if not lyrics:
             return []
 
