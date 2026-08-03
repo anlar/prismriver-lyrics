@@ -4,6 +4,7 @@ import unittest
 
 import httpx
 import pytest
+from prismriver_lyrics.models import LyricsResult, SyncedLyrics
 from prismriver_lyrics.plugins.absolutelyrics import AbsoluteLyricsPlugin
 from prismriver_lyrics.plugins.alphabetlyrics import AlphabetLyricsPlugin
 from prismriver_lyrics.plugins.amalgama import AmalgamaPlugin
@@ -44,6 +45,20 @@ from prismriver_lyrics.plugins.ytmusic import YTMusicPlugin
 from prismriver_lyrics.search import USER_AGENT
 
 
+def _digest(result: LyricsResult) -> str:
+    """md5 of a result's lyrics, in a form that also covers SyncedLyrics
+    (not just plain text): rendered as one "{time_ms} {text}" line per
+    SyncedLine, so a bug in timestamp parsing or line splitting changes
+    the digest just as a wrong plain-text extraction would."""
+    if isinstance(result.lyrics, SyncedLyrics):
+        text = "\n".join(
+            f"{line.time_ms} {line.text}" for line in result.lyrics.lines
+        )
+    else:
+        text = result.lyrics
+    return hashlib.md5(text.encode("utf-8")).hexdigest()
+
+
 class PluginTestCase(unittest.TestCase):
     """Base class for live plugin tests.
 
@@ -70,7 +85,7 @@ class PluginTestCase(unittest.TestCase):
             f"{plugin.name} found no lyrics for {artist!r} - {title!r}"
         )
         result = results[0]
-        digest = hashlib.md5(result.lyrics.encode("utf-8")).hexdigest()
+        digest = _digest(result)
         self.assertEqual(
             digest,
             expected_md5,
@@ -107,10 +122,7 @@ class PluginTestCase(unittest.TestCase):
         ) as client:
             results = await plugin.search(client, artist, title)
 
-        digests = [
-            hashlib.md5(result.lyrics.encode("utf-8")).hexdigest()
-            for result in results
-        ]
+        digests = [_digest(result) for result in results]
         self.assertEqual(
             digests,
             expected_md5s,
@@ -247,11 +259,14 @@ class TestPlugins(PluginTestCase):
         )
 
     def test_kugou_01(self):
-        self.check_plugin(
+        self.check_plugin_all(
             KuGouPlugin(),
             "Кино",
             "Звезда по имени Солнце",
-            "010f51e62c60f75f75b0c148fc0ecbff",
+            [
+                "010f51e62c60f75f75b0c148fc0ecbff",
+                "eb584fef4bd449b91876a02e0614597f",
+            ],
         )
 
     def test_letras_01(self):
@@ -263,19 +278,25 @@ class TestPlugins(PluginTestCase):
         )
 
     def test_lrclib_01(self):
-        self.check_plugin(
+        self.check_plugin_all(
             LrcLibPlugin(),
             "Metallica",
             "Sad But True",
-            "ccd5690dbd7f4c7aaa20e95beffd8beb",
+            [
+                "ccd5690dbd7f4c7aaa20e95beffd8beb",
+                "ca0125652b2cd71d30ddee222acad774",
+            ],
         )
 
     def test_lrcmux_01(self):
-        self.check_plugin(
+        self.check_plugin_all(
             LrcmuxPlugin(),
             "Кино",
             "Звезда по имени Солнце",
-            "4ac522fa29ec1d4a3075a1cacdbd56b1",
+            [
+                "4ac522fa29ec1d4a3075a1cacdbd56b1",
+                "fe568a96c2816e7847ca8f29686f4934",
+            ],
         )
 
     def test_lyrics_ovh_01(self):
@@ -406,11 +427,14 @@ class TestPlugins(PluginTestCase):
         )
 
     def test_rentanadviser_01(self):
-        self.check_plugin(
+        self.check_plugin_all(
             RentAnAdviserPlugin(),
             "Metallica",
             "Sad But True",
-            "45e292fc201e33e484aec39db6d628e5",
+            [
+                "45e292fc201e33e484aec39db6d628e5",
+                "e7421adc7f7d03f3c6f8d1250fb64be6",
+            ],
         )
 
     def test_seekalyric_01(self):
@@ -454,11 +478,14 @@ class TestPlugins(PluginTestCase):
         )
 
     def test_synclrc_01(self):
-        self.check_plugin(
+        self.check_plugin_all(
             SyncLrcPlugin(),
-            "Наутилус Помпилиус",
+            "Nautilus Pompilius",
             "Три царя",
-            "e3dadd7f156cb76fdab971a18fe4637a",
+            [
+                "e3dadd7f156cb76fdab971a18fe4637a",
+                "eaffb671e04444097913622ba0d3c57c",
+            ],
         )
 
     def test_utaten_01(self):
@@ -494,9 +521,12 @@ class TestPlugins(PluginTestCase):
         )
 
     def test_ytmusic_01(self):
-        self.check_plugin(
+        self.check_plugin_all(
             YTMusicPlugin(),
             "Metallica",
             "Sad But True",
-            "3325cc64867f3226f1a8389154298097",
+            [
+                "3325cc64867f3226f1a8389154298097",
+                "ac6c08f658064fa6a1eb9f575e8a5ef7",
+            ],
         )
