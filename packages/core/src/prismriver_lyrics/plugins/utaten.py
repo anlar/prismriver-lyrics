@@ -1,5 +1,5 @@
 import httpx
-from bs4 import BeautifulSoup, NavigableString, Tag
+from bs4 import NavigableString, Tag
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import UNKNOWN_LANG, LyricsPlugin
@@ -47,11 +47,10 @@ class UtaTenPlugin(LyricsPlugin):
         if song_url is None:
             return []
 
-        response = await client.get(song_url)
-        if response.status_code != 200:
+        soup = await self.fetch_soup(client, song_url)
+        if soup is None:
             return []
 
-        soup = BeautifulSoup(response.text, "html.parser")
         hiragana = soup.select_one("div.lyricBody div.medium div.hiragana")
         romaji = soup.select_one("div.lyricBody div.medium div.romaji")
         if hiragana is None or romaji is None:
@@ -97,7 +96,8 @@ class UtaTenPlugin(LyricsPlugin):
     async def _find_song_url(
         self, client: httpx.AsyncClient, artist: str, title: str
     ) -> str | None:
-        response = await client.get(
+        soup = await self.fetch_soup(
+            client,
             _SEARCH_URL,
             params={
                 "sort": "popular_sort_asc",
@@ -106,25 +106,17 @@ class UtaTenPlugin(LyricsPlugin):
                 "show_artists": 0,
             },
         )
-        if response.status_code != 200:
+        if soup is None:
             return None
 
-        soup = BeautifulSoup(response.text, "html.parser")
-        for row in soup.select("table.searchResult tr"):
-            title_link = row.select_one("p.searchResult__title a")
-            artist_link = row.select_one(
-                "td.searchResult__artist a[href^='/artist/']"
-            )
-            if title_link is None or artist_link is None:
-                continue
-            if (
-                title_link.get_text(strip=True).lower() == title.lower()
-                and artist_link.get_text(strip=True).lower() == artist.lower()
-            ):
-                href = title_link.get("href")
-                if href:
-                    return _BASE_URL + href
-        return None
+        href = self.find_matching_href(
+            soup.select("table.searchResult tr"),
+            "p.searchResult__title a",
+            "td.searchResult__artist a[href^='/artist/']",
+            title,
+            artist,
+        )
+        return _BASE_URL + href if href else None
 
     @staticmethod
     def _extract(container: Tag, ruby_child_class: str) -> str:

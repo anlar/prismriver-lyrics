@@ -50,10 +50,10 @@ class DeezerPlugin(LyricsPlugin):
         title: str,
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
-        auth_response = await client.get(_AUTH_URL)
-        if auth_response.status_code != 200:
+        auth_data = await self.fetch_json(client, _AUTH_URL)
+        if auth_data is None:
             return []
-        jwt = auth_response.json().get("jwt")
+        jwt = auth_data.get("jwt")
         if not jwt:
             return []
 

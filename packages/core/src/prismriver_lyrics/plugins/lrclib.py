@@ -61,15 +61,16 @@ class LrcLibPlugin(LyricsPlugin):
         if duration_ms is not None:
             params["duration"] = str(round(duration_ms / 1000))
 
-        response = await client.get(
+        tracks = await self.fetch_json(
+            client,
             _SEARCH_URL,
             params=params,
             headers={"User-Agent": APP_USER_AGENT},
         )
-        if response.status_code != 200:
+        if tracks is None:
             return []
 
-        for track in response.json():
+        for track in tracks:
             if track.get("instrumental"):
                 continue
 

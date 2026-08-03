@@ -183,7 +183,8 @@ class KuGouPlugin(LyricsPlugin):
         title: str,
         duration_ms: int | None,
     ) -> dict | None:
-        response = await client.get(
+        data = await self.fetch_json(
+            client,
             _SEARCH_URL,
             params={
                 "ver": "1",
@@ -195,16 +196,17 @@ class KuGouPlugin(LyricsPlugin):
                 "duration": str(duration_ms or 0),
             },
         )
-        if response.status_code != 200:
+        if data is None:
             return None
 
-        candidates = response.json().get("candidates") or []
+        candidates = data.get("candidates") or []
         return _best_candidate(candidates, duration_ms)
 
     async def _download(
         self, client: httpx.AsyncClient, candidate: dict
     ) -> SyncedLyrics | None:
-        response = await client.get(
+        data = await self.fetch_json(
+            client,
             _DOWNLOAD_URL,
             params={
                 "ver": "1",
@@ -215,10 +217,9 @@ class KuGouPlugin(LyricsPlugin):
                 "charset": "utf8",
             },
         )
-        if response.status_code != 200:
+        if data is None:
             return None
 
-        data = response.json()
         content = data.get("content")
         if data.get("status") != 200 or not content:
             return None

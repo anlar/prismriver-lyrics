@@ -1,5 +1,4 @@
 import httpx
-from bs4 import BeautifulSoup
 from bs4.element import Tag
 
 from prismriver_lyrics.models import LyricsResult
@@ -40,11 +39,10 @@ class LyrsensePlugin(LyricsPlugin):
         if song_url is None:
             return []
 
-        response = await client.get(song_url)
-        if response.status_code != 200:
+        soup = await self.fetch_soup(client, song_url)
+        if soup is None:
             return []
 
-        soup = BeautifulSoup(response.text, "html.parser")
         lines = soup.select("#songFlexLines > div")
         if not lines:
             return []
@@ -72,24 +70,18 @@ class LyrsensePlugin(LyricsPlugin):
     async def _find_song_url(
         self, client: httpx.AsyncClient, artist: str, title: str
     ) -> str | None:
-        response = await client.get(_SEARCH_URL, params={"s": title})
-        if response.status_code != 200:
+        soup = await self.fetch_soup(client, _SEARCH_URL, params={"s": title})
+        if soup is None:
             return None
 
-        soup = BeautifulSoup(response.text, "html.parser")
-        for item in soup.select("ul[id^='song_'][id$='List'] li.element"):
-            link = item.find("a")
-            artist_span = item.find("span")
-            if link is None or artist_span is None:
-                continue
-            if (
-                link.get_text(strip=True).lower() == title.lower()
-                and artist_span.get_text(strip=True).lower() == artist.lower()
-            ):
-                href = link.get("href")
-                if href:
-                    return _BASE_URL + href
-        return None
+        href = self.find_matching_href(
+            soup.select("ul[id^='song_'][id$='List'] li.element"),
+            "a",
+            "span",
+            title,
+            artist,
+        )
+        return _BASE_URL + href if href else None
 
     @staticmethod
     def _extract_column(lines: list[Tag], css_class: str) -> str:

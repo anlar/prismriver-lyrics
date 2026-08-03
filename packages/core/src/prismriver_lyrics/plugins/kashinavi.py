@@ -1,7 +1,6 @@
 import urllib.parse
 
 import httpx
-from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
@@ -42,12 +41,10 @@ class KashiNaviPlugin(LyricsPlugin):
         if song_url is None:
             return []
 
-        response = await client.get(song_url)
-        if response.status_code != 200:
+        soup = await self.fetch_soup(client, song_url, encoding="cp932")
+        if soup is None:
             return []
-        response.encoding = "cp932"
 
-        soup = BeautifulSoup(response.text, "html.parser")
         h2 = soup.find("h2")
         header_div = h2.find_parent("div") if h2 else None
         container = header_div.find_next_sibling("div") if header_div else None
@@ -64,22 +61,15 @@ class KashiNaviPlugin(LyricsPlugin):
         self, client: httpx.AsyncClient, artist: str, title: str
     ) -> str | None:
         url = f"{_SEARCH_URL}?kyoku={_quote(title)}&kashu={_quote(artist)}"
-        response = await client.get(url)
-        if response.status_code != 200:
+        soup = await self.fetch_soup(client, url, encoding="cp932")
+        if soup is None:
             return None
-        response.encoding = "cp932"
 
-        soup = BeautifulSoup(response.text, "html.parser")
-        for row in soup.select("table tr div[style*='overflow:hidden']"):
-            title_link = row.select_one("a[href^='/lyrics/']")
-            artist_link = row.select_one("a[href^='/artist/']")
-            if title_link is None or artist_link is None:
-                continue
-            if (
-                title_link.get_text(strip=True).lower() == title.lower()
-                and artist_link.get_text(strip=True).lower() == artist.lower()
-            ):
-                href = title_link.get("href")
-                if href:
-                    return _BASE_URL + href
-        return None
+        href = self.find_matching_href(
+            soup.select("table tr div[style*='overflow:hidden']"),
+            "a[href^='/lyrics/']",
+            "a[href^='/artist/']",
+            title,
+            artist,
+        )
+        return _BASE_URL + href if href else None

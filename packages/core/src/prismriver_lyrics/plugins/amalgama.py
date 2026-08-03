@@ -1,5 +1,4 @@
 import httpx
-from bs4 import BeautifulSoup
 from bs4.element import Tag
 
 from prismriver_lyrics.models import LyricsResult
@@ -57,16 +56,13 @@ class AmalgamaPlugin(LyricsPlugin):
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
         url = self.build_url(artist, title)
-        response = await client.get(url)
-        if response.status_code != 200:
-            return []
-
         # The site doesn't reliably declare its charset in the HTTP
         # header (only in a <meta> tag), so httpx's own guess can default
         # to UTF-8 and mangle the Cyrillic translation; force it instead.
-        response.encoding = "windows-1251"
+        soup = await self.fetch_soup(client, url, encoding="windows-1251")
+        if soup is None:
+            return []
 
-        soup = BeautifulSoup(response.text, "html.parser")
         click_area = soup.select_one("#click_area")
         if click_area is None:
             return []

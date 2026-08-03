@@ -41,7 +41,8 @@ class NeteasePlugin(LyricsPlugin):
         title: str,
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
-        response = await client.get(
+        data = await self.fetch_json(
+            client,
             _SEARCH_URL,
             params={
                 "s": f"{artist} {title}",
@@ -51,22 +52,24 @@ class NeteasePlugin(LyricsPlugin):
                 "total": "true",
             },
         )
-        if response.status_code != 200:
+        if data is None:
             return []
 
-        songs = response.json().get("result", {}).get("songs", [])
+        songs = data.get("result", {}).get("songs", [])
         song = next((s for s in songs if "uncollected" not in s), None)
         if song is None:
             return []
 
         song_id = song["id"]
-        lyrics_response = await client.get(
-            _LYRIC_URL, params={"id": song_id, "lv": -1, "kv": -1, "tv": -1}
+        lyrics_data = await self.fetch_json(
+            client,
+            _LYRIC_URL,
+            params={"id": song_id, "lv": -1, "kv": -1, "tv": -1},
         )
-        if lyrics_response.status_code != 200:
+        if lyrics_data is None:
             return []
 
-        lrc = lyrics_response.json().get("lrc", {}).get("lyric")
+        lrc = lyrics_data.get("lrc", {}).get("lyric")
         if not lrc:
             return []
 

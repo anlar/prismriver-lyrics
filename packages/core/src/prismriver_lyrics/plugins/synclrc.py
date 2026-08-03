@@ -30,15 +30,15 @@ class SyncLrcPlugin(LyricsPlugin):
         title: str,
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
-        response = await client.get(
+        data = await self.fetch_json(
+            client,
             _API_URL,
             params={"track": title, "artist": artist},
             headers={"User-Agent": APP_USER_AGENT},
         )
-        if response.status_code != 200:
+        if data is None:
             return []
 
-        data = response.json()
         if data.get("instrumental"):
             return []
 

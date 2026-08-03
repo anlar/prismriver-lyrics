@@ -77,13 +77,12 @@ class RentAnAdviserPlugin(LyricsPlugin):
         if result_id is None:
             return []
 
-        response = await client.get(
-            _API_URL, params={"id": result_id}, headers=_HEADERS
+        data = await self.fetch_json(
+            client, _API_URL, params={"id": result_id}, headers=_HEADERS
         )
-        if response.status_code != 200:
+        if data is None:
             return []
 
-        data = response.json()
         lyrics = self._clean_plain(data.get("lrc") or "")
         lines = [
             SyncedLine(time_ms=round(entry["start"] * 1000), text=text)
@@ -137,12 +136,14 @@ class RentAnAdviserPlugin(LyricsPlugin):
         if duration_ms is not None:
             params["duration"] = str(duration_ms)
 
-        response = await client.get(_API_URL, params=params, headers=_HEADERS)
-        if response.status_code != 200:
+        data = await self.fetch_json(
+            client, _API_URL, params=params, headers=_HEADERS
+        )
+        if data is None:
             return None
 
         fallback_id = None
-        for result in response.json().get("Results") or []:
+        for result in data.get("Results") or []:
             match = _RESULT_TITLE_RE.match(result.get("Title") or "")
             if match is None:
                 continue

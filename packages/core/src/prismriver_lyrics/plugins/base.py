@@ -1,5 +1,6 @@
 import importlib.metadata
 from abc import ABC, abstractmethod
+from collections.abc import Iterable
 
 import httpx
 from bs4 import BeautifulSoup, Comment
@@ -88,15 +89,62 @@ class LyricsPlugin(ABC):
 
     @staticmethod
     async def fetch_soup(
-        client: httpx.AsyncClient, url: str, **request_kwargs: object
+        client: httpx.AsyncClient,
+        url: str,
+        *,
+        encoding: str | None = None,
+        **request_kwargs: object,
     ) -> BeautifulSoup | None:
         """GET url and parse it, or None on a non-200 response.
         `request_kwargs` (e.g. `headers=`, `follow_redirects=`) are passed
-        through to `client.get()`."""
+        through to `client.get()`. `encoding`, if given, overrides the
+        response's own (header-declared or guessed) charset before
+        parsing — for sites that don't reliably declare one, or declare
+        the wrong one."""
         response = await client.get(url, **request_kwargs)
         if response.status_code != 200:
             return None
+        if encoding is not None:
+            response.encoding = encoding
         return BeautifulSoup(response.text, "html.parser")
+
+    @staticmethod
+    async def fetch_json(
+        client: httpx.AsyncClient, url: str, **request_kwargs: object
+    ) -> dict | list | None:
+        """GET url and parse its JSON body, or None on a non-200
+        response. `request_kwargs` (e.g. `params=`, `headers=`) are
+        passed through to `client.get()`."""
+        response = await client.get(url, **request_kwargs)
+        if response.status_code != 200:
+            return None
+        return response.json()
+
+    @staticmethod
+    def find_matching_href(
+        rows: Iterable[Tag],
+        title_selector: str,
+        artist_selector: str,
+        title: str,
+        artist: str,
+    ) -> str | None:
+        """Scan `rows` (e.g. search-result rows) for the first one whose
+        title_selector/artist_selector text matches title/artist
+        case-insensitively, returning that row's title element's href, or
+        None if no row matches."""
+        for row in rows:
+            title_el = row.select_one(title_selector)
+            artist_el = row.select_one(artist_selector)
+            if title_el is None or artist_el is None:
+                continue
+            if (
+                title_el.get_text(strip=True).lower() == title.lower()
+                and artist_el.get_text(strip=True).lower() == artist.lower()
+            ):
+                href = title_el.get("href")
+                if href:
+                    return str(href)
+        return None
 
     @classmethod
     async def fetch_lyrics(

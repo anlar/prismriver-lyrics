@@ -1,7 +1,6 @@
 import asyncio
 
 import httpx
-from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import ANY_LANG, LyricsPlugin
@@ -149,11 +148,10 @@ class GeniusPlugin(LyricsPlugin):
     async def _scrape_lyrics(
         self, client: httpx.AsyncClient, url: str
     ) -> str | None:
-        response = await client.get(url, headers=_SCRAPE_HEADERS)
-        if response.status_code != 200:
+        soup = await self.fetch_soup(client, url, headers=_SCRAPE_HEADERS)
+        if soup is None:
             return None
 
-        soup = BeautifulSoup(response.text, "html.parser")
         containers = soup.select("div[data-lyrics-container='true']")
         if not containers:
             return None

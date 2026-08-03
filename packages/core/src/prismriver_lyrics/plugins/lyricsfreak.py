@@ -1,5 +1,4 @@
 import httpx
-from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
@@ -31,16 +30,7 @@ class LyricsFreakPlugin(LyricsPlugin):
         if url is None:
             return []
 
-        response = await client.get(url)
-        if response.status_code != 200:
-            return []
-
-        soup = BeautifulSoup(response.text, "html.parser")
-        container = soup.select_one("div#content.lyrictxt")
-        if container is None:
-            return []
-
-        lyrics = self.extract_lyrics(container)
+        lyrics = await self.fetch_lyrics(client, url, "div#content.lyrictxt")
         if not lyrics:
             return []
 
@@ -49,14 +39,14 @@ class LyricsFreakPlugin(LyricsPlugin):
     async def _find_song_url(
         self, client: httpx.AsyncClient, artist: str, title: str
     ) -> str | None:
-        response = await client.get(
+        soup = await self.fetch_soup(
+            client,
             _SEARCH_URL,
             params={"a": "search", "type": "song", "q": f"{artist} {title}"},
         )
-        if response.status_code != 200:
+        if soup is None:
             return None
 
-        soup = BeautifulSoup(response.text, "html.parser")
         for row in soup.select(
             "div.colortable.green .lf-list__row.js-sort-table-content-item"
         ):

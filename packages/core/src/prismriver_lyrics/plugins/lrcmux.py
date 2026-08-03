@@ -31,15 +31,15 @@ class LrcmuxPlugin(LyricsPlugin):
         title: str,
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
-        response = await client.get(
+        data = await self.fetch_json(
+            client,
             _API_URL,
             params={"artist": artist, "title": title, "format": "json"},
             headers={"User-Agent": APP_USER_AGENT},
         )
-        if response.status_code != 200:
+        if data is None:
             return []
 
-        data = response.json()
         meta = data.get("meta") or {}
         if meta.get("instrumental"):
             return []

@@ -2,7 +2,6 @@ import asyncio
 import json
 
 import httpx
-from bs4 import BeautifulSoup
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import ANY_LANG, LyricsPlugin
@@ -124,15 +123,14 @@ class MusixmatchPlugin(LyricsPlugin):
             original_lang=original_lang,
         )
 
-    @staticmethod
+    @classmethod
     async def _fetch_next_data(
-        client: httpx.AsyncClient, url: str
+        cls, client: httpx.AsyncClient, url: str
     ) -> dict | None:
-        response = await client.get(url)
-        if response.status_code != 200:
+        soup = await cls.fetch_soup(client, url)
+        if soup is None:
             return None
 
-        soup = BeautifulSoup(response.text, "html.parser")
         script = soup.find("script", id="__NEXT_DATA__")
         if script is None:
             return None
