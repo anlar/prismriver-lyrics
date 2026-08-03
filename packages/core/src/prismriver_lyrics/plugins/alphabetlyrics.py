@@ -72,8 +72,4 @@ class AlphabetLyricsPlugin(LyricsPlugin):
             br.replace_with("\n")
 
         lines = [line.strip() for line in container.get_text().splitlines()]
-        while lines and not lines[-1]:
-            lines.pop()
-        while lines and not lines[0]:
-            lines.pop(0)
-        return "\n".join(lines)
+        return "\n".join(lines).strip()

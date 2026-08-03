@@ -117,9 +117,4 @@ class LyricsTranslatePlugin(LyricsPlugin):
                 for line_div in div.find_all("div", recursive=False):
                     lines.append(line_div.get_text(strip=True))
 
-        while lines and not lines[-1]:
-            lines.pop()
-        while lines and not lines[0]:
-            lines.pop(0)
-
         return "\n".join(lines).strip() or None

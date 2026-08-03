@@ -28,3 +28,12 @@ def slugify(value: str, sep: str = "-") -> str:
     lyrics-site URL path."""
     value = _NON_ALNUM.sub(sep, value.strip().lower())
     return value.strip(sep)
+
+
+_NON_ALNUM_CI = re.compile(r"[^a-zA-Z0-9]+")
+
+
+def split_words(value: str) -> list[str]:
+    """Split a string into its alphanumeric words, discarding separators
+    and empty chunks, preserving case (unlike slugify)."""
+    return [w for w in _NON_ALNUM_CI.split(value.strip()) if w]

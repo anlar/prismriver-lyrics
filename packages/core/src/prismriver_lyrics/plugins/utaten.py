@@ -157,6 +157,4 @@ class UtaTenPlugin(LyricsPlugin):
             walk(child)
 
         lines = [line.strip() for line in "".join(parts).splitlines()]
-        while lines and not lines[-1]:
-            lines.pop()
         return "\n".join(lines).strip()

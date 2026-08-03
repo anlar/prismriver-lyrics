@@ -20,11 +20,7 @@ def _strip_lrc(lrc: str) -> str:
             continue
         lines.append(_LRC_TIMESTAMP.sub("", raw_line).strip())
 
-    while lines and not lines[-1]:
-        lines.pop()
-    while lines and not lines[0]:
-        lines.pop(0)
-    return "\n".join(lines)
+    return "\n".join(lines).strip()
 
 
 class NeteasePlugin(LyricsPlugin):

@@ -1,11 +1,8 @@
-import re
-
 import httpx
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
-
-_NON_ALNUM = re.compile(r"[^a-zA-Z0-9]+")
+from prismriver_lyrics.util import split_words
 
 
 class SnakerootPlugin(LyricsPlugin):
@@ -22,14 +19,11 @@ class SnakerootPlugin(LyricsPlugin):
     id = "snakeroot"
     name = "Snakeroot"
 
-    def _words(self, value: str) -> list[str]:
-        return [w for w in _NON_ALNUM.split(value.strip()) if w]
-
     def build_url(self, artist: str, title: str) -> str:
-        artist_dir = "_".join(w.capitalize() for w in self._words(artist))
+        artist_dir = "_".join(w.capitalize() for w in split_words(artist))
         letter = artist_dir[0] if artist_dir else "A"
-        artist_slug = "_".join(w.lower() for w in self._words(artist))
-        title_slug = "_".join(w.lower() for w in self._words(title))
+        artist_slug = "_".join(w.lower() for w in split_words(artist))
+        title_slug = "_".join(w.lower() for w in split_words(title))
         return (
             f"https://lyrics.snakeroot.ru/{letter}/{artist_dir}/"
             f"{artist_slug}_{title_slug}.html"

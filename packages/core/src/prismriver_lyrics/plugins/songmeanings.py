@@ -44,8 +44,6 @@ class SongMeaningsPlugin(LyricsPlugin):
             return []
 
         lines = [line.strip() for line in textarea.get_text().splitlines()]
-        while lines and not lines[-1]:
-            lines.pop()
         lyrics = "\n".join(lines).strip()
         if not lyrics:
             return []

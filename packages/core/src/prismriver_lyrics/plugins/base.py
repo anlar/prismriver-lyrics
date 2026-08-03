@@ -168,3 +168,29 @@ class LyricsPlugin(ABC):
         text = str(node).strip()
         if text:
             parts.append(text)
+
+
+class SimpleLyricsPlugin(LyricsPlugin):
+    """Base for plugins whose lyrics live at one predictable URL, picked
+    out by a single CSS selector. A subclass only needs to implement
+    build_url() and set SELECTOR; this provides search() in terms of
+    those two."""
+
+    # CSS selector for the lyrics container, passed to fetch_lyrics().
+    SELECTOR: str
+
+    def build_url(self, artist: str, title: str) -> str:
+        raise NotImplementedError
+
+    async def search(
+        self,
+        client: httpx.AsyncClient,
+        artist: str,
+        title: str,
+        duration_ms: int | None = None,
+    ) -> list[LyricsResult]:
+        url = self.build_url(artist, title)
+        lyrics = await self.fetch_lyrics(client, url, self.SELECTOR)
+        if not lyrics:
+            return []
+        return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]
