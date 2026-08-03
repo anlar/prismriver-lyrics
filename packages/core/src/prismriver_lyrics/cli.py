@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import importlib.metadata
+import logging
 import sys
 
 from prismriver_lyrics.cache import SearchCache
@@ -34,6 +35,7 @@ def _lang_info(result) -> str | None:
 
 
 def main() -> None:
+    logging.basicConfig(level=logging.WARNING)
     version = importlib.metadata.version("prismriver-lyrics")
     parser = argparse.ArgumentParser(
         prog="prismriver-lyrics",

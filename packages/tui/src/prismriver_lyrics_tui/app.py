@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import importlib.metadata
+import logging
 import sys
 
 from prismriver_lyrics.cache import SearchCache
@@ -18,6 +19,7 @@ from textual import work
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Grid, Horizontal, Vertical, VerticalScroll
+from textual.logging import TextualHandler
 from textual.reactive import reactive
 from textual.widgets import (
     Label,
@@ -538,6 +540,7 @@ _VERSION_MESSAGE = (
 
 
 def run() -> None:
+    logging.basicConfig(level=logging.WARNING, handlers=[TextualHandler()])
     version = importlib.metadata.version("prismriver-lyrics-tui")
     parser = argparse.ArgumentParser(
         prog="prismriver-lyrics-tui",
