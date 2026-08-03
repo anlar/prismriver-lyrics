@@ -6,11 +6,29 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
 license-files = ["../../LICENSE.txt"]
+authors = [{ name = "Anton Larionov", email = "anton.larionov.dev@gmail.com" }]
+keywords = ["lyrics", "mpris", "tui", "textual", "terminal"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: Console :: Curses",
+    "Intended Audience :: End Users/Desktop",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Multimedia :: Sound/Audio",
+]
 dependencies = [
     "prismriver-lyrics",
     "textual>=8.2.8",
     "dbus-next>=0.2.3",
 ]
+
+[project.urls]
+Homepage = "https://github.com/anlar/prismriver-lyrics"
+Repository = "https://github.com/anlar/prismriver-lyrics"
+Issues = "https://github.com/anlar/prismriver-lyrics/issues"
 
 [project.scripts]
 prismriver-lyrics-tui = "prismriver_lyrics_tui.app:run"

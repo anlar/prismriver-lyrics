@@ -75,6 +75,11 @@ class SearchCache:
     def _connect(self) -> sqlite3.Connection:
         self._path.parent.mkdir(parents=True, exist_ok=True)
         conn = sqlite3.connect(self._path)
+        # WAL lets a reader and a writer (e.g. the CLI and TUI at once) work
+        # concurrently; busy_timeout makes a blocked writer wait instead of
+        # immediately raising "database is locked".
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA busy_timeout=5000")
         conn.executescript(_SCHEMA)
         return conn
 

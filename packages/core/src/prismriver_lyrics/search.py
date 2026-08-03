@@ -16,6 +16,13 @@ from prismriver_lyrics.util import DEFAULT_CACHE_TTL, parse_duration
 
 logger = logging.getLogger(__name__)
 
+
+class SearchFailedError(Exception):
+    """Raised when every queried plugin errored out (e.g. no network),
+    as opposed to plugins successfully running and simply finding
+    nothing."""
+
+
 USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
@@ -104,6 +111,9 @@ async def search_lyrics(
             logger.warning(
                 "%s search failed: %r", plugin.id, plugin_results
             )
+
+    if plugins and all(isinstance(r, BaseException) for r in gathered):
+        raise SearchFailedError(f"all {len(plugins)} plugin(s) failed")
 
     results = [
         result

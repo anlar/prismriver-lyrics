@@ -630,11 +630,7 @@ def run() -> None:
     if plugin_ids is not None:
         unknown = plugin_ids - {p.id for p in default_plugins()}
         if unknown:
-            print(
-                f"Unknown plugin id(s): {', '.join(sorted(unknown))}",
-                file=sys.stderr,
-            )
-            raise SystemExit(1)
+            parser.error(f"unknown plugin id(s): {', '.join(sorted(unknown))}")
 
     app = PrismriverTuiApp(
         plugin_ids=plugin_ids,

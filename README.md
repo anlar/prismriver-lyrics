@@ -2,6 +2,9 @@
   <h1>Prismriver Lyrics</h1>
 
   <p>A CLI and terminal UI for searching song lyrics across multiple sources via a plugin system.</p>
+
+  [![test](https://github.com/anlar/prismriver-lyrics/actions/workflows/test.yml/badge.svg)](https://github.com/anlar/prismriver-lyrics/actions/workflows/test.yml)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.txt)
 </div>
 
 ## About

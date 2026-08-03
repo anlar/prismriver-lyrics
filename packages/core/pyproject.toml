@@ -6,10 +6,27 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
 license-files = ["../../LICENSE.txt"]
+authors = [{ name = "Anton Larionov", email = "anton.larionov.dev@gmail.com" }]
+keywords = ["lyrics", "music", "cli", "scraper"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Multimedia :: Sound/Audio",
+]
 dependencies = [
     "httpx>=0.28.1",
     "beautifulsoup4>=4.15.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/anlar/prismriver-lyrics"
+Repository = "https://github.com/anlar/prismriver-lyrics"
+Issues = "https://github.com/anlar/prismriver-lyrics/issues"
 
 [project.scripts]
 prismriver-lyrics = "prismriver_lyrics.cli:main"

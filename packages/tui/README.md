@@ -12,3 +12,9 @@ prismriver-lyrics-tui
 
 Requires a running D-Bus session bus and an MPRIS-compliant media player
 (e.g. VLC, mpv with the mpris plugin, rhythmbox, etc).
+
+## Development
+
+This package is part of the [prismriver-lyrics](https://github.com/anlar/prismriver-lyrics)
+uv workspace. See the [root README](https://github.com/anlar/prismriver-lyrics#readme)
+for setup (`make install-pipx`) and testing (`make test-local`) instructions.

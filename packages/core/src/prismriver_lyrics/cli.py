@@ -12,7 +12,7 @@ from prismriver_lyrics.registry import (
     parse_ids,
     print_plugins,
 )
-from prismriver_lyrics.search import search_lyrics
+from prismriver_lyrics.search import SearchFailedError, search_lyrics
 from prismriver_lyrics.util import DEFAULT_CACHE_TTL, parse_duration
 
 _VERSION_MESSAGE = (
@@ -131,17 +131,21 @@ def main() -> None:
                 f"unknown plugin id(s): {', '.join(sorted(unknown))}"
             )
 
-    results = asyncio.run(
-        search_lyrics(
-            args.artist,
-            args.title,
-            use_cache=not args.no_cache,
-            cache=SearchCache(ttl=args.cache_ttl),
-            langs=langs,
-            translated=translated,
-            synced=synced,
+    try:
+        results = asyncio.run(
+            search_lyrics(
+                args.artist,
+                args.title,
+                use_cache=not args.no_cache,
+                cache=SearchCache(ttl=args.cache_ttl),
+                langs=langs,
+                translated=translated,
+                synced=synced,
+            )
         )
-    )
+    except SearchFailedError as exc:
+        print(f"Search failed: {exc}", file=sys.stderr)
+        raise SystemExit(1) from exc
     results = filter_results(results, plugin_ids, langs, translated, synced)
 
     if not results:

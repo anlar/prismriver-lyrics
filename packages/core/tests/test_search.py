@@ -3,7 +3,7 @@ from prismriver_lyrics.cache import SearchCache
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
 from prismriver_lyrics.registry import filter_cache_key
-from prismriver_lyrics.search import search_lyrics
+from prismriver_lyrics.search import SearchFailedError, search_lyrics
 
 
 class _FakePlugin(LyricsPlugin):
@@ -26,6 +26,18 @@ class _FakePlugin(LyricsPlugin):
     async def search(self, client, artist, title, duration_ms=None):
         self.called = True
         return [self.result] if self.result is not None else []
+
+
+class _FailingPlugin(LyricsPlugin):
+    def __init__(self, plugin_id: str) -> None:
+        self.id = plugin_id
+        self.name = plugin_id
+        self.lang = ["?"]
+        self.translated = 0
+        self.sync = 0
+
+    async def search(self, client, artist, title, duration_ms=None):
+        raise RuntimeError("boom")
 
 
 @pytest.mark.asyncio
@@ -130,4 +142,18 @@ async def test_search_lyrics_live_search_narrows_plugins_and_caches_by_filter(
         matching_result
     ]
     # The plain (artist, title) entry is left untouched by a filtered search.
+    assert cache.get("Artist", "Title") is None
+
+
+@pytest.mark.asyncio
+async def test_search_lyrics_raises_when_every_plugin_fails(tmp_path):
+    cache = SearchCache(ttl=3600, path=tmp_path / "cache.sqlite3")
+    plugins = [_FailingPlugin("p1"), _FailingPlugin("p2")]
+
+    with pytest.raises(SearchFailedError):
+        await search_lyrics(
+            "Artist", "Title", plugins=plugins, cache=cache
+        )
+
+    # A total failure isn't cached as an empty ("no results") entry.
     assert cache.get("Artist", "Title") is None
