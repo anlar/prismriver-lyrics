@@ -8,7 +8,7 @@ license = "MIT"
 license-files = ["../../LICENSE.txt"]
 dependencies = [
     "prismriver-lyrics",
-    "textual>=0.58",
+    "textual>=8.2.8",
     "dbus-next>=0.2.3",
 ]
 
@@ -31,7 +31,7 @@ prismriver-lyrics = { workspace = true }
 
 [dependency-groups]
 dev = [
-    "pytest>=8.3",
-    "pytest-asyncio>=0.24",
-    "textual-dev>=1.5",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "textual-dev>=1.8.0",
 ]
