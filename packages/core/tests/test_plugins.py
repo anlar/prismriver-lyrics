@@ -9,6 +9,7 @@ from prismriver_lyrics.plugins.alphabetlyrics import AlphabetLyricsPlugin
 from prismriver_lyrics.plugins.amalgama import AmalgamaPlugin
 from prismriver_lyrics.plugins.azlyrics import AZLyricsPlugin
 from prismriver_lyrics.plugins.base import LyricsPlugin
+from prismriver_lyrics.plugins.darklyrics import DarkLyricsPlugin
 from prismriver_lyrics.plugins.deezer import DeezerPlugin
 from prismriver_lyrics.plugins.elyrics import ElyricsPlugin
 from prismriver_lyrics.plugins.genius import GeniusPlugin
@@ -164,6 +165,14 @@ class TestPlugins(PluginTestCase):
             "Joe Dassin",
             "Salut",
             "be92383df51cdd1a2d4b3637fc8db08e",
+        )
+
+    def test_darklyrics_01(self):
+        self.check_plugin(
+            DarkLyricsPlugin(),
+            "Metallica",
+            "Sad But True",
+            "5d9566e5ee4c1c3e88334e91ec15e754",
         )
 
     def test_deezer_01(self):
