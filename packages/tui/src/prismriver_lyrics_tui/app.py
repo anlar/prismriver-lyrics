@@ -374,11 +374,11 @@ class PrismriverTuiApp(App[None]):
     def _set_results(
         self, results: list[LyricsResult], *, placeholder: str = ""
     ) -> None:
-        self._results = sorted(
-            results, key=lambda result: result.source.lower()
-        )
+        results = sorted(results, key=lambda result: result.source.lower())
+        results, duplicates_hidden = self._dedup_results(results)
         if self._limit is not None:
-            self._results = self._results[: self._limit]
+            results = results[: self._limit]
+        self._results = results
         has_synced = any(
             isinstance(result.lyrics, SyncedLyrics) for result in self._results
         )
@@ -402,11 +402,38 @@ class PrismriverTuiApp(App[None]):
                 0,
             )
             option_list.highlighted = sync_index
-            option_list.border_title = f"Results ({len(self._results)})"
+            option_list.border_title = self._results_border_title(
+                len(self._results), duplicates_hidden
+            )
         else:
             option_list.set_options([Option(placeholder, disabled=True)])
             option_list.border_title = "Results"
             self._refresh_lyrics(None)
+
+    @staticmethod
+    def _dedup_results(
+        results: list[LyricsResult],
+    ) -> tuple[list[LyricsResult], int]:
+        """Drop later results whose lyrics exactly match an earlier one
+        (e.g. the same source's plain-text result found via two plugin
+        aliases, or two sources hosting identical text), keeping the
+        first of each group. Returns the deduped list and how many were
+        dropped."""
+        seen: set[str | SyncedLyrics] = set()
+        deduped: list[LyricsResult] = []
+        for result in results:
+            if result.lyrics in seen:
+                continue
+            seen.add(result.lyrics)
+            deduped.append(result)
+        return deduped, len(results) - len(deduped)
+
+    @staticmethod
+    def _results_border_title(count: int, duplicates_hidden: int) -> str:
+        if not duplicates_hidden:
+            return f"Results ({count})"
+        suffix = "duplicate" if duplicates_hidden == 1 else "duplicates"
+        return f"Results ({count}, {duplicates_hidden} {suffix} hidden)"
 
     def on_option_list_option_highlighted(
         self, event: OptionList.OptionHighlighted

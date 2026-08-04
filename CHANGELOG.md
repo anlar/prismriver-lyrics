@@ -16,6 +16,10 @@ Each change should be on one line, as GitHub markdown in the release section can
 - `utatime` plugin: fetches lyrics from utatime.com (formerly lyrical-nonsense.com).
 - `utanet` plugin: fetches lyrics from uta-net.com (Uta-Net).
 
+### Changed
+
+- Hide duplicate lyrics results in TUI
+
 ## [1.0.0] - 2026-08-04
 
 ### Added

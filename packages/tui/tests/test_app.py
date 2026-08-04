@@ -261,3 +261,64 @@ async def test_selecting_sync_result_switches_to_synced_tab(monkeypatch):
         results_list.highlighted = plain_index
         await pilot.pause()
         assert tabs.active == "lyrics-plain"
+
+
+def test_dedup_results_drops_later_exact_lyrics_matches():
+    app = PrismriverTuiApp()
+    first = LyricsResult(source="Aaa", url="u1", lyrics="same text")
+    dup = LyricsResult(source="Bbb", url="u2", lyrics="same text")
+    unique = LyricsResult(source="Ccc", url="u3", lyrics="other text")
+
+    deduped, hidden = app._dedup_results([first, dup, unique])
+
+    assert deduped == [first, unique]
+    assert hidden == 1
+
+
+def test_dedup_results_keeps_synced_and_plain_lyrics_distinct():
+    app = PrismriverTuiApp()
+    plain = LyricsResult(source="Aaa", url="u1", lyrics="Line one")
+    synced = _synced_result(source="Bbb")
+
+    deduped, hidden = app._dedup_results([plain, synced])
+
+    assert deduped == [plain, synced]
+    assert hidden == 0
+
+
+def test_results_border_title_without_duplicates():
+    app = PrismriverTuiApp()
+    assert app._results_border_title(20, 0) == "Results (20)"
+
+
+def test_results_border_title_with_duplicates():
+    app = PrismriverTuiApp()
+    assert (
+        app._results_border_title(20, 5)
+        == "Results (20, 5 duplicates hidden)"
+    )
+
+
+def test_results_border_title_singular_duplicate():
+    app = PrismriverTuiApp()
+    assert (
+        app._results_border_title(20, 1) == "Results (20, 1 duplicate hidden)"
+    )
+
+
+@pytest.mark.asyncio
+async def test_search_results_hide_exact_duplicate_lyrics(monkeypatch):
+    first = LyricsResult(source="Aaa", url="u1", lyrics="same text")
+    dup = LyricsResult(source="Bbb", url="u2", lyrics="same text")
+    fake = _FakeSearch([first, dup])
+    monkeypatch.setattr("prismriver_lyrics_tui.app.search_lyrics", fake)
+
+    app = PrismriverTuiApp()
+    async with app.run_test() as pilot:
+        await _open_dialog_and_submit(pilot, "Song Title", "Some Artist")
+
+        assert [r.source for r in app._results] == ["Aaa"]
+        results_list = app.query_one("#results-list", OptionList)
+        assert (
+            results_list.border_title == "Results (1, 1 duplicate hidden)"
+        )
