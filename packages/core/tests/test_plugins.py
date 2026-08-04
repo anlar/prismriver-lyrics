@@ -42,6 +42,7 @@ from prismriver_lyrics.plugins.songlyrics import SongLyricsPlugin
 from prismriver_lyrics.plugins.songmeanings import SongMeaningsPlugin
 from prismriver_lyrics.plugins.synclrc import SyncLrcPlugin
 from prismriver_lyrics.plugins.utaten import UtaTenPlugin
+from prismriver_lyrics.plugins.utatime import UtaTimePlugin
 from prismriver_lyrics.plugins.vagalume import VagalumePlugin
 from prismriver_lyrics.plugins.ytmusic import YTMusicPlugin
 from prismriver_lyrics.search import USER_AGENT
@@ -529,6 +530,14 @@ class TestPlugins(PluginTestCase):
             "Should I Stay or Should I Go",
             ["ea73fc2c07846a2418fc1243bde7b795"],
             [None],
+        )
+
+    def test_utatime_01(self):
+        self.check_plugin(
+            UtaTimePlugin(),
+            "Kalafina",
+            "monochrome",
+            "c4882ce77d83c81ca189eddeb2580640",
         )
 
     def test_vagalume_01(self):
