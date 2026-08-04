@@ -41,6 +41,7 @@ from prismriver_lyrics.plugins.song_guru import SongGuruPlugin
 from prismriver_lyrics.plugins.songlyrics import SongLyricsPlugin
 from prismriver_lyrics.plugins.songmeanings import SongMeaningsPlugin
 from prismriver_lyrics.plugins.synclrc import SyncLrcPlugin
+from prismriver_lyrics.plugins.uta_net import UtaNetPlugin
 from prismriver_lyrics.plugins.utaten import UtaTenPlugin
 from prismriver_lyrics.plugins.utatime import UtaTimePlugin
 from prismriver_lyrics.plugins.vagalume import VagalumePlugin
@@ -506,6 +507,14 @@ class TestPlugins(PluginTestCase):
                 "e3dadd7f156cb76fdab971a18fe4637a",
                 "eaffb671e04444097913622ba0d3c57c",
             ],
+        )
+
+    def test_utanet_01(self):
+        self.check_plugin(
+            UtaNetPlugin(),
+            "Kalafina",
+            "monochrome",
+            "c4882ce77d83c81ca189eddeb2580640",
         )
 
     def test_utaten_01(self):
