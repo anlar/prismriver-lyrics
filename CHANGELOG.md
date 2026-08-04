@@ -15,6 +15,7 @@ Each change should be on one line, as GitHub markdown in the release section can
 - `songlyrics` plugin: fetches lyrics from songlyrics.com.
 - `utatime` plugin: fetches lyrics from utatime.com (formerly lyrical-nonsense.com).
 - `utanet` plugin: fetches lyrics from uta-net.com (Uta-Net).
+- `tekstowo` plugin: fetches lyrics from tekstowo.pl.
 
 ### Changed
 
