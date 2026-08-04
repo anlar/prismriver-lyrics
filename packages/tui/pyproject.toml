@@ -5,7 +5,7 @@ description = "Terminal UI showing lyrics for the currently playing track via MP
 readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
-license-files = ["../../LICENSE.txt"]
+license-files = ["LICENSE.txt"]
 authors = [{ name = "Anton Larionov", email = "anton.larionov.dev@gmail.com" }]
 keywords = ["lyrics", "mpris", "tui", "textual", "terminal"]
 classifiers = [
