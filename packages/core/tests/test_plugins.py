@@ -40,6 +40,7 @@ from prismriver_lyrics.plugins.snakeroot import SnakerootPlugin
 from prismriver_lyrics.plugins.song_guru import SongGuruPlugin
 from prismriver_lyrics.plugins.songlyrics import SongLyricsPlugin
 from prismriver_lyrics.plugins.songmeanings import SongMeaningsPlugin
+from prismriver_lyrics.plugins.songtexte import SongtextePlugin
 from prismriver_lyrics.plugins.synclrc import SyncLrcPlugin
 from prismriver_lyrics.plugins.tekstowo import TekstowoPlugin
 from prismriver_lyrics.plugins.uta_net import UtaNetPlugin
@@ -497,6 +498,18 @@ class TestPlugins(PluginTestCase):
             "Linkin Park",
             "Numb",
             "1724f33109dffef7d11de3627c04225f",
+        )
+
+    def test_songtexte_01(self):
+        self.check_plugin_all(
+            SongtextePlugin(),
+            "The Clash",
+            "Should I Stay or Should I Go",
+            [
+                "567c2091a0a4d6b68787c8f2f71b438f",
+                "163cc769aa9b12530e6fc156abb87996",
+            ],
+            [None, "de"],
         )
 
     def test_synclrc_01(self):
