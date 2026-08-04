@@ -12,6 +12,7 @@ Each change should be on one line, as GitHub markdown in the release section can
 ### Added
 
 - `metalarchives` plugin: fetches lyrics from metal-archives.com (Encyclopaedia Metallum).
+- `songlyrics` plugin: fetches lyrics from songlyrics.com.
 
 ## [1.0.0] - 2026-08-04
 
