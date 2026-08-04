@@ -524,11 +524,15 @@ class TestPlugins(PluginTestCase):
         )
 
     def test_tekstowo_01(self):
-        self.check_plugin(
+        self.check_plugin_all(
             TekstowoPlugin(),
             "Metallica",
             "Enter Sandman",
-            "146f9be33426c92df1c9ea4ea1eb6bdd",
+            [
+                "146f9be33426c92df1c9ea4ea1eb6bdd",
+                "ea5c0f2a7467ddfa0386cc8e3921d13a",
+            ],
+            [None, "pl"],
         )
 
     def test_utanet_01(self):
