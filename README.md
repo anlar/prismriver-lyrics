@@ -51,8 +51,26 @@ Prismriver Lyrics requires Python 3.12+.
 
 ### Installation
 
-Prismriver Lyrics isn't published to PyPI yet, so install it from source
-using [`uv`](https://docs.astral.sh/uv/) and `pipx`:
+Both packages are published on PyPI. Install either or both with `pipx`, `pip`,
+or `uv`:
+
+```sh
+$ pipx install prismriver-lyrics
+$ pipx install prismriver-lyrics-tui
+```
+
+```sh
+$ pip install prismriver-lyrics
+$ pip install prismriver-lyrics-tui
+```
+
+```sh
+$ uv tool install prismriver-lyrics
+$ uv tool install prismriver-lyrics-tui
+```
+
+Alternatively, install from source using [`uv`](https://docs.astral.sh/uv/)
+and `pipx`:
 
 ```sh
 git clone https://github.com/anlar/prismriver-lyrics.git
@@ -61,8 +79,7 @@ make install-pipx
 ```
 
 This builds both packages and installs each as its own isolated pipx app,
-exposing both the `prismriver-lyrics` and `prismriver-lyrics-tui`
-commands.
+exposing both the `prismriver-lyrics` and `prismriver-lyrics-tui` commands.
 
 ## Usage
 
