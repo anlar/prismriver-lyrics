@@ -4,9 +4,9 @@ from curl_cffi.requests import AsyncSession
 
 from prismriver_lyrics.models import LyricsResult
 from prismriver_lyrics.plugins.base import LyricsPlugin
-from prismriver_lyrics.util import slugify
 
 _BASE_URL = "https://www.songlyrics.com"
+_SUGGEST_URL = f"{_BASE_URL}/_suggest"
 
 
 class SongLyricsPlugin(LyricsPlugin):
@@ -15,10 +15,11 @@ class SongLyricsPlugin(LyricsPlugin):
     Cloudflare TLS-fingerprints requests (403 on httpx, 200 via curl_cffi
     impersonate="chrome").
 
-    No search: URLs are predictable, /{artist-slug}/{title-slug}-lyrics/, both
-    dash-slugified (e.g. "Sad but True" -> sad-but-true-lyrics). Lyrics sit in
-    `#songLyricsDiv`, one `<p class="lyrics-verse">` per verse with
-    `<br>`-separated lines.
+    /_suggest?q={artist} {title} is the site's own autocomplete endpoint,
+    returning JSON with a "songs" list of {s: title, a: artist, u: url}
+    matches; the first entry with an exact (case-insensitive) title/artist
+    match gives the song's page url. Lyrics sit in `#songLyricsDiv`, one
+    `<p class="lyrics-verse">` per verse with `<br>`-separated lines.
     """
 
     id = "songlyrics"
@@ -31,9 +32,20 @@ class SongLyricsPlugin(LyricsPlugin):
         title: str,
         duration_ms: int | None = None,
     ) -> list[LyricsResult]:
-        url = f"{_BASE_URL}/{slugify(artist)}/{slugify(title)}-lyrics/"
-
         async with AsyncSession() as session:
+            response = await session.get(
+                _SUGGEST_URL,
+                params={"q": f"{artist} {title}"},
+                impersonate="chrome",
+            )
+            if response.status_code != 200:
+                return []
+
+            path = self._find_song_path(response.json(), artist, title)
+            if path is None:
+                return []
+            url = f"{_BASE_URL}{path}"
+
             response = await session.get(url, impersonate="chrome")
             if response.status_code != 200:
                 return []
@@ -48,3 +60,15 @@ class SongLyricsPlugin(LyricsPlugin):
             return []
 
         return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]
+
+    @staticmethod
+    def _find_song_path(
+        data: dict, artist: str, title: str
+    ) -> str | None:
+        for song in data.get("songs", []):
+            if (
+                song.get("s", "").strip().lower() == title.lower()
+                and song.get("a", "").strip().lower() == artist.lower()
+            ):
+                return song.get("u")
+        return None
