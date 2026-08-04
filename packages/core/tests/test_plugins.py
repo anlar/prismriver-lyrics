@@ -27,6 +27,7 @@ from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
 from prismriver_lyrics.plugins.lyricsmode import LyricsModePlugin
 from prismriver_lyrics.plugins.lyricstranslate import LyricsTranslatePlugin
 from prismriver_lyrics.plugins.lyrsense import LyrsensePlugin
+from prismriver_lyrics.plugins.metal_archives import MetalArchivesPlugin
 from prismriver_lyrics.plugins.musixmatch import MusixmatchPlugin
 from prismriver_lyrics.plugins.netease import NeteasePlugin
 from prismriver_lyrics.plugins.one_music_lyrics import OneMusicLyricsPlugin
@@ -358,6 +359,14 @@ class TestPlugins(PluginTestCase):
                 "db691a5ab8bae6dc801aebd7339b66bf",
             ],
             [None, "ru"],
+        )
+
+    def test_metal_archives_01(self):
+        self.check_plugin(
+            MetalArchivesPlugin(),
+            "Arch Enemy",
+            "Nemesis",
+            "e22bbe7325342c48fd9455389044ec53",
         )
 
     def test_musixmatch_01(self):
