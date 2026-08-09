@@ -3,6 +3,8 @@ import asyncio
 import importlib.metadata
 import logging
 import sys
+from urllib.parse import urlsplit
+from urllib.request import url2pathname
 
 from prismriver_lyrics.cache import SearchCache
 from prismriver_lyrics.models import LyricsResult, SyncedLyrics
@@ -14,6 +16,7 @@ from prismriver_lyrics.registry import (
 )
 from prismriver_lyrics.search import search_lyrics
 from prismriver_lyrics.util import DEFAULT_CACHE_TTL, parse_duration
+from prismriver_lyrics.writer import LyricsWriteError, write_lyrics
 from rich.markup import escape
 from textual import work
 from textual.app import App, ComposeResult
@@ -31,6 +34,7 @@ from textual.widgets import (
 )
 from textual.widgets.option_list import Option, OptionDoesNotExist
 
+from prismriver_lyrics_tui.confirm_dialog import ConfirmDialog
 from prismriver_lyrics_tui.mpris import (
     MprisWatcher,
     TrackInfo,
@@ -68,6 +72,7 @@ class PrismriverTuiApp(App[None]):
         Binding("s", "search", "Search lyrics", show=False),
         Binding("a", "resync", "Resume auto-sync", show=False),
         Binding("t", "change_theme", "Change theme", show=False),
+        Binding("w", "write_lyrics", "Write lyrics to file", show=False),
     ]
 
     track: reactive[TrackInfo] = reactive(TrackInfo())
@@ -88,6 +93,7 @@ class PrismriverTuiApp(App[None]):
         self._search_task: asyncio.Task[None] | None = None
         self._last_track_key: tuple[str, str] | None = None
         self._results: list[LyricsResult] = []
+        self._current_result: LyricsResult | None = None
         self._players: dict[str, TrackInfo] = {}
         self._selected_bus_name: str | None = None
         self._plugin_ids = plugin_ids
@@ -144,6 +150,7 @@ class PrismriverTuiApp(App[None]):
                 "[dim]·[/] <PgUp/PgDn> [dim]move[/] "
                 "[dim]·[/] <Tab> [dim]switch panels[/] "
                 "[dim]·[/] <s> [dim]search[/] "
+                "[dim]·[/] <w> [dim]write to file[/] "
                 "[dim]·[/] <t> [dim]theme[/] "
                 "[dim]·[/] <q> [dim]exit[/]",
                 id="status-bar-hotkeys",
@@ -350,6 +357,44 @@ class PrismriverTuiApp(App[None]):
             artist, title = result
             self._handle_manual_search(artist, title)
 
+    @work
+    async def action_write_lyrics(self) -> None:
+        result = self._current_result
+        if result is None:
+            self.notify("No lyrics selected", severity="warning")
+            return
+
+        file_path = self._local_track_file()
+        if file_path is None:
+            self.notify(
+                "Current track isn't a local file", severity="warning"
+            )
+            return
+
+        confirmed = await self.push_screen_wait(
+            ConfirmDialog(f"Write lyrics to {file_path}?")
+        )
+        if not confirmed:
+            return
+
+        try:
+            await asyncio.to_thread(write_lyrics, file_path, result.lyrics)
+        except LyricsWriteError as exc:
+            self.notify(str(exc), title="Write failed", severity="error")
+        else:
+            self.notify(f"Lyrics written to {file_path}")
+
+    def _local_track_file(self) -> str | None:
+        """Filesystem path for the current track, or None if it has no
+        known location or isn't a local file."""
+        url = self.track.url
+        if not url:
+            return None
+        parsed = urlsplit(url)
+        if parsed.scheme != "file":
+            return None
+        return url2pathname(parsed.path) or None
+
     def action_resync(self) -> None:
         self.auto_sync = True
         self._last_track_key = None
@@ -498,6 +543,7 @@ class PrismriverTuiApp(App[None]):
         self.query_one("#song-position", Label).update(format_duration(0))
 
     def _refresh_lyrics(self, result: LyricsResult | None) -> None:
+        self._current_result = result
         synced = (
             result.lyrics
             if result and isinstance(result.lyrics, SyncedLyrics)

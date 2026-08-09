@@ -17,6 +17,7 @@ Each change should be on one line, as GitHub markdown in the release section can
 - `utanet` plugin: fetches lyrics from uta-net.com (Uta-Net).
 - `tekstowo` plugin: fetches lyrics from tekstowo.pl.
 - `songtexte` plugin: fetches lyrics, and a German translation if available, from songtexte.com.
+- TUI: action to write selected lyrics into the currently playing track file (`w` hotkey).
 
 ### Changed
 

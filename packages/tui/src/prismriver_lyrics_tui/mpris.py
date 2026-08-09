@@ -42,6 +42,7 @@ class TrackInfo:
     length_us: int | None = None
     art_url: str = ""
     playback_status: str = ""
+    url: str = ""
 
 
 _PLAYBACK_STATUS_EMOJI = {
@@ -108,6 +109,7 @@ def _metadata_fields(metadata: dict[str, Any]) -> dict[str, Any]:
     text("xesam:albumArtist", "album_artist")
     text("xesam:genre", "genre", separator=" · ")
     text("mpris:artUrl", "art_url")
+    text("xesam:url", "url")
     integer("xesam:trackNumber", "track_number")
     integer("xesam:discNumber", "disc_number")
     integer("mpris:length", "length_us")

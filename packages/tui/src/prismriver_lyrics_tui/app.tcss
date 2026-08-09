@@ -175,3 +175,15 @@ SearchDialog {
 #search-dialog Input:focus {
     border: none;
 }
+
+ConfirmDialog {
+    align: center middle;
+}
+
+#confirm-dialog {
+    width: 100;
+    height: auto;
+    border: round $accent;
+    background: $background;
+    padding: 1;
+}
