@@ -26,6 +26,7 @@ from prismriver_lyrics.plugins.lyricsfreak import LyricsFreakPlugin
 from prismriver_lyrics.plugins.lyricsmania import LyricsManiaPlugin
 from prismriver_lyrics.plugins.lyricsmode import LyricsModePlugin
 from prismriver_lyrics.plugins.lyricstranslate import LyricsTranslatePlugin
+from prismriver_lyrics.plugins.lyricsworld import LyricsWorldPlugin
 from prismriver_lyrics.plugins.lyrsense import LyrsensePlugin
 from prismriver_lyrics.plugins.metal_archives import MetalArchivesPlugin
 from prismriver_lyrics.plugins.musixmatch import MusixmatchPlugin
@@ -354,6 +355,22 @@ class TestPlugins(PluginTestCase):
             "Ariana Grande",
             "Bye",
             "1184ccf8b84192dff21c42b01bbc8a30",
+        )
+
+    def test_lyricsworld_01(self):
+        self.check_plugin(
+            LyricsWorldPlugin(),
+            "Кино",
+            "Группа крови",
+            "30a9f9c0469377f77b9e88c3574314a2",
+        )
+
+    def test_lyricsworld_02(self):
+        self.check_plugin(
+            LyricsWorldPlugin(),
+            "Виктор Цой",
+            "Звезда по имени Солнце",
+            "ec507365f7f0de9b21e43cdabd2a6aeb",
         )
 
     def test_lyrsense_01(self):
