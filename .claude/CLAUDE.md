@@ -1,13 +1,24 @@
-## Testing
+# prismriver-lyrics
 
-Don't invoke `pytest`, `ruff`, or `uv run` test commands directly — always go
-through the `make` targets below.
+A `uv` workspace (`packages/core`, `packages/tui`) built and tested with `uv`.
 
-After each change, run `make test-local`. It runs the full suite except the
-live plugin tests in `packages/core/tests/test_plugins.py` (which hit real
-lyrics sites over the network), plus `ruff check`.
+## Validation
 
-If the change touched a plugin (anything under
-`packages/core/src/prismriver_lyrics/plugins/`), also run
-`make test-plugin PARAMETER=<plugin_name>` for that plugin, e.g.
-`make test-plugin PARAMETER=musixmatch`.
+A task is not done until all of these pass:
+
+```sh
+make test-local
+```
+
+and, for each plugin touched by the change (matching its `test_<plugin>_NN`
+tests in `packages/core/tests/test_plugins.py`):
+
+```sh
+make test-plugin PARAMETER=<plugin>
+```
+
+`test-local` runs the full suite plus `ruff check` but skips `test_plugins.py`,
+since that file hits real lyrics sites over the network. Always run
+`test-plugin` for affected plugins on top of it — network access being
+unavailable is not a reason to skip verifying a plugin change actually works
+against the real site.

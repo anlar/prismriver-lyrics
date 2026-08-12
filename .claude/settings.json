@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(UV_CACHE_DIR=* make test-local)",
-      "Bash(UV_CACHE_DIR=* make test-plugin*)"
-    ]
-  }
-}
