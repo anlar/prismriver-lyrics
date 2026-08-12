@@ -44,6 +44,7 @@ from prismriver_lyrics.plugins.songtexte import SongtextePlugin
 from prismriver_lyrics.plugins.synclrc import SyncLrcPlugin
 from prismriver_lyrics.plugins.tekstovi_net import TekstoviNetPlugin
 from prismriver_lyrics.plugins.tekstowo import TekstowoPlugin
+from prismriver_lyrics.plugins.tekstpesme import TekstpesmePlugin
 from prismriver_lyrics.plugins.uta_net import UtaNetPlugin
 from prismriver_lyrics.plugins.utaten import UtaTenPlugin
 from prismriver_lyrics.plugins.utatime import UtaTimePlugin
@@ -550,6 +551,22 @@ class TestPlugins(PluginTestCase):
                 "ea5c0f2a7467ddfa0386cc8e3921d13a",
             ],
             [None, "pl"],
+        )
+
+    def test_tekstpesme_01(self):
+        self.check_plugin(
+            TekstpesmePlugin(),
+            "Sergej Ćetković",
+            "Ako Boga znaš",
+            "eb0894965fd6c341498f6185d22f16d0",
+        )
+
+    def test_tekstpesme_02(self):
+        self.check_plugin(
+            TekstpesmePlugin(),
+            "Đorđe Balašević",
+            "Ne lomite mi bagrenje",
+            "1d83c64fe82fb1519404e88793121d9e",
         )
 
     def test_utanet_01(self):
