@@ -9,6 +9,8 @@ Each change should be on one line, as GitHub markdown in the release section can
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-08-23
+
 ### Added
 
 - `metalarchives` plugin: fetches lyrics from metal-archives.com (Encyclopaedia Metallum).
