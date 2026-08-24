@@ -37,3 +37,16 @@ def split_words(value: str) -> list[str]:
     """Split a string into its alphanumeric words, discarding separators
     and empty chunks, preserving case (unlike slugify)."""
     return [w for w in _NON_ALNUM_CI.split(value.strip()) if w]
+
+
+_ARTIST_TITLE_SEP = re.compile(r"\s+-\s+")
+
+
+def split_artist_title(title: str) -> tuple[str, str] | None:
+    """Split a combined "<artist> - <title>" string, as reported by some
+    MPRIS players (notably radio streams) when they have no separate artist
+    field. Returns None if `title` doesn't contain such a separator."""
+    parts = _ARTIST_TITLE_SEP.split(title.strip(), maxsplit=1)
+    if len(parts) != 2 or not parts[0] or not parts[1]:
+        return None
+    return parts[0], parts[1]

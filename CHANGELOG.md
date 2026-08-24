@@ -9,6 +9,10 @@ Each change should be on one line, as GitHub markdown in the release section can
 
 ## [Unreleased]
 
+### Added
+
+- TUI: split combined "Artist - Title" strings into artist/title when a player (e.g. a radio stream) reports title only.
+
 ### Changed
 
 - TUI: fix progress bar flickering to 0 when playing a radio stream.

@@ -1,5 +1,5 @@
 import pytest
-from prismriver_lyrics.util import parse_duration, slugify
+from prismriver_lyrics.util import parse_duration, slugify, split_artist_title
 
 
 def test_parse_duration_single_unit():
@@ -34,3 +34,41 @@ def test_slugify_strips_punctuation():
 
 def test_slugify_collapses_whitespace_and_symbols():
     assert slugify("  Guns N' Roses  ") == "guns-n-roses"
+
+
+def test_split_artist_title_basic():
+    assert split_artist_title("Metallica - Master of Puppets") == (
+        "Metallica",
+        "Master of Puppets",
+    )
+
+
+def test_split_artist_title_unicode():
+    assert split_artist_title("大黒摩季 - リーマンブルース") == (
+        "大黒摩季",
+        "リーマンブルース",
+    )
+
+
+def test_split_artist_title_splits_on_first_separator_only():
+    assert split_artist_title("A - B - C") == ("A", "B - C")
+
+
+def test_split_artist_title_strips_surrounding_whitespace():
+    assert split_artist_title("  Metallica - Master of Puppets  ") == (
+        "Metallica",
+        "Master of Puppets",
+    )
+
+
+def test_split_artist_title_rejects_no_separator():
+    assert split_artist_title("Master of Puppets") is None
+
+
+def test_split_artist_title_rejects_hyphen_without_spaces():
+    assert split_artist_title("well-known title") is None
+
+
+def test_split_artist_title_rejects_empty_side():
+    assert split_artist_title(" - Master of Puppets") is None
+    assert split_artist_title("Metallica - ") is None

@@ -3,6 +3,7 @@ import asyncio
 import importlib.metadata
 import logging
 import sys
+from dataclasses import replace
 from urllib.parse import urlsplit
 from urllib.request import url2pathname
 
@@ -15,7 +16,11 @@ from prismriver_lyrics.registry import (
     print_plugins,
 )
 from prismriver_lyrics.search import search_lyrics
-from prismriver_lyrics.util import DEFAULT_CACHE_TTL, parse_duration
+from prismriver_lyrics.util import (
+    DEFAULT_CACHE_TTL,
+    parse_duration,
+    split_artist_title,
+)
 from prismriver_lyrics.writer import LyricsWriteError, write_lyrics
 from rich.markup import escape
 from textual import work
@@ -290,6 +295,14 @@ class PrismriverTuiApp(App[None]):
         self._handle_track(self._players.get(bus_name, TrackInfo()))
 
     def _handle_track(self, track: TrackInfo) -> None:
+        # Some MPRIS players (notably radio streams) report only a title,
+        # combining artist and track name into it (e.g.
+        # "大黒摩季 - リーマンブルース") rather than populating xesam:artist.
+        if not track.artist and track.title:
+            split = split_artist_title(track.title)
+            if split is not None:
+                track = replace(track, artist=split[0], title=split[1])
+
         self.track = track
 
         # MprisWatcher emits an update for *any* change (playback state,
