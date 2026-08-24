@@ -536,11 +536,15 @@ class PrismriverTuiApp(App[None]):
         fields.display = True
         progress_row.display = True
 
+        # MprisWatcher emits an update for *any* change (playback state, a
+        # stream's shifting duration estimate, ...), not just a new song, so
+        # only the total is set here. Progress/position are left to
+        # _tick_position, which queries the player's actual current
+        # position rather than guessing.
         total_seconds = t.length_us / 1_000_000 if t.length_us else None
         self.query_one("#song-progress", ProgressBar).update(
-            total=total_seconds, progress=0
+            total=total_seconds
         )
-        self.query_one("#song-position", Label).update(format_duration(0))
 
     def _refresh_lyrics(self, result: LyricsResult | None) -> None:
         self._current_result = result
