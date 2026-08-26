@@ -78,6 +78,7 @@ class PrismriverTuiApp(App[None]):
         Binding("a", "resync", "Resume auto-sync", show=False),
         Binding("t", "change_theme", "Change theme", show=False),
         Binding("w", "write_lyrics", "Write lyrics to file", show=False),
+        Binding("o", "open_link", "Open link in browser", show=False),
     ]
 
     track: reactive[TrackInfo] = reactive(TrackInfo())
@@ -156,6 +157,7 @@ class PrismriverTuiApp(App[None]):
                 "[dim]·[/] <Tab> [dim]switch panels[/] "
                 "[dim]·[/] <s> [dim]search[/] "
                 "[dim]·[/] <w> [dim]write to file[/] "
+                "[dim]·[/] <o> [dim]open link[/] "
                 "[dim]·[/] <t> [dim]theme[/] "
                 "[dim]·[/] <q> [dim]exit[/]",
                 id="status-bar-hotkeys",
@@ -396,6 +398,12 @@ class PrismriverTuiApp(App[None]):
             self.notify(str(exc), title="Write failed", severity="error")
         else:
             self.notify(f"Lyrics written to {file_path}")
+
+    @work
+    async def action_open_link(self) -> None:
+        result = self._current_result
+        if result and result.url:
+            self.open_url(result.url)
 
     def _local_track_file(self) -> str | None:
         """Filesystem path for the current track, or None if it has no

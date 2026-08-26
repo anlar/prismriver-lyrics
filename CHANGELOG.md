@@ -12,6 +12,7 @@ Each change should be on one line, as GitHub markdown in the release section can
 ### Added
 
 - TUI: split combined "Artist - Title" strings into artist/title when a player (e.g. a radio stream) reports title only.
+- TUI: action to open the selected result's link in the browser (`o` hotkey).
 
 ### Changed
 
