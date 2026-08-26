@@ -30,6 +30,7 @@ from textual.containers import Grid, Horizontal, Vertical, VerticalScroll
 from textual.logging import TextualHandler
 from textual.reactive import reactive
 from textual.widgets import (
+    HelpPanel,
     Label,
     OptionList,
     ProgressBar,
@@ -70,15 +71,16 @@ class PrismriverTuiApp(App[None]):
     ENABLE_COMMAND_PALETTE = False
 
     BINDINGS = [
+        Binding("s", "search", "Search lyrics"),
+        Binding("o", "open_link", "Open link in browser"),
+        Binding("w", "write_lyrics", "Write lyrics to file"),
+        Binding("a", "resync", "Resume auto-sync"),
+        Binding("t", "change_theme", "Change theme"),
+        Binding("h", "toggle_help_panel", "Help"),
         Binding("q", "quit", "Quit", priority=True),
         # Overrides App's default ctrl+q -> quit binding with a no-op, so
         # "q" is the only way to quit.
-        Binding("ctrl+q", "no_op", "", show=False),
-        Binding("s", "search", "Search lyrics", show=False),
-        Binding("a", "resync", "Resume auto-sync", show=False),
-        Binding("t", "change_theme", "Change theme", show=False),
-        Binding("w", "write_lyrics", "Write lyrics to file", show=False),
-        Binding("o", "open_link", "Open link in browser", show=False),
+        Binding("ctrl+q", "no_op", "", system=True),
     ]
 
     track: reactive[TrackInfo] = reactive(TrackInfo())
@@ -151,14 +153,11 @@ class PrismriverTuiApp(App[None]):
                 id="status-bar-app",
             )
             yield Static(
-                "<↑↓/j/k> [dim]scroll[/] "
-                "[dim]·[/] <g/G> [dim]top/bottom[/] "
-                "[dim]·[/] <PgUp/PgDn> [dim]move[/] "
-                "[dim]·[/] <Tab> [dim]switch panels[/] "
-                "[dim]·[/] <s> [dim]search[/] "
-                "[dim]·[/] <w> [dim]write to file[/] "
+                "<s> [dim]search[/] "
                 "[dim]·[/] <o> [dim]open link[/] "
+                "[dim]·[/] <w> [dim]write to file[/] "
                 "[dim]·[/] <t> [dim]theme[/] "
+                "[dim]·[/] <h> [dim]help[/] "
                 "[dim]·[/] <q> [dim]exit[/]",
                 id="status-bar-hotkeys",
             )
@@ -404,6 +403,15 @@ class PrismriverTuiApp(App[None]):
         result = self._current_result
         if result and result.url:
             self.open_url(result.url)
+
+    def action_toggle_help_panel(self) -> None:
+        panel = self.screen.query(HelpPanel)
+        if panel:
+            panel.remove()
+        else:
+            new_panel = HelpPanel()
+            new_panel.border_title = "Help"
+            self.screen.mount(new_panel)
 
     def _local_track_file(self) -> str | None:
         """Filesystem path for the current track, or None if it has no

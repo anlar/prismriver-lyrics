@@ -1,3 +1,8 @@
+Screen {
+    align: center middle;
+    layers: base overlay;
+}
+
 #body {
     height: 1fr;
 }
@@ -178,6 +183,13 @@ SearchDialog {
 
 ConfirmDialog {
     align: center middle;
+}
+
+HelpPanel {
+    layer: overlay;
+    split: none;
+    height: 80%;
+    border: round $accent;
 }
 
 #confirm-dialog {
