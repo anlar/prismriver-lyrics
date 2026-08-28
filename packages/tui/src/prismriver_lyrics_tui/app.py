@@ -299,10 +299,18 @@ class PrismriverTuiApp(App[None]):
         # Some MPRIS players (notably radio streams) report only a title,
         # combining artist and track name into it (e.g.
         # "大黒摩季 - リーマンブルース") rather than populating xesam:artist.
-        if not track.artist and track.title:
+        # Others (notably YouTube-backed players) populate both fields but
+        # leave the raw "<artist> - <title>" video title untouched, so the
+        # artist is redundantly duplicated at the front of the title too.
+        if track.title:
             split = split_artist_title(track.title)
             if split is not None:
-                track = replace(track, artist=split[0], title=split[1])
+                if not track.artist:
+                    track = replace(track, artist=split[0], title=split[1])
+                elif split[0].strip().casefold() == (
+                    track.artist.strip().casefold()
+                ):
+                    track = replace(track, title=split[1])
 
         self.track = track
 
