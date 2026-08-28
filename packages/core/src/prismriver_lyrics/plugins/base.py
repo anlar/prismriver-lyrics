@@ -1,4 +1,5 @@
 import importlib.metadata
+import re
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
 
@@ -74,6 +75,13 @@ class LyricsPlugin(ABC):
     # system). Recursed into like _PARAGRAPH_TAGS, but transparently: no
     # line boundary is inserted, since the tag isn't a real content break.
     _INLINE_TAGS: frozenset[str] = frozenset()
+
+    # Runs of whitespace within a line (space/tab, not the newlines used as
+    # line boundaries): browsers collapse these to a single space when
+    # rendering HTML outside <pre>, but source markup sometimes has runs of
+    # literal spaces (e.g. absolutelyrics.com), so extract_lyrics() does the
+    # same collapsing to match what's actually displayed on the source site.
+    _WHITESPACE_RUN = re.compile(r"[^\S\n]+")
 
     @abstractmethod
     async def search(
@@ -181,7 +189,10 @@ class LyricsPlugin(ABC):
         for child in container.contents:
             cls._walk(child, parts)
 
-        lines = [line.strip() for line in "".join(parts).splitlines()]
+        lines = [
+            cls._WHITESPACE_RUN.sub(" ", line).strip()
+            for line in "".join(parts).splitlines()
+        ]
 
         while lines and not lines[-1]:
             lines.pop()
@@ -209,7 +220,13 @@ class LyricsPlugin(ABC):
                     cls._walk(child, parts)
             else:
                 # Unknown element (ad, script, wrapper div, ...): drop its
-                # contents entirely but keep the line boundary.
+                # contents entirely but keep the line boundary. Several such
+                # elements can sit side by side (e.g. desktop/mobile ad
+                # slots for the same spot), so only add the boundary if
+                # we're not already at one, rather than piling on a blank
+                # line per skipped element.
+                if parts and not parts[-1].strip():
+                    return
                 parts.append("\n")
             return
 

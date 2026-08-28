@@ -3,7 +3,7 @@ import re
 import httpx
 
 from prismriver_lyrics.models import LyricsResult
-from prismriver_lyrics.plugins.base import LyricsPlugin
+from prismriver_lyrics.plugins.base import UNKNOWN_LANG, LyricsPlugin
 
 _SEARCH_URL = "https://music.163.com/api/search/get"
 _LYRIC_URL = "https://music.163.com/api/song/lyric"
@@ -28,11 +28,18 @@ class NeteasePlugin(LyricsPlugin):
 
     Searches by "{artist} {title}", picks the first available (not
     "uncollected") match, then fetches its LRC-format lyrics and strips
-    the [mm:ss.xx] timestamps down to plain text.
+    the [mm:ss.xx] timestamps down to plain text. Songs may also carry a
+    community-submitted Chinese translation (the API's "tlyric" field),
+    returned as a second, translated result.
     """
 
     id = "netease"
     name = "NetEase"
+
+    # Community translations on this (Chinese) site are always into
+    # Chinese.
+    lang = [UNKNOWN_LANG, "zh"]
+    translated = 1
 
     async def search(
         self,
@@ -78,4 +85,19 @@ class NeteasePlugin(LyricsPlugin):
             return []
 
         url = f"https://music.163.com/#/song?id={song_id}"
-        return [LyricsResult(source=self.name, url=url, lyrics=lyrics)]
+        results = [LyricsResult(source=self.name, url=url, lyrics=lyrics)]
+
+        tlrc = lyrics_data.get("tlyric", {}).get("lyric")
+        translation = _strip_lrc(tlrc) if tlrc else ""
+        if translation:
+            results.append(
+                LyricsResult(
+                    source=self.name,
+                    url=url,
+                    lyrics=translation,
+                    translation=True,
+                    lang="zh",
+                )
+            )
+
+        return results

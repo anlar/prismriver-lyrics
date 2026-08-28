@@ -43,7 +43,7 @@ class LyrsensePlugin(LyricsPlugin):
         if soup is None:
             return []
 
-        lines = soup.select("#songFlexLines > div")
+        lines = soup.select("#songFlexLines > div.songTextLine")
         if not lines:
             return []
 

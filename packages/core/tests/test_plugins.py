@@ -210,7 +210,7 @@ class TestPlugins(PluginTestCase):
             ColorCodedLyricsPlugin(),
             "KATSEYE",
             "Animal",
-            "80d328f9e3e6aa87c28118461736a58c",
+            "95fbbc002912f233b3f605efca587124",
         )
 
     def test_darklyrics_01(self):
@@ -218,7 +218,7 @@ class TestPlugins(PluginTestCase):
             DarkLyricsPlugin(),
             "Metallica",
             "Sad But True",
-            "5d9566e5ee4c1c3e88334e91ec15e754",
+            "efe2e2d20191339d4e9ceed74d71bf60",
         )
 
     def test_deezer_01(self):
@@ -379,8 +379,8 @@ class TestPlugins(PluginTestCase):
             "System of a Down",
             "Suite-Pee",
             [
-                "b5f53c28fcaca70767590ea8d0ef16c0",
-                "db691a5ab8bae6dc801aebd7339b66bf",
+                "61c9b5326227124966635d8db0ed8273",
+                "ca80c4d7ab8225561116f4dc364b9d6d",
             ],
             [None, "ru"],
         )
@@ -429,11 +429,15 @@ class TestPlugins(PluginTestCase):
         )
 
     def test_netease_01(self):
-        self.check_plugin(
+        self.check_plugin_all(
             NeteasePlugin(),
             "The Clash",
             "London Calling",
-            "6cbe3b629c81aebf680eaee8f60e29e6",
+            [
+                "6cbe3b629c81aebf680eaee8f60e29e6",
+                "f1d54f591753232234087bf6f2ee3c72",
+            ],
+            [None, "zh"],
         )
 
     def test_one_music_lyrics_01(self):
@@ -508,7 +512,7 @@ class TestPlugins(PluginTestCase):
             SongLyricsPlugin(),
             "Metallica",
             "Sad But True",
-            "325faee229d954ac1f27c038192035d1",
+            "ccd5690dbd7f4c7aaa20e95beffd8beb",
         )
 
     def test_songmeanings_01(self):

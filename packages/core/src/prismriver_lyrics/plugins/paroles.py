@@ -8,6 +8,11 @@ from prismriver_lyrics.plugins.base import LyricsPlugin
 
 _NON_ALNUM = re.compile(r"[^a-z0-9]+")
 
+# The site occasionally has a stray extra <br> in a verse block (e.g. 3 in a
+# row instead of the usual 2), which extract_lyrics() faithfully renders as
+# multiple blank lines; collapse any such run down to a single blank line.
+_MULTI_BLANK_LINE = re.compile(r"\n{3,}")
+
 
 class ParolesPlugin(LyricsPlugin):
     """Fetches lyrics from paroles.net.
@@ -61,7 +66,7 @@ class ParolesPlugin(LyricsPlugin):
             if text:
                 parts.append(text)
 
-        lyrics = "\n\n".join(parts)
+        lyrics = _MULTI_BLANK_LINE.sub("\n\n", "\n\n".join(parts))
         if not lyrics:
             return []
 
