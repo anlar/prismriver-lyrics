@@ -12,7 +12,11 @@ from prismriver_lyrics.registry import (
     filter_plugins,
     filter_results,
 )
-from prismriver_lyrics.util import DEFAULT_CACHE_TTL, parse_duration
+from prismriver_lyrics.util import (
+    DEFAULT_CACHE_TTL,
+    parse_duration,
+    strip_title_postfix,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +72,13 @@ async def search_lyrics(
 
     Results are cached on disk keyed by (artist, title) (see above for
     the filtered case); pass `use_cache=False` to force a fresh search.
+
+    `title` has any known noise postfix (e.g. "(Official Music Video)")
+    stripped via `util.strip_title_postfix()` before it's used for the
+    cache key or plugin queries.
     """
+    title = strip_title_postfix(title)
+
     if cache is None:
         cache = _default_cache
 

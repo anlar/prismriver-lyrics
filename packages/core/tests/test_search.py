@@ -56,6 +56,23 @@ async def test_search_lyrics_without_filter_uses_plain_cache(tmp_path):
 
 
 @pytest.mark.asyncio
+async def test_search_lyrics_strips_title_postfix(tmp_path):
+    cache = SearchCache(ttl=3600, path=tmp_path / "cache.sqlite3")
+    result = LyricsResult(source="P1", url="u", lyrics="a")
+    plugin = _FakePlugin("p1", result=result)
+
+    results = await search_lyrics(
+        "Artist",
+        "Title (Official Music Video)",
+        plugins=[plugin],
+        cache=cache,
+    )
+
+    assert results == [result]
+    assert cache.get("Artist", "Title") == [result]
+
+
+@pytest.mark.asyncio
 async def test_search_lyrics_uses_filter_specific_cache_entry_first(tmp_path):
     cache = SearchCache(ttl=3600, path=tmp_path / "cache.sqlite3")
     cached_result = LyricsResult(

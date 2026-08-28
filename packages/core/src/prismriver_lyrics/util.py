@@ -39,6 +39,28 @@ def split_words(value: str) -> list[str]:
     return [w for w in _NON_ALNUM_CI.split(value.strip()) if w]
 
 
+_TITLE_POSTFIXES = (
+    "official music video",
+    "official hd music video",
+)
+
+_TITLE_POSTFIX_RE = re.compile(
+    r"\s*(?:\((?:"
+    + "|".join(_TITLE_POSTFIXES)
+    + r")\)|\[(?:"
+    + "|".join(_TITLE_POSTFIXES)
+    + r")\])\s*$",
+    re.IGNORECASE,
+)
+
+
+def strip_title_postfix(title: str) -> str:
+    """Remove a trailing (round- or square-bracketed) postfix (e.g. "(Official
+    Music Video)" or "[Official Music Video]") that some sources append to a
+    track title. Matching is case-insensitive."""
+    return _TITLE_POSTFIX_RE.sub("", title).strip()
+
+
 _ARTIST_TITLE_SEP = re.compile(r"\s+-\s+")
 
 

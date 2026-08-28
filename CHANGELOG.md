@@ -14,6 +14,7 @@ Each change should be on one line, as GitHub markdown in the release section can
 - TUI: split combined "Artist - Title" strings into artist/title when a player (e.g. a radio stream) reports title only.
 - TUI: action to open the selected result's link in the browser (`o` hotkey).
 - TUI: help panel listing available hotkeys (`h` hotkey).
+- core: strip noise postfixes (e.g. "(Official Music Video)") from a track title before searching.
 
 ### Changed
 

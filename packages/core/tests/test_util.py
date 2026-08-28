@@ -1,5 +1,10 @@
 import pytest
-from prismriver_lyrics.util import parse_duration, slugify, split_artist_title
+from prismriver_lyrics.util import (
+    parse_duration,
+    slugify,
+    split_artist_title,
+    strip_title_postfix,
+)
 
 
 def test_parse_duration_single_unit():
@@ -72,3 +77,29 @@ def test_split_artist_title_rejects_hyphen_without_spaces():
 def test_split_artist_title_rejects_empty_side():
     assert split_artist_title(" - Master of Puppets") is None
     assert split_artist_title("Metallica - ") is None
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        (
+            "Master of Puppets (Official Music Video)",
+            "Master of Puppets",
+        ),
+        (
+            "Master of Puppets (official music video)",
+            "Master of Puppets",
+        ),
+        (
+            "Master of Puppets [Official Music Video]",
+            "Master of Puppets",
+        ),
+        ("Master of Puppets", "Master of Puppets"),
+        (
+            "(Official Music Video) Master of Puppets",
+            "(Official Music Video) Master of Puppets",
+        ),
+    ],
+)
+def test_strip_title_postfix(value, expected):
+    assert strip_title_postfix(value) == expected
