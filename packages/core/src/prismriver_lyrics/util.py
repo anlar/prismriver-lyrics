@@ -61,6 +61,22 @@ def strip_title_postfix(title: str) -> str:
     return _TITLE_POSTFIX_RE.sub("", title).strip()
 
 
+# YouTube's official-artist channels are named "<artist>VEVO", so a track
+# played from one reports e.g. "RadioheadVEVO" as its artist. Matched
+# case-sensitively: "Vevo" is a plausible tail for a real name in a way the
+# shouted form isn't.
+_ARTIST_POSTFIX_RE = re.compile(r"\s*VEVO$")
+
+
+def strip_artist_postfix(artist: str) -> str:
+    """Remove the trailing "VEVO" that YouTube artist-channel names carry
+    (e.g. "RadioheadVEVO" -> "Radiohead"), so the name matches what lyrics
+    sites index. Left alone if the artist is nothing but the postfix, since
+    an empty artist searches worse than a wrong one."""
+    stripped = _ARTIST_POSTFIX_RE.sub("", artist.strip())
+    return stripped or artist.strip()
+
+
 _ARTIST_TITLE_SEP = re.compile(r"\s+-\s+")
 
 

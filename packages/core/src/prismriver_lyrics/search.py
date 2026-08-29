@@ -15,6 +15,7 @@ from prismriver_lyrics.registry import (
 from prismriver_lyrics.util import (
     DEFAULT_CACHE_TTL,
     parse_duration,
+    strip_artist_postfix,
     strip_title_postfix,
 )
 
@@ -74,9 +75,11 @@ async def search_lyrics(
     the filtered case); pass `use_cache=False` to force a fresh search.
 
     `title` has any known noise postfix (e.g. "(Official Music Video)")
-    stripped via `util.strip_title_postfix()` before it's used for the
-    cache key or plugin queries.
+    stripped via `util.strip_title_postfix()`, and `artist` its YouTube
+    channel postfix via `util.strip_artist_postfix()`, before either is
+    used for the cache key or plugin queries.
     """
+    artist = strip_artist_postfix(artist)
     title = strip_title_postfix(title)
 
     if cache is None:

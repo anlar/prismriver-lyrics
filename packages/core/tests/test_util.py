@@ -3,6 +3,7 @@ from prismriver_lyrics.util import (
     parse_duration,
     slugify,
     split_artist_title,
+    strip_artist_postfix,
     strip_title_postfix,
 )
 
@@ -103,3 +104,22 @@ def test_split_artist_title_rejects_empty_side():
 )
 def test_strip_title_postfix(value, expected):
     assert strip_title_postfix(value) == expected
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("RadioheadVEVO", "Radiohead"),
+        ("Radiohead VEVO", "Radiohead"),
+        ("Radiohead", "Radiohead"),
+        # Case-sensitive: only the shouted form is a channel postfix.
+        ("RadioheadVevo", "RadioheadVevo"),
+        ("Radioheadvevo", "Radioheadvevo"),
+        # Only a postfix, not anywhere in the name.
+        ("VEVO Radiohead", "VEVO Radiohead"),
+        # Nothing but the postfix: an empty artist is worse than a wrong one.
+        ("VEVO", "VEVO"),
+    ],
+)
+def test_strip_artist_postfix(value, expected):
+    assert strip_artist_postfix(value) == expected

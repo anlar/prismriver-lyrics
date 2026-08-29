@@ -15,6 +15,7 @@ Each change should be on one line, as GitHub markdown in the release section can
 - TUI: action to open the selected result's link in the browser (`o` hotkey).
 - TUI: help panel listing available hotkeys (`h` hotkey).
 - core: strip noise postfixes (e.g. "(Official Music Video)") from a track title before searching.
+- core: strip channel postfix from a track artist before searching.
 - TUI: `--no-cache` flag to bypass the on-disk results cache.
 - TUI: `--artist`/`--title` flags to start with a manual search instead of following MPRIS.
 - CLI and TUI: `--sort` flag to order results by estimated quality (`rank`, the default) or by source name (`source`).
