@@ -15,10 +15,13 @@ class SongMeaningsPlugin(LyricsPlugin):
     result whose title/subtitle exactly match the query is used.
 
     A song page keeps its lyrics in a `<textarea name="editLyricsBody">` — part
-    of the page's inline lyrics-editing UI, but also the only copy of the
-    lyrics text present in the page at all (nothing else renders them
-    separately). Being a `<textarea>`, its content is plain text with real
-    newlines, not HTML, so no `<br>` handling is needed.
+    of the page's inline lyrics-editing UI. The displayed copy is a `<br>`-
+    separated, attribute-less `<div>` with no selector to target it by, so the
+    textarea is what's read instead. Being a `<textarea>`, its content is plain
+    text with real newlines, not HTML, so no `<br>` handling is needed — but
+    runs of spaces within a line still get collapsed the way
+    `extract_lyrics()` would, since the displayed `<div>` is HTML and the
+    browser collapses them there.
     """
 
     id = "songmeanings"
@@ -43,7 +46,10 @@ class SongMeaningsPlugin(LyricsPlugin):
         if textarea is None:
             return []
 
-        lines = [line.strip() for line in textarea.get_text().splitlines()]
+        lines = [
+            self._WHITESPACE_RUN.sub(" ", line).strip()
+            for line in textarea.get_text().splitlines()
+        ]
         lyrics = "\n".join(lines).strip()
         if not lyrics:
             return []
