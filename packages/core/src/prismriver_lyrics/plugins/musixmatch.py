@@ -31,6 +31,8 @@ class MusixmatchPlugin(LyricsPlugin):
     id = "musixmatch"
     name = "Musixmatch"
 
+    quality = 75
+
     # Reports whatever language the matched song and its crowd
     # translations happen to be tagged with, so this varies per song.
     lang = [ANY_LANG]

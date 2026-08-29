@@ -82,6 +82,8 @@ class DeezerPlugin(LyricsPlugin):
     id = "deezer"
     name = "Deezer"
 
+    quality = 75
+
     async def search(
         self,
         client: httpx.AsyncClient,

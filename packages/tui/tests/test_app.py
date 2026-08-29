@@ -209,16 +209,15 @@ async def test_sync_result_shows_symbol_in_results_list(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_synced_result_selected_by_default_over_alphabetical_order(
-    monkeypatch,
-):
-    # "Aaa Plain" sorts before "lrclib.net", so this only passes if the
-    # synced result is preferred over the alphabetically-first one.
+async def test_synced_result_selected_under_source_sort(monkeypatch):
+    # With --sort source the list stays alphabetical, and "Aaa Plain"
+    # sorts before "lrclib.net" -- so this only passes if the synced
+    # result is still highlighted over the alphabetically-first one.
     plain = LyricsResult(source="Aaa Plain", url="u", lyrics="plain text")
     fake = _FakeSearch([plain, _synced_result()])
     monkeypatch.setattr("prismriver_lyrics_tui.app.search_lyrics", fake)
 
-    app = PrismriverTuiApp()
+    app = PrismriverTuiApp(sort="source")
     async with app.run_test() as pilot:
         await _open_dialog_and_submit(pilot, "Song Title", "Some Artist")
 

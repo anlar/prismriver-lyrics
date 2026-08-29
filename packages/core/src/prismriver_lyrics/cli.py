@@ -6,6 +6,11 @@ import sys
 
 from prismriver_lyrics.cache import SearchCache
 from prismriver_lyrics.models import SyncedLyrics
+from prismriver_lyrics.ranking import (
+    DEFAULT_SORT,
+    SORT_CHOICES,
+    sort_results,
+)
 from prismriver_lyrics.registry import (
     default_plugins,
     filter_results,
@@ -66,6 +71,13 @@ def main() -> None:
         type=int,
         metavar="N",
         help="Limit the number of results printed. Default: unlimited.",
+    )
+    parser.add_argument(
+        "--sort",
+        choices=SORT_CHOICES,
+        default=DEFAULT_SORT,
+        help="Order results by estimated quality (rank) or source name "
+        "(source). Default: %(default)s.",
     )
     parser.add_argument(
         "--plugins",
@@ -152,7 +164,7 @@ def main() -> None:
         print("No lyrics found.", file=sys.stderr)
         raise SystemExit(1)
 
-    results = sorted(results, key=lambda result: result.source.lower())
+    results = sort_results(results, args.sort)
     if args.limit is not None:
         results = results[: args.limit]
 

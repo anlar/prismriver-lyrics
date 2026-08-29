@@ -17,10 +17,12 @@ Each change should be on one line, as GitHub markdown in the release section can
 - core: strip noise postfixes (e.g. "(Official Music Video)") from a track title before searching.
 - TUI: `--no-cache` flag to bypass the on-disk results cache.
 - TUI: `--artist`/`--title` flags to start with a manual search instead of following MPRIS.
+- CLI and TUI: `--sort` flag to order results by estimated quality (`rank`, the default) or by source name (`source`).
 
 ### Changed
 
 - TUI: fix progress bar flickering to 0 when playing a radio stream.
+- CLI and TUI: results are ranked best-first by estimated quality (amount of lyrics text, verse formatting, encoding damage, time-synced, source) instead of listed alphabetically; use `--sort source` for the old order.
 
 ## [1.1.0] - 2026-08-23
 

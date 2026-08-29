@@ -22,6 +22,9 @@ APP_USER_AGENT = (
 # value isn't a valid lang code to type.
 UNKNOWN_LANG = "?"
 
+# Neutral LyricsPlugin.quality, used by every plugin that doesn't set one.
+DEFAULT_QUALITY = 50
+
 # Two uses: as a LyricsPlugin.lang hint, "results may carry any language
 # code, varies per search" (e.g. musixmatch); as a registry filter_lang
 # token, "any *tagged* language, whichever code it is" (i.e. not
@@ -64,6 +67,13 @@ class LyricsPlugin(ABC):
     # 0 if this plugin only ever returns plain-text lyrics, 1 if it may
     # also return time-synced lyrics (a SyncedLyrics).
     sync: int = 0
+
+    # How far this source is trusted when ranking results (see the
+    # `ranking` module), 0 (worst) to 100 (best). Left at DEFAULT_QUALITY
+    # unless a source is clearly better than average (purpose-built or closely
+    # curated) or worse (thin scraper aggregators that often carry partial
+    # text).
+    quality: int = DEFAULT_QUALITY
 
     # <p> wraps a verse on some sources (e.g. letras.mus.br); it's real
     # content, so it's recursed into, and its close also marks a

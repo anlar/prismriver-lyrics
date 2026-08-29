@@ -30,6 +30,9 @@ Features:
   a bypass flag (`--no-cache`)
 - Filtering by plugin id, language, translated/original, or synced/plain-text,
   and a result cap (`--limit`/`-l`)
+- Results ranked best-first by estimated quality (how complete and clean the
+  text looks and whether it's time-synced) or alphabetically by source
+  (`--sort`)
 - Time-synced (LRC) lyrics, with the current line highlighted in the TUI as the
   track plays
 - TUI manual search dialog (for when no MPRIS player is active or the

@@ -10,6 +10,11 @@ from urllib.request import url2pathname
 
 from prismriver_lyrics.cache import SearchCache
 from prismriver_lyrics.models import LyricsResult, SyncedLyrics
+from prismriver_lyrics.ranking import (
+    DEFAULT_SORT,
+    SORT_CHOICES,
+    sort_results,
+)
 from prismriver_lyrics.registry import (
     default_plugins,
     filter_results,
@@ -115,6 +120,7 @@ class PrismriverTuiApp(App[None]):
         use_cache: bool = True,
         artist: str | None = None,
         title: str | None = None,
+        sort: str = DEFAULT_SORT,
     ) -> None:
         super().__init__()
         self._watcher = MprisWatcher()
@@ -133,6 +139,7 @@ class PrismriverTuiApp(App[None]):
         self._cache = SearchCache(ttl=cache_ttl)
         self._initial_artist = artist
         self._initial_title = title
+        self._sort = sort
 
     def compose(self) -> ComposeResult:
         with Horizontal(id="body"):
@@ -483,7 +490,7 @@ class PrismriverTuiApp(App[None]):
     def _set_results(
         self, results: list[LyricsResult], *, placeholder: str = ""
     ) -> None:
-        results = sorted(results, key=lambda result: result.source.lower())
+        results = sort_results(results, self._sort)
         results, duplicates_hidden = self._dedup_results(results)
         if self._limit is not None:
             results = results[: self._limit]
@@ -719,6 +726,13 @@ def run() -> None:
         help="Print the available color themes and exit.",
     )
     parser.add_argument(
+        "--sort",
+        choices=SORT_CHOICES,
+        default=DEFAULT_SORT,
+        help="Order results by estimated quality (rank) or source name "
+        "(source). Default: %(default)s.",
+    )
+    parser.add_argument(
         "--plugins",
         action="store_true",
         help="Print the available plugins (id<TAB>name) and exit.",
@@ -805,6 +819,7 @@ def run() -> None:
         use_cache=not args.no_cache,
         artist=args.artist,
         title=args.title,
+        sort=args.sort,
     )
 
     if args.themes:

@@ -48,6 +48,8 @@ class LrcLibPlugin(LyricsPlugin):
     id = "lrclib"
     name = "LRCLIB"
 
+    quality = 75
+
     sync = 1
 
     async def search(
