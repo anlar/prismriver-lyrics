@@ -2,6 +2,7 @@ import argparse
 import asyncio
 import importlib.metadata
 import logging
+import subprocess
 import sys
 from dataclasses import replace
 from urllib.parse import urlsplit
@@ -61,6 +62,22 @@ from prismriver_lyrics_tui.widgets import (
 # mpris._PLAYER_PROPERTY_GETTERS), so this trades a little precision for not
 # hammering D-Bus.
 _POSITION_POLL_INTERVAL = 0.5
+
+
+def _open_in_browser(url: str) -> None:
+    """Open a URL via xdg-open, bypassing Python's webbrowser module.
+
+    webbrowser's browser selection can be flaky depending on the Python
+    version and desktop environment (e.g. it may pick a Firefox
+    remote-invoke path that silently fails). xdg-open reliably delegates to
+    the desktop's configured handler.
+    """
+    subprocess.Popen(
+        ["xdg-open", url],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True,
+    )
 
 
 class PrismriverTuiApp(App[None]):
@@ -417,11 +434,10 @@ class PrismriverTuiApp(App[None]):
         else:
             self.notify(f"Lyrics written to {file_path}")
 
-    @work
-    async def action_open_link(self) -> None:
+    def action_open_link(self) -> None:
         result = self._current_result
         if result and result.url:
-            self.open_url(result.url)
+            _open_in_browser(result.url)
 
     def action_toggle_help_panel(self) -> None:
         panel = self.screen.query(HelpPanel)
