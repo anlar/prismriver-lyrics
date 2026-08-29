@@ -399,18 +399,18 @@ class TestPlugins(PluginTestCase):
             "Metallica",
             "Sad But True",
             [
-                "356aee6fd75543851b57b8468ac9439c",
-                "8ee3338c52f50854184b4be1961361bd",
-                "021854a80cd06b19824885d0e0d915bb",
-                "bb461f656986bf598b59abe7eee046da",
-                "040dd0533e3a7db39ddfebcb4c71658c",
-                "6df3431cb1671feec2b9b6f7e254881b",
-                "3856af94881ffc48ccb3e8cb37390ab5",
-                "94fc815e9dc2071bd80ac3c993a47046",
-                "25ebd432e3b4c45f0851e805dd4ca21f",
-                "b6f4225412436cdf9a4d6af57e8d39ec",
-                "ccc312a3f5813589abf6539f44cbd014",
-                "c76f15d93fa371274423041792138181",
+                "ccd5690dbd7f4c7aaa20e95beffd8beb",
+                "e79ad51c8d0a28b468ea058f9664e3f4",
+                "20c4407e017c2b8a7f8785ddc8da7dc1",
+                "398a286a969e7391afb9ff66db80dd09",
+                "9700485d585d988166091aff1d239d27",
+                "0e70f1e1bf5c5b205998bb71f2d51356",
+                "30bb41dffcc8efb2f78505734482765b",
+                "5f7f405000a4f7a705d55bf1de923451",
+                "f2f375a9b0e7073c41e1546e2ac150a3",
+                "9d738da80bc738ccac851be7a5702571",
+                "eb960d72081821c70efbc54f9ed17def",
+                "a2e959a3cc286af1e6e1f807b9d9612b",
             ],
             [
                 "en",
@@ -538,11 +538,11 @@ class TestPlugins(PluginTestCase):
     def test_synclrc_01(self):
         self.check_plugin_all(
             SyncLrcPlugin(),
-            "Nautilus Pompilius",
+            "Наутилус Помпилиус",
             "Три царя",
             [
-                "e3dadd7f156cb76fdab971a18fe4637a",
-                "eaffb671e04444097913622ba0d3c57c",
+                "29ee37d0f17864def02a4c68fdc494eb",
+                "3cadf471ee056928851f0878f0b9724b",
             ],
         )
 
