@@ -15,6 +15,7 @@ Each change should be on one line, as GitHub markdown in the release section can
 - TUI: action to open the selected result's link in the browser (`o` hotkey).
 - TUI: help panel listing available hotkeys (`h` hotkey).
 - core: strip noise postfixes (e.g. "(Official Music Video)") from a track title before searching.
+- TUI: `--no-cache` flag to bypass the on-disk results cache.
 
 ### Changed
 

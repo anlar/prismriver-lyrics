@@ -95,6 +95,7 @@ class PrismriverTuiApp(App[None]):
         synced: bool | None = None,
         limit: int | None = None,
         cache_ttl: float = parse_duration(DEFAULT_CACHE_TTL),
+        use_cache: bool = True,
     ) -> None:
         super().__init__()
         self._watcher = MprisWatcher()
@@ -109,6 +110,7 @@ class PrismriverTuiApp(App[None]):
         self._translated = translated
         self._synced = synced
         self._limit = limit
+        self._use_cache = use_cache
         self._cache = SearchCache(ttl=cache_ttl)
 
     def compose(self) -> ComposeResult:
@@ -347,6 +349,7 @@ class PrismriverTuiApp(App[None]):
                 artist,
                 title,
                 duration_ms,
+                use_cache=self._use_cache,
                 cache=self._cache,
                 langs=self._langs,
                 translated=self._translated,
@@ -713,6 +716,11 @@ def run() -> None:
         "Default: both.",
     )
     parser.add_argument(
+        "--no-cache",
+        action="store_true",
+        help="Bypass the on-disk results cache and force a fresh search.",
+    )
+    parser.add_argument(
         "--cache-ttl",
         type=parse_duration,
         default=DEFAULT_CACHE_TTL,
@@ -753,6 +761,7 @@ def run() -> None:
         synced=synced,
         limit=args.limit,
         cache_ttl=args.cache_ttl,
+        use_cache=not args.no_cache,
     )
 
     if args.themes:
