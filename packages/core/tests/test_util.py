@@ -5,6 +5,7 @@ from prismriver_lyrics.util import (
     split_artist_title,
     strip_artist_postfix,
     strip_title_postfix,
+    strip_title_variants,
 )
 
 
@@ -123,3 +124,29 @@ def test_strip_title_postfix(value, expected):
 )
 def test_strip_artist_postfix(value, expected):
     assert strip_artist_postfix(value) == expected
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("Creep (Live at Glastonbury)", "Creep"),
+        ("Creep [Live]", "Creep"),
+        ("Creep (LIVE)", "Creep"),
+        ("Song (Radio Remix)", "Song"),
+        ("Song (Acoustic Session)", "Song"),
+        ("Song (2015 Reboot)", "Song"),
+        ("Song (Bonus Track)", "Song"),
+        # Every matching block goes, not just a trailing one.
+        ("Song (Live) [Bonus Track]", "Song"),
+        ("Song (Live) Reprise", "Song Reprise"),
+        # Blocks without one of the words are left in place.
+        ("Song (feat. Someone)", "Song (feat. Someone)"),
+        ("Song", "Song"),
+        # Whole words only: "Deliverance" is not "live".
+        ("Song (Deliverance)", "Song (Deliverance)"),
+        # Nothing but the block: an empty title searches worse than a noisy one.
+        ("(Live)", "(Live)"),
+    ],
+)
+def test_strip_title_variants(value, expected):
+    assert strip_title_variants(value) == expected

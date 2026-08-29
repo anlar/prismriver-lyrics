@@ -61,6 +61,42 @@ def strip_title_postfix(title: str) -> str:
     return _TITLE_POSTFIX_RE.sub("", title).strip()
 
 
+# Words marking a bracketed block as describing a particular *release* of a
+# song (a live take, a remix, a session recording, a bonus track) rather
+# than naming a different song. The lyrics are the base song's either way,
+# so the block only stops sources from matching.
+_TITLE_VARIANT_WORDS = (
+    "live",
+    "remix",
+    "session",
+    "reboot",
+    "bonus",
+)
+
+# Whole words only, so e.g. "Deliverance" isn't read as "live".
+_TITLE_VARIANT_WORD_RE = re.compile(
+    r"\b(?:" + "|".join(_TITLE_VARIANT_WORDS) + r")\b",
+    re.IGNORECASE,
+)
+
+# A round- or square-bracketed block, with any whitespace running up to it.
+_BRACKET_BLOCK_RE = re.compile(r"\s*(?:\([^)]*\)|\[[^\]]*\])")
+
+
+def strip_title_variants(title: str) -> str:
+    """Remove bracketed blocks naming an alternate take of a song rather
+    than a different song (e.g. "Creep (Live at Glastonbury)" -> "Creep"),
+    since the lyrics are the base song's. Every such block is dropped, not
+    just a trailing one. Matching is case-insensitive and on whole words.
+    Left alone if the title is nothing but these blocks, since an empty
+    title searches worse than a noisy one."""
+    stripped = _BRACKET_BLOCK_RE.sub(
+        lambda m: "" if _TITLE_VARIANT_WORD_RE.search(m.group()) else m.group(),
+        title.strip(),
+    ).strip()
+    return stripped or title.strip()
+
+
 # YouTube's official-artist channels are named "<artist>VEVO", so a track
 # played from one reports e.g. "RadioheadVEVO" as its artist. Matched
 # case-sensitively: "Vevo" is a plausible tail for a real name in a way the

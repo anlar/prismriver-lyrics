@@ -17,6 +17,7 @@ from prismriver_lyrics.util import (
     parse_duration,
     strip_artist_postfix,
     strip_title_postfix,
+    strip_title_variants,
 )
 
 logger = logging.getLogger(__name__)
@@ -74,13 +75,19 @@ async def search_lyrics(
     Results are cached on disk keyed by (artist, title) (see above for
     the filtered case); pass `use_cache=False` to force a fresh search.
 
-    `title` has any known noise postfix (e.g. "(Official Music Video)")
-    stripped via `util.strip_title_postfix()`, and `artist` its YouTube
-    channel postfix via `util.strip_artist_postfix()`, before either is
-    used for the cache key or plugin queries.
+    `title` has bracketed blocks naming an alternate take (e.g. "(Live at
+    Glastonbury)") stripped via `util.strip_title_variants()` and any known
+    noise postfix (e.g. "(Official Music Video)") via
+    `util.strip_title_postfix()`; `artist` has its YouTube channel postfix
+    stripped via `util.strip_artist_postfix()`. All of this happens before
+    either is used for the cache key or plugin queries.
+
+    Variants are stripped before the postfix so that either order of the
+    two blocks ("... (Live) (Official Music Video)" and the reverse) ends
+    up at the same bare title.
     """
     artist = strip_artist_postfix(artist)
-    title = strip_title_postfix(title)
+    title = strip_title_postfix(strip_title_variants(title))
 
     if cache is None:
         cache = _default_cache
