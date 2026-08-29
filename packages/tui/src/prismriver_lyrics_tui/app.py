@@ -96,6 +96,8 @@ class PrismriverTuiApp(App[None]):
         limit: int | None = None,
         cache_ttl: float = parse_duration(DEFAULT_CACHE_TTL),
         use_cache: bool = True,
+        artist: str | None = None,
+        title: str | None = None,
     ) -> None:
         super().__init__()
         self._watcher = MprisWatcher()
@@ -112,6 +114,8 @@ class PrismriverTuiApp(App[None]):
         self._limit = limit
         self._use_cache = use_cache
         self._cache = SearchCache(ttl=cache_ttl)
+        self._initial_artist = artist
+        self._initial_title = title
 
     def compose(self) -> ComposeResult:
         with Horizontal(id="body"):
@@ -171,6 +175,10 @@ class PrismriverTuiApp(App[None]):
         self.query_one("#lyrics-plain-scroll", VerticalScroll).focus()
         self.run_worker(self._watch_mpris(), exclusive=True, group="mpris")
         self.set_interval(_POSITION_POLL_INTERVAL, self._tick_position)
+        if self._initial_artist is not None and self._initial_title is not None:
+            self._handle_manual_search(
+                self._initial_artist, self._initial_title
+            )
 
     async def _watch_mpris(self) -> None:
         try:
@@ -673,6 +681,18 @@ def run() -> None:
         version=_VERSION_MESSAGE.format(version=version),
     )
     parser.add_argument(
+        "--artist",
+        "-a",
+        help="Song artist. Starts a manual search instead of following "
+        "MPRIS; requires --title/-t to also be set.",
+    )
+    parser.add_argument(
+        "--title",
+        "-t",
+        help="Song title. Starts a manual search instead of following "
+        "MPRIS; requires --artist/-a to also be set.",
+    )
+    parser.add_argument(
         "--theme",
         metavar="NAME",
         help="Color theme to use (see --themes for the available names).",
@@ -741,6 +761,11 @@ def run() -> None:
         print_plugins()
         return
 
+    if bool(args.artist) != bool(args.title):
+        parser.error(
+            "--artist/-a and --title/-t must be given together"
+        )
+
     plugin_ids = parse_ids(args.filter_plugins)
     langs = parse_ids(args.filter_lang)
     translated = (
@@ -762,6 +787,8 @@ def run() -> None:
         limit=args.limit,
         cache_ttl=args.cache_ttl,
         use_cache=not args.no_cache,
+        artist=args.artist,
+        title=args.title,
     )
 
     if args.themes:
