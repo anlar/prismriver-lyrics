@@ -40,8 +40,13 @@ def split_words(value: str) -> list[str]:
 
 
 _TITLE_POSTFIXES = (
-    "official music video",
+    "official 4k",
     "official hd music video",
+    "official hd video",
+    "official music video",
+    "official video",
+    "official",
+    "официальный клип",
 )
 
 _TITLE_POSTFIX_RE = re.compile(
@@ -66,11 +71,13 @@ def _strip_title_postfix(title: str) -> str:
 # than naming a different song. The lyrics are the base song's either way,
 # so the block only stops sources from matching.
 _TITLE_VARIANT_WORDS = (
+    "bonus",
+    "cut",
     "live",
+    "reboot",
     "remix",
     "session",
-    "reboot",
-    "bonus",
+    "version",
 )
 
 # Whole words only, so e.g. "Deliverance" isn't read as "live".
