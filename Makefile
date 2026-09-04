@@ -24,7 +24,6 @@ run-tui:
 install-pipx:
 	rm -rf dist
 	uv build --all-packages -o dist
-	pipx install --force dist/prismriver_lyrics-*-py3-none-any.whl --pip-args "--find-links dist"
 	pipx install --force dist/prismriver_lyrics_tui-*-py3-none-any.whl --pip-args "--find-links dist"
 	# TUI should depend on local prismriver-lyrics package (not on PyPI release)
 	pipx runpip prismriver-lyrics-tui install --force-reinstall dist/prismriver_lyrics-*-py3-none-any.whl
