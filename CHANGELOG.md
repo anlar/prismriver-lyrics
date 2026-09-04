@@ -25,6 +25,7 @@ Each change should be on one line, as GitHub markdown in the release section can
 
 - TUI: fix progress bar flickering to 0 when playing a radio stream.
 - CLI and TUI: results are ranked best-first by estimated quality (amount of lyrics text, verse formatting, encoding damage, time-synced, source) instead of listed alphabetically; use `--sort source` for the old order.
+- TUI: prefill search dialog with artist and title from the current song
 
 ## [1.1.0] - 2026-08-23
 

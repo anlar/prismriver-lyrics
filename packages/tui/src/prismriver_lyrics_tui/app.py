@@ -24,6 +24,8 @@ from prismriver_lyrics.registry import (
 from prismriver_lyrics.search import search_lyrics
 from prismriver_lyrics.util import (
     DEFAULT_CACHE_TTL,
+    clear_artist,
+    clear_title,
     parse_duration,
     split_artist_title,
 )
@@ -409,7 +411,17 @@ class PrismriverTuiApp(App[None]):
 
     @work
     async def action_search(self) -> None:
-        result = await self.push_screen_wait(SearchDialog())
+        # Pre-fill with whatever track the app is currently on (a synced
+        # player's, or the last manual search's), normalised the same way
+        # search_lyrics() would, so the dialog shows the terms actually
+        # searched rather than the player's raw metadata.
+        track = self.track
+        result = await self.push_screen_wait(
+            SearchDialog(
+                artist=clear_artist(track.artist),
+                title=clear_title(track.title),
+            )
+        )
         if result is not None:
             artist, title = result
             self._handle_manual_search(artist, title)
