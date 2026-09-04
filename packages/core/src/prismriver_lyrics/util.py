@@ -54,7 +54,7 @@ _TITLE_POSTFIX_RE = re.compile(
 )
 
 
-def strip_title_postfix(title: str) -> str:
+def _strip_title_postfix(title: str) -> str:
     """Remove a trailing (round- or square-bracketed) postfix (e.g. "(Official
     Music Video)" or "[Official Music Video]") that some sources append to a
     track title. Matching is case-insensitive."""
@@ -83,7 +83,7 @@ _TITLE_VARIANT_WORD_RE = re.compile(
 _BRACKET_BLOCK_RE = re.compile(r"\s*(?:\([^)]*\)|\[[^\]]*\])")
 
 
-def strip_title_variants(title: str) -> str:
+def _strip_title_variants(title: str) -> str:
     """Remove bracketed blocks naming an alternate take of a song rather
     than a different song (e.g. "Creep (Live at Glastonbury)" -> "Creep"),
     since the lyrics are the base song's. Every such block is dropped, not
@@ -104,13 +104,34 @@ def strip_title_variants(title: str) -> str:
 _ARTIST_POSTFIX_RE = re.compile(r"\s*VEVO$")
 
 
-def strip_artist_postfix(artist: str) -> str:
+def _strip_artist_postfix(artist: str) -> str:
     """Remove the trailing "VEVO" that YouTube artist-channel names carry
     (e.g. "RadioheadVEVO" -> "Radiohead"), so the name matches what lyrics
     sites index. Left alone if the artist is nothing but the postfix, since
     an empty artist searches worse than a wrong one."""
     stripped = _ARTIST_POSTFIX_RE.sub("", artist.strip())
     return stripped or artist.strip()
+
+
+def clear_artist(artist: str) -> str:
+    """Normalise a player-reported artist into the name lyrics sites index,
+    dropping the noise a source added rather than anything naming the
+    artist: currently the YouTube artist-channel postfix ("RadioheadVEVO"
+    -> "Radiohead")."""
+    return _strip_artist_postfix(artist)
+
+
+def clear_title(title: str) -> str:
+    """Normalise a player-reported title into the name lyrics sites index,
+    dropping both bracketed blocks naming an alternate take ("Creep (Live at
+    Glastonbury)" -> "Creep") and known source noise ("Master of Puppets
+    (Official Music Video)" -> "Master of Puppets").
+
+    Variants are stripped before the postfix so that either order of the
+    two blocks ("... (Live) (Official Music Video)" and the reverse) ends
+    up at the same bare title.
+    """
+    return _strip_title_postfix(_strip_title_variants(title))
 
 
 _ARTIST_TITLE_SEP = re.compile(r"\s+-\s+")

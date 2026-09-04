@@ -1,11 +1,10 @@
 import pytest
 from prismriver_lyrics.util import (
+    clear_artist,
+    clear_title,
     parse_duration,
     slugify,
     split_artist_title,
-    strip_artist_postfix,
-    strip_title_postfix,
-    strip_title_variants,
 )
 
 
@@ -103,8 +102,8 @@ def test_split_artist_title_rejects_empty_side():
         ),
     ],
 )
-def test_strip_title_postfix(value, expected):
-    assert strip_title_postfix(value) == expected
+def test_clear_title_strips_postfix(value, expected):
+    assert clear_title(value) == expected
 
 
 @pytest.mark.parametrize(
@@ -122,8 +121,8 @@ def test_strip_title_postfix(value, expected):
         ("VEVO", "VEVO"),
     ],
 )
-def test_strip_artist_postfix(value, expected):
-    assert strip_artist_postfix(value) == expected
+def test_clear_artist(value, expected):
+    assert clear_artist(value) == expected
 
 
 @pytest.mark.parametrize(
@@ -148,5 +147,16 @@ def test_strip_artist_postfix(value, expected):
         ("(Live)", "(Live)"),
     ],
 )
-def test_strip_title_variants(value, expected):
-    assert strip_title_variants(value) == expected
+def test_clear_title_strips_variants(value, expected):
+    assert clear_title(value) == expected
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        "Creep (Live) (Official Music Video)",
+        "Creep (Official Music Video) (Live)",
+    ],
+)
+def test_clear_title_strips_both_blocks_in_either_order(value):
+    assert clear_title(value) == "Creep"
