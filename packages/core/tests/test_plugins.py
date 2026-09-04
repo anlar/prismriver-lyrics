@@ -374,6 +374,7 @@ class TestPlugins(PluginTestCase):
         )
 
     def test_lyrsense_01(self):
+        # A page with no footnote markers.
         self.check_plugin_all(
             LyrsensePlugin(),
             "System of a Down",
@@ -381,6 +382,21 @@ class TestPlugins(PluginTestCase):
             [
                 "61c9b5326227124966635d8db0ed8273",
                 "ca80c4d7ab8225561116f4dc364b9d6d",
+            ],
+            [None, "ru"],
+        )
+
+    def test_lyrsense_02(self):
+        # Its translation carries mid-line <sup> footnote markers, which
+        # split a line into several text nodes; the digest only matches if
+        # the space on either side of a dropped marker survives.
+        self.check_plugin_all(
+            LyrsensePlugin(),
+            "Rammstein",
+            "Keine Lust",
+            [
+                "c23e4772013bf2d222a5e54cad0ebad4",
+                "12ddf91372c363949d02634a169be896",
             ],
             [None, "ru"],
         )

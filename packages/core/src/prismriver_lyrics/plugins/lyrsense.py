@@ -83,8 +83,8 @@ class LyrsensePlugin(LyricsPlugin):
         )
         return _BASE_URL + href if href else None
 
-    @staticmethod
-    def _extract_column(lines: list[Tag], css_class: str) -> str:
+    @classmethod
+    def _extract_column(cls, lines: list[Tag], css_class: str) -> str:
         text_lines = []
         for line in lines:
             span = line.select_one(f".{css_class}")
@@ -95,5 +95,10 @@ class LyrsensePlugin(LyricsPlugin):
             # note marker), not lyric text.
             for sup in span.find_all("sup"):
                 sup.decompose()
-            text_lines.append(span.get_text(strip=True))
+            # A mid-line footnote splits the span into several text nodes
+            # ("...хочется", " любить себя"), so the text is joined without
+            # stripping each node, which would swallow the space between
+            # them; whitespace is normalised over the joined line instead.
+            text = cls._WHITESPACE_RUN.sub(" ", span.get_text())
+            text_lines.append(text.strip())
         return "\n".join(text_lines).strip()
